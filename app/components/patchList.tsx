@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import Link from "next/link";
 
 export interface PatchLog {
   id: string;
@@ -19,9 +20,10 @@ export function PatchList({ patchLogs }: PatchListProps) {
     <>
       <div className="space-y-4">
         {patchLogs.map((log) => (
-          <div
+          <Link
             key={log.id}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+            href={`/patch/${log.id}`}
+            className="block bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
           >
             <div className="flex items-start justify-between">
               <div>
@@ -38,7 +40,7 @@ export function PatchList({ patchLogs }: PatchListProps) {
                 {log.app_name}
               </span>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </>
