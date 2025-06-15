@@ -1,13 +1,14 @@
 import { PatchList, type PatchLog } from "../components/patchList";
-import { createApiUrl } from "../lib/config";
 
 export default async function PatchPage() {
-  const url = createApiUrl("/steam-patch-logs");
-  console.log("🔥 Fetching from:", url);
+  console.log("🔥 Fetching from:", process.env.API_BASE_URL);
 
-  const response = await fetch(url, {
-    next: { revalidate: 21600 }, // 6시간마다 재검증
-  });
+  const response = await fetch(
+    `${process.env.API_BASE_URL}/api/steam-patch-logs`,
+    {
+      next: { revalidate: 21600 },
+    }
+  );
 
   const patchLogs: PatchLog[] = await response.json();
 
