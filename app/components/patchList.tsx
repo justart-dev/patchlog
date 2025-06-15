@@ -25,8 +25,8 @@ export function PatchList({ patchLogs }: PatchListProps) {
             href={`/patch/${log.id}`}
             className="block bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
           >
-            <div className="flex items-start justify-between">
-              <div>
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+              <div className="order-2 sm:order-1">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   {log.title}
                 </h2>
@@ -36,7 +36,7 @@ export function PatchList({ patchLogs }: PatchListProps) {
                   })}
                 </p>
               </div>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border self-start sm:self-auto order-1 sm:order-2 bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-gray-200 whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[120px] sm:max-w-none">
                 {log.app_name}
               </span>
             </div>
