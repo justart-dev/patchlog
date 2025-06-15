@@ -6,8 +6,10 @@ import { Navbar } from "./components/nav";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Footer from "./components/footer";
+import { baseUrl } from "./sitemap";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
   title: {
     default: "Patchlog",
     template: "%s | Patchlog",
@@ -16,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Patchlog - 스팀 게임 패치 노트",
     description: "한글로 제공되는 게임 패치 노트",
-    url: "https://patchlog.vercel.app",
+    url: baseUrl,
     siteName: "Patchlog",
     locale: "ko_KR",
     type: "website",
