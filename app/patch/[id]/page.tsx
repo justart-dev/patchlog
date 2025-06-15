@@ -83,13 +83,13 @@ export default function PatchDetailPage() {
           })}
         </div>
         <div
-          className="prose max-w-none dark:prose-invert"
+          className="prose max-w-none"
           dangerouslySetInnerHTML={{ __html: patchDetail.content || "" }}
         />
         <div className="mt-12 flex justify-center">
           <button
             onClick={() => router.back()}
-            className="flex items-center space-x-2 px-6 py-3 rounded-lg bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-700/70 transition-colors cursor-pointer"
+            className="flex items-center space-x-2 px-6 py-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer"
             aria-label="뒤로 가기"
           >
             <svg
