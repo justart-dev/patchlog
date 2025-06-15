@@ -1,21 +1,84 @@
+import Link from "next/link";
+
 export default function Page() {
   return (
-    <section>
-      <h1 className="mb-6 text-3xl font-bold tracking-tight">Patchlog</h1>
+    <div className="max-w-3xl mx-auto px-4 py-12 md:py-20">
+      <div className="text-center mb-16">
+        <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6 pb-1">
+          Patchlog
+        </h1>
+        <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          스팀 게임의 업데이트 내역을 한글로 만나보세요.
+        </p>
+      </div>
 
-      <p className="mb-4 text-lg leading-relaxed text-muted-foreground">
-        왜 한국 서비스를 하는데, 정작 패치노트는 영어뿐일까요?
-      </p>
+      <div className="space-y-8 max-w-2xl mx-auto">
+        <div className="p-6 bg-white dark:bg-gray-800">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+            왜 한국에 서비스하는 게임인데 정작 패치노트는 영어뿐일까요?
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300">
+            많은 스팀 게임이 한국어를 지원하지만, 중요한 업데이트 내역은 여전히
+            <span className="font-medium text-blue-600 dark:text-blue-400">
+              {" "}
+              영어로만 제공
+            </span>
+            되는게 현실입니다. 이로 인해 많은 한국어 사용자들이 게임의 최신
+            소식과 변경사항을 놓치기 일쑤죠.
+          </p>
+        </div>
 
-      <p className="mb-4 text-lg leading-relaxed text-muted-foreground">
-        많은 스팀 게임이 한국어를 지원하지만, 중요한 업데이트 내역은 여전히
-        영어로만 제공됩니다.
-      </p>
+        <div className="p-6 bg-white dark:bg-gray-800">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+            게이머 친화적 번역
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300">
+            단순한 단어 대체가 아닌, 게임의 세계관과 캐릭터성을 살리는
+            <span className="font-medium text-blue-600 dark:text-blue-400">
+              {" "}
+              문맥 기반 번역
+            </span>
+            을 제공합니다. 패치 내용의 핵심을 놓치지 않으면서 이해하기 쉽게
+            전달합니다.
+          </p>
+        </div>
 
-      <p className="mb-4 text-lg leading-relaxed text-muted-foreground">
-        그래서 Patchlog가 시작되었습니다. 단순한 자동 번역이 아닌, 게임 흐름과
-        맥락에 맞는 자연스러운 번역으로 패치 내용을 전합니다.
-      </p>
-    </section>
+        <div className="p-6 bg-white dark:bg-gray-800">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+            더 많은 게임, 더 나은 서비스
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300">
+            Marvel Rivals를 시작으로
+            <span className="font-medium text-blue-600 dark:text-blue-400">
+              {" "}
+              다양한 스팀 게임의 패치노트
+            </span>
+            를 한글로 제공할 예정입니다.
+          </p>
+        </div>
+        <div className="mt-6 flex justify-center">
+          <Link
+            href="/patch"
+            className="flex items-center space-x-2 px-6 py-3 rounded-lg bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/50 dark:hover:bg-gray-700/70 transition-colors cursor-pointer"
+            aria-label="최신 패치 보기"
+          >
+            <span className="font-medium">최신 패치 보기</span>
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M14 5l7 7m0 0l-7 7m7-7H3"
+              />
+            </svg>
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }
