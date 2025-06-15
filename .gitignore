@@ -54,3 +54,7 @@ dist
 
 # Local Netlify folder if it exists
 .netlify
+
+# .gitignore
+.env*.local
+.env
