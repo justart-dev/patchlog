@@ -9,13 +9,14 @@ export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
+  const resolvedParams = await Promise.resolve(params);
   try {
     const { data, error } = await supabase
       .from("steam_patch_logs")
       .select(
         "id, title, published_at, content, app_name, app_gid,translated_ko"
       )
-      .eq("id", params.id)
+      .eq("id", resolvedParams.id)
       .single();
 
     if (error) {
