@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { PatchList, type PatchLog } from "../components/patchList";
 
 export default async function PatchPage() {
