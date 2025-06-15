@@ -19,19 +19,22 @@ export function PatchList({ patchLogs }: PatchListProps) {
     <>
       <div className="space-y-4">
         {patchLogs.map((log) => (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+          <div
+            key={log.id}
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+          >
             <div className="flex items-start justify-between">
               <div>
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   {log.title}
                 </h2>
                 <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                  {format(new Date(log.published_at), "yyyy년 M월 d일 HH:mm", {
+                  {format(new Date(log.published_at), "yyyy년 M월 d일", {
                     locale: ko,
                   })}
                 </p>
               </div>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border">
                 {log.app_name}
               </span>
             </div>
