@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import TabNavigation from "../../components/TabNavigation";
 
 interface PatchDetail {
   id: string;
   title: string;
   content: string;
+  translateKo: string;
   publishedAt: string;
   appName: string;
   appGid: string;
@@ -17,7 +19,13 @@ export default function PatchDetailPage() {
   const [patchDetail, setPatchDetail] = useState<PatchDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeLanguage, setActiveLanguage] = useState<"ko" | "en">("ko");
   const router = useRouter();
+
+  const languageTabs = [
+    { label: "한국어", value: "ko" },
+    { label: "영어", value: "en" },
+  ];
 
   useEffect(() => {
     const fetchPatchDetail = async () => {
@@ -65,8 +73,8 @@ export default function PatchDetailPage() {
   }
 
   return (
-    <section className="pt-20 pb-8 md:pt-24">
-      <div className="max-w-4xl mx-auto px-4 relative">
+    <section className="py-8">
+      <div className="max-w-4xl mx-auto px-4">
         <div className="mb-6">
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border">
             {patchDetail.appName}
@@ -82,10 +90,30 @@ export default function PatchDetailPage() {
             day: "numeric",
           })}
         </div>
-        <div
-          className="prose max-w-none"
-          dangerouslySetInnerHTML={{ __html: patchDetail.content || "" }}
-        />
+
+        <div className="mt-8">
+          <TabNavigation
+            items={languageTabs}
+            defaultActive="ko"
+            onChange={(value) => setActiveLanguage(value as "ko" | "en")}
+            className="mb-8"
+          />
+
+          <div className="prose max-w-none">
+            {activeLanguage === "ko" ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: patchDetail.translateKo || "",
+                }}
+              />
+            ) : (
+              <div
+                dangerouslySetInnerHTML={{ __html: patchDetail.content || "" }}
+              />
+            )}
+          </div>
+        </div>
+
         <div className="mt-12 flex justify-center">
           <button
             onClick={() => router.back()}
