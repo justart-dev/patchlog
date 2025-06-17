@@ -54,17 +54,15 @@ export default function RootLayout({
     >
       <body className="antialiased flex flex-col min-h-screen">
         <div className="w-full bg-white border-b border-gray-100">
-          <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4">
             <Navbar />
           </div>
         </div>
         <main className="flex-grow">
-          <div className="max-w-7xl mx-auto px-4 py-8">
-            {children}
-          </div>
+          <div className="max-w-7xl mx-auto px-4 py-8">{children}</div>
         </main>
         <div className="w-full bg-white border-t border-gray-100 mt-auto">
-          <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4">
             <Footer />
           </div>
         </div>

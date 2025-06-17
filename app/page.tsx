@@ -7,7 +7,7 @@ export default function Page() {
         <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6 pb-1">
           Patchlog
         </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+        <p className="text-2xl text-gray-600 max-w-2xl mx-auto">
           스팀 게임의 업데이트 내역을 한글로 만나보세요.
         </p>
       </div>
@@ -19,10 +19,7 @@ export default function Page() {
           </h2>
           <p className="text-gray-600">
             많은 스팀 게임이 한국어를 지원하지만, 중요한 업데이트 내역은 여전히
-            <span className="font-medium text-blue-600">
-              {" "}
-              영어로만 제공
-            </span>
+            <span className="font-medium text-blue-600"> 영어로만 제공</span>
             되는게 현실입니다. 이로 인해 많은 한국어 사용자들이 게임의 최신
             소식과 변경사항을 놓치기 일쑤죠.
           </p>
@@ -34,11 +31,8 @@ export default function Page() {
           </h2>
           <p className="text-gray-600">
             단순한 단어 대체가 아닌, 게임의 세계관과 캐릭터성을 살리는
-            <span className="font-medium text-blue-600">
-              {" "}
-              문맥 기반 번역
-            </span>
-            을 제공합니다. 패치 내용의 핵심을 놓치지 않으면서 이해하기 쉽게
+            <span className="font-medium text-blue-600"> 문맥 기반 번역</span>을
+            제공합니다. 패치 내용의 핵심을 놓치지 않으면서 이해하기 쉽게
             전달합니다.
           </p>
         </div>
