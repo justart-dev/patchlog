@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
-    <footer className="mb-16">
-      <p className="mt-4 text-sm text-neutral-600">
+    <footer className="w-full py-8">
+      <p className="text-sm text-neutral-600">
         © {new Date().getFullYear()} PatchTranslate. 일부 콘텐츠는 Valve의 Steam
         API를 기반으로 합니다.
       </p>
