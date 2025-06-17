@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 ::selection {
   background-color: #47a3f3;
@@ -17,9 +17,25 @@
   --sh-entity: #e25a1c;
 }
 
-
 html {
   min-width: 360px;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+}
+
+/* Prevent breaking Korean and English words */
+p, h1, h2, h3, h4, h5, h6, span, div, a {
+  word-break: keep-all;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .prose .anchor {
@@ -42,7 +58,7 @@ html {
 
 .prose .anchor:after {
   @apply text-neutral-300;
-  content: '#';
+  content: "#";
 }
 
 .prose *:hover > .anchor {
@@ -120,8 +136,8 @@ pre {
 }
 
 /* Remove Safari input shadow on mobile */
-input[type='text'],
-input[type='email'] {
+input[type="text"],
+input[type="email"] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
