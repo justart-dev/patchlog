@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import TabNavigation from "../../components/TabNavigation";
+import { addStylesToHtml } from "../../utils/htmlUtils";
 
 interface PatchDetail {
   id: string;
@@ -21,7 +22,6 @@ export default function PatchDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [activeLanguage, setActiveLanguage] = useState<"ko" | "en">("ko");
   const router = useRouter();
-
   const languageTabs = [
     { label: "한국어", value: "ko" },
     { label: "영어", value: "en" },
@@ -103,12 +103,14 @@ export default function PatchDetailPage() {
             {activeLanguage === "ko" ? (
               <div
                 dangerouslySetInnerHTML={{
-                  __html: patchDetail.translateKo || "",
+                  __html: addStylesToHtml(patchDetail.translateKo || ""),
                 }}
               />
             ) : (
               <div
-                dangerouslySetInnerHTML={{ __html: patchDetail.content || "" }}
+                dangerouslySetInnerHTML={{
+                  __html: addStylesToHtml(patchDetail.content || ""),
+                }}
               />
             )}
           </div>
