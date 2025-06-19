@@ -2,10 +2,10 @@ import Link from "next/link";
 
 const navItems = {
   "/": {
-    name: "홈",
+    name: "Home",
   },
   "/patch": {
-    name: "패치 내역",
+    name: "Marvel Rivals",
   },
 };
 
