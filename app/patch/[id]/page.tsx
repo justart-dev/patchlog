@@ -3,12 +3,13 @@
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import TabNavigation from "../../components/TabNavigation";
-import { addStylesToHtml } from "../../utils/htmlUtils";
+import { addStylesToHtml } from "app/utils/htmlUtils";
 
 interface PatchDetail {
   id: string;
   app_name: string;
   title: string;
+  url : string;
   published_at: string;
   translated_ko: string;
   content: string;
@@ -20,12 +21,12 @@ export default function PatchDetailPage() {
   const [patchDetail, setPatchDetail] = useState<PatchDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeLanguage, setActiveLanguage] = useState<"ko" | "en">("ko");
+  const [activeLanguage, setActiveLanguage] = useState("ko");
   const router = useRouter();
   
   const languageTabs = [
-    { label: "한국어", value: "ko" },
-    { label: "영어", value: "en" },
+    { label: "정보", value: "ko" },
+    { label: "메타 분석", value: "meta",disabled: true },
   ];
 
   useEffect(() => {
@@ -100,25 +101,31 @@ export default function PatchDetailPage() {
           <TabNavigation
             items={languageTabs}
             defaultActive="ko"
-            onChange={(value) => setActiveLanguage(value as "ko" | "en")}
-            className="mb-8"
+            onChange={(value) => {
+              const selectedTab = languageTabs.find(tab => tab.value === value);
+              if (selectedTab && !selectedTab.disabled) {
+                setActiveLanguage(value);
+              }
+            }}
+            // className="mb-8"
           />
-
-          <div className="max-w-none">
-            {activeLanguage === "ko" ? (
+          <div className="mt-14 max-w-none">
+            {activeLanguage === "ko" && (
               <div
                 dangerouslySetInnerHTML={{
                   __html: addStylesToHtml(patchDetail.translated_ko || ""),
                 }}
               />
-            ) : (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: addStylesToHtml(patchDetail.content || ""),
-                }}
-              />
             )}
           </div>
+        </div>
+        <div className="flex justify-center">
+          <button
+            onClick={() => window.open(patchDetail.url, '_blank')}
+            className="my-4 text-sm text-neutral-600 cursor-pointer hover:text-neutral-800 transition-colors"
+          >
+            [원문 보러 가기]
+          </button>
         </div>
 
         <div className="mt-12 flex justify-center">
