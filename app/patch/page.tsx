@@ -13,7 +13,7 @@ export default async function PatchPage() {
   );
 
   const patchLogs: PatchLog[] = await response.json();
-
+  console.log("🔥 Fetching data:", patchLogs);
   return (
     <section className="py-8">
       <div className="max-w-4xl mx-auto px-4">
