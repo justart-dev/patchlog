@@ -1,14 +1,21 @@
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import Link from "next/link";
+import Image from "next/image";
 
 export interface PatchLog {
   id: string;
+  app_name: string;
+  app_gid: string;
   title: string;
   published_at: string;
   content?: string;
-  app_name: string;
-  app_gid: string;
+  translated_ko? : string;
+  feed_type: number;
+  capsule_image: string;
+  steam_app_metadata : {
+    capsule_image? : string;
+  }
 }
 
 interface PatchListProps {
@@ -23,22 +30,25 @@ export function PatchList({ patchLogs }: PatchListProps) {
           <Link
             key={log.id}
             href={`/patch/${log.id}`}
-            className="block bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:bg-gray-50 transition-colors"
+            className="block bg-white rounded-lg shadow-sm p-3 border border-gray-200 hover:bg-gray-50 transition-colors"
           >
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
-              <div className="order-2 sm:order-1">
-                <h2 className="text-lg font-semibold text-gray-900">
+            <div className="flex flex-row gap-4">
+              <div className="flex-shrink-0 w-36 h-20 flex items-center justify-center">
+                {log.steam_app_metadata.capsule_image && (
+                  <Image
+                    src={log.steam_app_metadata.capsule_image}
+                    alt={log.app_name}
+                    width={160}
+                    height={96}
+                    className="rounded"
+                  />
+                )}
+              </div>
+              <div className="flex-1 min-w-0 flex flex-col justify-center">
+                <h2 className="text-xl font-semibold text-gray-900">
                   {log.title}
                 </h2>
-                <p className="mt-1 text-sm text-gray-500">
-                  {format(new Date(log.published_at), "yyyy년 M월 d일", {
-                    locale: ko,
-                  })}
-                </p>
               </div>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border self-start sm:self-auto order-1 sm:order-2 bg-gray-50 text-gray-800 whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[120px] sm:max-w-none">
-                {log.app_name}
-              </span>
             </div>
           </Link>
         ))}
