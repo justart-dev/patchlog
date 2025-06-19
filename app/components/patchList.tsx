@@ -30,18 +30,20 @@ export function PatchList({ patchLogs }: PatchListProps) {
           <Link
             key={log.id}
             href={`/patch/${log.id}`}
-            className="block bg-white rounded-lg shadow-sm p-3 border border-gray-200 hover:bg-gray-50 transition-colors"
+            className="block bg-white rounded-lg shadow-sm p-3 border border-gray-200  transition-all duration-300 ease-in-out relative overflow-hidden hover:scale-[1.01]"
           >
             <div className="flex flex-row gap-4">
               <div className="flex-shrink-0 w-36 h-20 flex items-center justify-center">
-                {log.steam_app_metadata.capsule_image && (
+                {log.steam_app_metadata.capsule_image ? (
                   <Image
                     src={log.steam_app_metadata.capsule_image}
                     alt={log.app_name}
-                    width={160}
-                    height={96}
+                    width={200}
+                    height={112}
                     className="rounded"
                   />
+                ) : (
+                  <div className="w-full h-full bg-gray-100 rounded animate-pulse" />
                 )}
               </div>
               <div className="flex-1 min-w-0 flex flex-col justify-center">
