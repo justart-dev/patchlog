@@ -4,7 +4,7 @@ export default function Page() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12 md:py-20">
       <div className="text-center mb-16">
-        <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6 pb-1">
+        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6 pb-1">
           Patchlog
         </h1>
         <p className="text-2xl text-gray-600 max-w-2xl mx-auto">

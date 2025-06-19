@@ -30,7 +30,7 @@ export function PatchList({ patchLogs }: PatchListProps) {
           <Link
             key={log.id}
             href={`/patch/${log.id}`}
-            className="block bg-white rounded-lg shadow-sm p-3 border border-gray-200  transition-all duration-300 ease-in-out relative overflow-hidden hover:scale-[1.01]"
+            className="block bg-white rounded-lg shadow-sm p-3 border border-gray-200"
           >
             <div className="flex flex-row gap-4">
               <div className="flex-shrink-0 w-36 h-20 flex items-center justify-center">
@@ -47,7 +47,7 @@ export function PatchList({ patchLogs }: PatchListProps) {
                 )}
               </div>
               <div className="flex-1 min-w-0 flex flex-col justify-center">
-                <h2 className="text-xl font-semibold text-gray-900">
+                <h2 className="text-sm font-normal text-gray-900">
                   {log.title}
                 </h2>
               </div>
