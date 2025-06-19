@@ -23,25 +23,25 @@ export function addStylesToHtml(html: string): string {
   };
 
   // 제목 스타일
-  html = addStyle('h1', 'font-weight: 700; font-size: 2.5rem; margin-bottom: 2rem; margin-top: 6rem; color: #111827; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.75rem;');
-  html = addStyle('h2', 'font-weight: 700; font-size: 2rem; margin-bottom: 1.5rem; margin-top: 2.5rem; color: #1f2937;');
-  html = addStyle('h3', 'font-weight: 600; font-size: 1.75rem; margin-bottom: 1.25rem; margin-top: 2rem; color: #374151;');
+  html = addStyle('h1', 'font-weight: 700; font-size: 2.25rem; margin-bottom: 1.5rem; margin-top: 3rem; color: #111827; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem;');
+  html = addStyle('h2', 'font-weight: 700; font-size: 1.875rem; margin-bottom: 1.25rem; margin-top: 2rem; color: #1f2937;');
+  html = addStyle('h3', 'font-weight: 600; font-size: 1.5rem; margin-bottom: 1rem; margin-top: 1.75rem; color: #374151;');
   
   // 단락 스타일
-  html = addStyle('p', 'margin-bottom: 2rem; font-size: 1.125rem; color: #374151;');
+  html = addStyle('p', 'margin : 0.5rem 0; font-size: 1rem; color: #374151;');
   
   // 목록 스타일
   html = addStyle('ul', 'list-style-type: disc; padding-left: 2.5rem; margin-bottom: 2rem;');
   html = addStyle('ol', 'list-style-type: decimal; padding-left: 2.5rem; margin-bottom: 2rem;');
-  html = addStyle('li', 'margin-bottom: 0.75rem; font-size: 1.1rem;');
+  html = addStyle('li', 'margin-bottom: 0.5rem; font-size: 0.95rem;');
   
   // 링크 스타일
-  html = addStyle('a', 'color: #2563eb; text-decoration: none; font-size: 1.125rem;');
+  html = addStyle('a', 'color: #2563eb; text-decoration: none; font-size: 1rem;');
   html = addStyle('a:hover', 'text-decoration: underline; color: #1e40af;');
   
   // 강조 스타일
-  html = addStyle('strong', 'font-weight: 600; color: #111827; font-size: 1.125rem;');
-  html = addStyle('em', 'font-style: italic; font-size: 1.125rem;');
+  html = addStyle('strong', 'font-weight: 600; color: #111827; font-size: 1rem;');
+  html = addStyle('em', 'font-style: italic; font-size: 1rem;');
   
   // 코드 블록 스타일
   html = addStyle('code', 'background-color: #f3f4f6; padding: 0.125rem 0.5rem; border-radius: 0.25rem; font-family: monospace; font-size: 1rem;');
