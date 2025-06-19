@@ -6,6 +6,15 @@
 export function addStylesToHtml(html: string): string {
   if (!html) return '';
 
+    // 이스케이프 문자 제거
+    html = html
+    .replace(/\\n/g, '\n')
+    .replace(/\\r/g, '\r')
+    .replace(/\\t/g, '\t')
+    .replace(/\\"/g, '"')
+    .replace(/\\'/g, "'")
+    .replace(/\\\\/g, '\\');
+
   // 공통 스타일링 함수
   const addStyle = (tag: string, style: string) => {
     const regex = new RegExp(`<${tag}(\\s+[^>]*)?>`, 'gi');
@@ -23,9 +32,9 @@ export function addStylesToHtml(html: string): string {
   };
 
   // 제목 스타일
-  html = addStyle('h1', 'font-weight: 700; font-size: 2.25rem; margin-bottom: 1.5rem; margin-top: 3rem; color: #111827; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem;');
-  html = addStyle('h2', 'font-weight: 700; font-size: 1.875rem; margin-bottom: 1.25rem; margin-top: 2rem; color: #1f2937;');
-  html = addStyle('h3', 'font-weight: 600; font-size: 1.5rem; margin-bottom: 1rem; margin-top: 1.75rem; color: #374151;');
+  html = addStyle('h1', 'font-weight: 700; font-size: 2rem; margin-bottom: 1.5rem; margin-top: 3rem; color: #111827; padding-bottom: 0.5rem;');
+  html = addStyle('h2', 'font-weight: 700; font-size: 1.5rem; margin-bottom: 1.25rem; margin-top: 2rem; color: #1f2937;');
+  html = addStyle('h3', 'font-weight: 600; font-size: 1.2rem; margin-bottom: 1rem; margin-top: 1.75rem; color: #374151;');
   
   // 단락 스타일
   html = addStyle('p', 'margin : 0.5rem 0; font-size: 1rem; color: #374151;');
