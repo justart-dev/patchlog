@@ -16,7 +16,7 @@ export async function GET() {
     if (error) {
       throw error;
     }
-
+    console.log('get logs data', data)
     return NextResponse.json(data);
   } catch (error) {
     console.error("Error fetching patch logs:", error);
