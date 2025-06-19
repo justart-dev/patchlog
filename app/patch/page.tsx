@@ -3,17 +3,15 @@ export const dynamic = "force-dynamic";
 import { PatchList, type PatchLog } from "../components/patchList";
 
 export default async function PatchPage() {
-  console.log("🔥 Fetching from:", process.env.API_BASE_URL);
-
   const response = await fetch(
     `${process.env.API_BASE_URL}/api/steam-patch-logs`,
-    {
-      next: { revalidate: 21600 },
-    }
+    // {
+    //   next: { revalidate: 21600 },
+    // }
   );
 
   const patchLogs: PatchLog[] = await response.json();
-  console.log("🔥 Fetching data:", patchLogs);
+  
   return (
     <section className="py-8">
       <div className="max-w-4xl mx-auto px-4">

@@ -11,11 +11,7 @@ export interface PatchLog {
   published_at: string;
   content?: string;
   translated_ko? : string;
-  feed_type: number;
-  capsule_image: string;
-  steam_app_metadata : {
-    capsule_image? : string;
-  }
+  capsule_image : string;
 }
 
 interface PatchListProps {
@@ -34,9 +30,9 @@ export function PatchList({ patchLogs }: PatchListProps) {
           >
             <div className="flex flex-row gap-4">
               <div className="flex-shrink-0 w-36 h-20 flex items-center justify-center">
-                {log.steam_app_metadata.capsule_image ? (
+                {log.capsule_image ? (
                   <Image
-                    src={log.steam_app_metadata.capsule_image}
+                    src={log.capsule_image}
                     alt={log.app_name}
                     width={200}
                     height={112}
