@@ -8,7 +8,7 @@ import { addStylesToHtml } from "../../utils/htmlUtils";
 interface PatchDetail {
   id: string;
   app_name: string;
-  app_title: string;
+  title: string;
   published_at: string;
   translated_ko: string;
   content: string;
@@ -22,8 +22,7 @@ export default function PatchDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [activeLanguage, setActiveLanguage] = useState<"ko" | "en">("ko");
   const router = useRouter();
-
-
+  
   const languageTabs = [
     { label: "한국어", value: "ko" },
     { label: "영어", value: "en" },
@@ -83,7 +82,7 @@ export default function PatchDetailPage() {
           </span>
         </div>
         <h1 className="mb-2 text-3xl font-bold tracking-tight">
-          {patchDetail.app_title}
+          {patchDetail.title}
         </h1>
         {patchDetail ? (
           <div className="text-gray-500 mb-8">
@@ -105,7 +104,7 @@ export default function PatchDetailPage() {
             className="mb-8"
           />
 
-          <div className="prose max-w-none">
+          <div className="max-w-none">
             {activeLanguage === "ko" ? (
               <div
                 dangerouslySetInnerHTML={{
