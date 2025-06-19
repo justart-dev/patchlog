@@ -8,10 +8,17 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 export async function GET() {
   try {
     const { data, error } = await supabase
-      .from("steam_patch_logs")
-      .select('id, title, published_at, app_name, app_gid')
-      .order("published_at", { ascending: false })
-      .limit(5);
+  .from("steam_patch_logs")
+  .select(`
+    id,title,app_id,app_gid,app_name,published_at,feed_type,
+    steam_app_metadata (
+      capsule_image
+    )
+  `)
+  .eq("feed_type", 1)
+  .order("published_at", { ascending: false })
+  .limit(5);
+
 
     if (error) {
       throw error;

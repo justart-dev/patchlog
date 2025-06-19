@@ -14,7 +14,7 @@ export async function GET(
     const { data, error } = await supabase
       .from("steam_patch_logs")
       .select(
-        "id, title, published_at, content, app_name, app_gid,translated_ko"
+        '*'
       )
       .eq("id", resolvedParams.id)
       .single();
@@ -30,15 +30,7 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({
-      id: data.id,
-      title: data.title,
-      content: data.content,
-      publishedAt: data.published_at,
-      appName: data.app_name,
-      appGid: data.app_gid,
-      translateKo: data.translated_ko,
-    });
+    return NextResponse.json(data);
   } catch (error) {
     console.error("Error fetching patch detail:", error);
     return NextResponse.json(
