@@ -58,3 +58,5 @@ dist
 # .gitignore
 .env*.local
 .env
+.mcp.json
+
