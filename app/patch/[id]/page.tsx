@@ -32,7 +32,7 @@ export default function PatchDetailPage() {
   useEffect(() => {
     const fetchPatchDetail = async () => {
       try {
-        const response = await fetch(`/api/steam-patch-logs/${params.id}`);
+        const response = await fetch(`/api/marvel-patch-logs/${params.id}`);
         if (!response.ok) {
           throw new Error("패치 정보를 불러오는데 실패했습니다.");
         }

@@ -4,7 +4,7 @@ import { PatchList, type PatchLog } from "../components/patchList";
 
 export default async function PatchPage() {
   const response = await fetch(
-    `${process.env.API_BASE_URL}/api/steam-patch-logs`,
+    `${process.env.API_BASE_URL}/api/marvel-patch-logs`,
     // {
     //   next: { revalidate: 21600 },
     // }
