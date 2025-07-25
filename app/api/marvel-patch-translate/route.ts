@@ -14,7 +14,9 @@ interface PatchLog {
   translated_ko?: string;
 }
 
-export async function POST() {
+export async function POST(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const testMode = searchParams.get('test') === 'true';
   try {
     // 오늘 synced_at인 레코드들 가져오기 (한국시간 기준)
     const kstDate = new Date(Date.now() + 9 * 60 * 60 * 1000); // UTC+9
@@ -52,51 +54,61 @@ export async function POST() {
     // 각 패치 로그를 번역
     for (const log of patchLogs as PatchLog[]) {
       try {
-        // OpenAI API 호출을 위한 body 준비
-        const requestBody = {
-          ...marvelPrompt,
-          messages: [
-            marvelPrompt.messages[0], // system message
+        let translatedContent: string;
+
+        if (testMode) {
+          // 테스트 모드: OpenAI API 호출 없이 더미 번역
+          translatedContent = `[테스트 번역] ${log.content.substring(0, 100)}...`;
+          console.log(`Test mode: Skipping OpenAI API for log ${log.id}`);
+        } else {
+          // 실제 모드: OpenAI API 호출
+          const requestBody = {
+            ...marvelPrompt,
+            messages: [
+              marvelPrompt.messages[0], // system message
+              {
+                role: "user",
+                content: log.content,
+              },
+            ],
+          };
+
+          const openaiResponse = await fetch(
+            "https://api.openai.com/v1/chat/completions",
             {
-              role: "user",
-              content: log.content,
-            },
-          ],
-        };
-
-        // OpenAI API 호출
-        const openaiResponse = await fetch(
-          "https://api.openai.com/v1/chat/completions",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${openaiApiKey}`,
-            },
-            body: JSON.stringify(requestBody),
-          }
-        );
-
-        if (!openaiResponse.ok) {
-          console.error(
-            `OpenAI API error for log ${log.id}:`,
-            openaiResponse.status
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${openaiApiKey}`,
+              },
+              body: JSON.stringify(requestBody),
+            }
           );
-          continue;
+
+          if (!openaiResponse.ok) {
+            console.error(
+              `OpenAI API error for log ${log.id}:`,
+              openaiResponse.status
+            );
+            continue;
+          }
+
+          const openaiData = await openaiResponse.json();
+          translatedContent = openaiData.choices?.[0]?.message?.content;
+
+          if (!translatedContent) {
+            console.error(`No translation received for log ${log.id}`);
+            continue;
+          }
         }
 
-        const openaiData = await openaiResponse.json();
-        const translatedContent = openaiData.choices?.[0]?.message?.content;
-
-        if (!translatedContent) {
-          console.error(`No translation received for log ${log.id}`);
-          continue;
-        }
-
-        // DB에 번역 결과 업데이트
+        // DB에 번역 결과와 synced_at 업데이트
         const { error: updateError } = await supabase
           .from("steam_patch_logs")
-          .update({ translated_ko: translatedContent })
+          .update({ 
+            translated_ko: translatedContent,
+            synced_at: new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString() // KST
+          })
           .eq("id", log.id);
 
         if (updateError) {
@@ -107,8 +119,8 @@ export async function POST() {
         translatedCount++;
         console.log(`Successfully translated log ${log.id}`);
 
-        // API 호출 간 잠시 대기 (rate limit 방지)
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // API 호출 간 잠시 대기 (rate limit 방지) - 테스트 모드에서는 짧게
+        await new Promise((resolve) => setTimeout(resolve, testMode ? 100 : 1000));
       } catch (error) {
         console.error(`Error processing log ${log.id}:`, error);
         continue;
