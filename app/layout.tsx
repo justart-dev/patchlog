@@ -5,6 +5,7 @@ import { GeistMono } from "geist/font/mono";
 import { Navbar } from "./components/nav";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import Script from "next/script";
 import Footer from "./components/footer";
 import { baseUrl } from "./sitemap";
 
@@ -59,7 +60,9 @@ export default function RootLayout({
           </div>
         </div>
         <main className="flex-grow">
-          <div className="max-w-7xl mx-auto px-4 py-8">{children}</div>
+          <div className="max-w-7xl mx-auto px-4 py-8">
+            {children}
+          </div>
         </main>
         <div className="w-full bg-white border-t border-gray-100 mt-auto">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4">
@@ -68,6 +71,11 @@ export default function RootLayout({
         </div>
         <Analytics />
         <SpeedInsights />
+        <Script 
+          src="https://cloud.umami.is/script.js" 
+          data-website-id="281e61a4-5b43-473c-a852-bec5281dd36b"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
