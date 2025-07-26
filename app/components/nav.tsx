@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 interface NavItem {
   name: string;
@@ -70,7 +71,7 @@ const navItems: NavItem[] = [
 
 export function Navbar() {
   return (
-    <nav className="w-full">
+    <nav className="w-full flex justify-between items-center">
       <div className="flex items-center space-x-6">
         {navItems.map((item) => (
           <Link
@@ -84,6 +85,21 @@ export function Navbar() {
             <span>{item.name}</span>
           </Link>
         ))}
+      </div>
+
+      <div className="flex items-center space-x-4">
+        <SignedOut>
+          <SignInButton mode="modal">
+            <button className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors border border-gray-300 rounded-md hover:bg-gray-50">
+              로그인
+            </button>
+          </SignInButton>
+        </SignedOut>
+        <SignedIn>
+          <div className="flex items-center space-x-4">
+            <UserButton afterSignOutUrl="/" />
+          </div>
+        </SignedIn>
       </div>
     </nav>
   );

@@ -8,6 +8,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import Script from "next/script";
 import Footer from "./components/footer";
 import { baseUrl } from "./sitemap";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -45,38 +46,38 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="ko"
-      className={cx(
-        "text-black bg-white",
-        GeistSans.variable,
-        GeistMono.variable
-      )}
-    >
-      <body className="antialiased flex flex-col min-h-screen">
-        <div className="w-full bg-white border-b border-gray-100">
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4">
-            <Navbar />
+    <ClerkProvider>
+      <html
+        lang="ko"
+        className={cx(
+          "text-black bg-white",
+          GeistSans.variable,
+          GeistMono.variable
+        )}
+      >
+        <body className="antialiased flex flex-col min-h-screen">
+          <div className="w-full bg-white border-b border-gray-100">
+            <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4">
+              <Navbar />
+            </div>
           </div>
-        </div>
-        <main className="flex-grow">
-          <div className="max-w-7xl mx-auto px-4 py-8">
-            {children}
+          <main className="flex-grow">
+            <div className="max-w-7xl mx-auto px-4 py-8">{children}</div>
+          </main>
+          <div className="w-full bg-white border-t border-gray-100 mt-auto">
+            <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4">
+              <Footer />
+            </div>
           </div>
-        </main>
-        <div className="w-full bg-white border-t border-gray-100 mt-auto">
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4">
-            <Footer />
-          </div>
-        </div>
-        <Analytics />
-        <SpeedInsights />
-        <Script 
-          src="https://cloud.umami.is/script.js" 
-          data-website-id="281e61a4-5b43-473c-a852-bec5281dd36b"
-          strategy="afterInteractive"
-        />
-      </body>
-    </html>
+          <Analytics />
+          <SpeedInsights />
+          <Script
+            src="https://cloud.umami.is/script.js"
+            data-website-id="281e61a4-5b43-473c-a852-bec5281dd36b"
+            strategy="afterInteractive"
+          />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

@@ -60,3 +60,6 @@ dist
 .env
 .mcp.json
 
+
+# clerk configuration (can include secrets)
+/.clerk/
