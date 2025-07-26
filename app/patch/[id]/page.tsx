@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import TabNavigation from "../../components/TabNavigation";
 import { addStylesToHtml } from "../../../app/utils/htmlUtils";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import StatusDisplay from "../../components/StatusDisplay";
 
 interface PatchDetail {
   id: string;
@@ -53,25 +54,41 @@ export default function PatchDetailPage() {
 
   if (loading) {
     return (
-      <LoadingSpinner
-        message="패치 정보를 불러오는 중..."
-        className="min-h-screen"
-      />
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner
+          message="패치 정보를 불러오는 중..."
+          className="py-12"
+        />
+      </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex justify-center items-center min-h-screen text-red-500">
-        {error}
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <StatusDisplay
+          title="오류 발생"
+          message={error}
+          variant="error"
+          showHomeButton
+          showRetryButton
+          onRetry={() => window.location.reload()}
+          className="py-12"
+        />
       </div>
     );
   }
 
   if (!patchDetail) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        패치 정보를 찾을 수 없습니다.
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <StatusDisplay
+          title="패치 정보를 찾을 수 없음"
+          message="요청하신 패치 정보를 찾을 수 없습니다. 패치 목록에서 다시 확인해주세요."
+          variant="warning"
+          showHomeButton
+          className="py-12"
+        />
       </div>
     );
   }
@@ -87,17 +104,13 @@ export default function PatchDetailPage() {
         <h1 className="mb-2 text-3xl font-bold tracking-tight">
           {patchDetail.title}
         </h1>
-        {patchDetail ? (
-          <div className="text-gray-500 mb-8">
-            {new Date(patchDetail.published_at).toLocaleDateString("ko-KR", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </div>
-        ) : (
-          <div className="text-gray-500 mb-8">Loading...</div>
-        )}
+        <div className="text-gray-500 mb-8">
+          {new Date(patchDetail.published_at).toLocaleDateString("ko-KR", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </div>
 
         <div className="mt-8">
           <TabNavigation
