@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { useState } from "react";
 
 interface NavItem {
   name: string;
@@ -70,37 +73,97 @@ const navItems: NavItem[] = [
 ];
 
 export function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
-    <nav className="w-full flex justify-between items-center">
-      <div className="flex items-center space-x-6">
-        {navItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            target={item.blank ? "_blank" : "_self"}
-            rel={item.blank ? "noopener noreferrer" : ""}
-            className="flex items-center space-x-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors py-2"
+    <nav className="w-full">
+      <div className="flex justify-between items-center">
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center space-x-6">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              target={item.blank ? "_blank" : "_self"}
+              rel={item.blank ? "noopener noreferrer" : ""}
+              className="flex items-center space-x-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors py-2"
+            >
+              <span className="text-base">{item.icon}</span>
+              <span className="hidden sm:inline">{item.name}</span>
+            </Link>
+          ))}
+        </div>
+
+        {/* Mobile menu button */}
+        <div className="md:hidden">
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="p-2 text-gray-500 hover:text-gray-900 focus:outline-none"
+            aria-label="Toggle menu"
           >
-            <span>{item.icon}</span>
-            <span>{item.name}</span>
-          </Link>
-        ))}
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              {isMenuOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
+          </button>
+        </div>
+
+        {/* Auth buttons */}
+        <div className="flex items-center space-x-2">
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors whitespace-nowrap">
+                로그인
+              </button>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <div className="flex items-center">
+              <UserButton afterSignOutUrl="/" />
+            </div>
+          </SignedIn>
+        </div>
       </div>
 
-      <div className="flex items-center space-x-4">
-        <SignedOut>
-          <SignInButton mode="modal">
-            <button className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors border border-gray-300 rounded-md hover:bg-gray-50">
-              로그인
-            </button>
-          </SignInButton>
-        </SignedOut>
-        <SignedIn>
-          <div className="flex items-center space-x-4">
-            <UserButton afterSignOutUrl="/" />
-          </div>
-        </SignedIn>
-      </div>
+      {/* Mobile menu */}
+      {isMenuOpen && (
+        <div className="md:hidden mt-2 space-y-2 pb-2">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              target={item.blank ? "_blank" : "_self"}
+              rel={item.blank ? "noopener noreferrer" : ""}
+              className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 rounded-md"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <div className="flex items-center space-x-2">
+                <span className="text-gray-500">{item.icon}</span>
+                <span>{item.name}</span>
+              </div>
+            </Link>
+          ))}
+
+        </div>
+      )}
     </nav>
   );
 }
