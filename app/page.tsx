@@ -29,7 +29,7 @@ export default function Page() {
             </p>
 
             {/* Divider */}
-            <div className="flex items-center justify-center mb-12">
+            <div className="flex items-center justify-center my-20">
               <div className="flex-1 h-px bg-gradient-to-r from-transparent to-slate-200"></div>
               <div className="px-6">
                 <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
@@ -64,6 +64,33 @@ export default function Page() {
                 <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse delay-200"></div>
                 <span>매일 업데이트</span>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Section */}
+        <div className="my-60">
+          <h2 className="text-2xl md:text-3xl font-bold text-center bg-gradient-to-r from-slate-900 to-blue-700 bg-clip-text text-transparent mb-16 pb-4 tracking-tight leading-tight">
+            서비스 특징
+          </h2>
+          <div className="grid grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-3">
+                매일
+              </div>
+              <div className="text-base text-slate-600">자동 업데이트</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-purple-600 mb-3">
+                AI
+              </div>
+              <div className="text-base text-slate-600">자동 번역</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-emerald-600 mb-3">
+                무료
+              </div>
+              <div className="text-base text-slate-600">서비스 이용</div>
             </div>
           </div>
         </div>
@@ -167,35 +194,8 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Stats Section */}
-        <div className="my-40">
-          <h2 className="text-2xl md:text-3xl font-bold text-center bg-gradient-to-r from-slate-900 to-blue-700 bg-clip-text text-transparent mb-16 pb-4 tracking-tight leading-tight">
-            서비스 특징
-          </h2>
-          <div className="grid grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-3">
-                매일
-              </div>
-              <div className="text-base text-slate-600">자동 업데이트</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-purple-600 mb-3">
-                AI
-              </div>
-              <div className="text-base text-slate-600">자동 번역</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-emerald-600 mb-3">
-                무료
-              </div>
-              <div className="text-base text-slate-600">서비스 이용</div>
-            </div>
-          </div>
-        </div>
-
         {/* How it works */}
-        <div className="my-40">
+        <div className="my-60">
           <h2 className="text-2xl md:text-3xl font-bold text-center bg-gradient-to-r from-slate-900 to-blue-700 bg-clip-text text-transparent mb-16 pb-4 tracking-tight leading-tight">
             어떻게 작동하나요?
           </h2>
@@ -297,7 +297,7 @@ export default function Page() {
         </div>
 
         {/* Game Library Preview */}
-        <div className="my-40">
+        <div className="my-20">
           <h2 className="text-2xl md:text-3xl font-bold text-center bg-gradient-to-r from-slate-900 to-blue-700 bg-clip-text text-transparent mb-16 pb-4 tracking-tight leading-tight">
             지원 게임
           </h2>
@@ -333,7 +333,7 @@ export default function Page() {
         <div className="text-center">
           <Link
             href="/patch"
-            className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-medium text-lg transition-colors duration-200"
+            className="inline-flex items-center space-x-2 border border-slate-300 hover:border-slate-400 text-slate-700 hover:text-slate-900 px-8 py-4 rounded-lg font-medium text-lg transition-all duration-200"
           >
             <span>패치노트 확인하기</span>
             <svg
