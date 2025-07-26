@@ -28,7 +28,7 @@ export default function PatchDetailPage() {
 
   const languageTabs = [
     { label: "정보", value: "ko" },
-    { label: "메타 분석", value: "meta", disabled: true },
+    { label: "코멘트", value: "comment", disabled: true },
   ];
 
   useEffect(() => {
