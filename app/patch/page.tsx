@@ -14,14 +14,14 @@ export default function PatchPage() {
     const fetchPatchLogs = async () => {
       try {
         const response = await fetch(
-          '/api/marvel-patch-logs'
-          // { next: { revalidate: 21600 } }
+          "/api/marvel-patch-logs",
+          { next: { revalidate: 1800 } } // 30분(1800초)마다 재검증
         );
-        
+
         if (!response.ok) {
           throw new Error("패치 로그를 불러오는데 실패했습니다.");
         }
-        
+
         const data = await response.json();
         setPatchLogs(data);
       } catch (err) {
@@ -36,17 +36,22 @@ export default function PatchPage() {
     fetchPatchLogs();
   }, []);
 
-  // Get the latest update date from patch logs
-  const latestDate = patchLogs && patchLogs.length > 0
-    ? new Date(
-        Math.max(
-          ...patchLogs.map((log) => new Date(log.published_at).getTime())
+  const latestDate =
+    patchLogs && patchLogs.length > 0
+      ? new Date(
+          Math.max(
+            ...patchLogs.map((log) => new Date(log.published_at).getTime())
+          )
         )
-      )
-    : new Date();
-    
+      : new Date();
+
   if (loading) {
-    return <LoadingSpinner message="패치 목록을 불러오는 중..." className="min-h-screen" />;
+    return (
+      <LoadingSpinner
+        message="패치 목록을 불러오는 중..."
+        className="min-h-screen"
+      />
+    );
   }
 
   if (error) {
