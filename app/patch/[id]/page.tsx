@@ -3,13 +3,14 @@
 import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import TabNavigation from "../../components/TabNavigation";
-import { addStylesToHtml } from "app/utils/htmlUtils";
+import { addStylesToHtml } from "../../../app/utils/htmlUtils";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 interface PatchDetail {
   id: string;
   app_name: string;
   title: string;
-  url : string;
+  url: string;
   published_at: string;
   translated_ko: string;
   content: string;
@@ -23,10 +24,10 @@ export default function PatchDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [activeLanguage, setActiveLanguage] = useState("ko");
   const router = useRouter();
-  
+
   const languageTabs = [
     { label: "정보", value: "ko" },
-    { label: "메타 분석", value: "meta",disabled: true },
+    { label: "메타 분석", value: "meta", disabled: true },
   ];
 
   useEffect(() => {
@@ -52,9 +53,10 @@ export default function PatchDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        로딩 중...
-      </div>
+      <LoadingSpinner
+        message="패치 정보를 불러오는 중..."
+        className="min-h-screen"
+      />
     );
   }
 
@@ -102,7 +104,9 @@ export default function PatchDetailPage() {
             items={languageTabs}
             defaultActive="ko"
             onChange={(value) => {
-              const selectedTab = languageTabs.find(tab => tab.value === value);
+              const selectedTab = languageTabs.find(
+                (tab) => tab.value === value
+              );
               if (selectedTab && !selectedTab.disabled) {
                 setActiveLanguage(value);
               }
@@ -121,7 +125,7 @@ export default function PatchDetailPage() {
         </div>
         <div className="flex justify-center">
           <button
-            onClick={() => window.open(patchDetail.url, '_blank')}
+            onClick={() => window.open(patchDetail.url, "_blank")}
             className="my-4 text-sm text-neutral-600 cursor-pointer hover:text-neutral-800 transition-colors"
           >
             [원문 보러 가기]
