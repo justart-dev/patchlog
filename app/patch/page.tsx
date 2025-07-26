@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { PatchList, type PatchLog } from "../components/patchList";
 import LoadingSpinner from "../components/LoadingSpinner";
+import StatusDisplay from "../components/StatusDisplay";
 
 export default function PatchPage() {
   const [patchLogs, setPatchLogs] = useState<PatchLog[] | null>(null);
@@ -50,8 +51,16 @@ export default function PatchPage() {
 
   if (error) {
     return (
-      <div className="flex justify-center items-center min-h-screen text-red-500">
-        {error}
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <StatusDisplay
+          title="오류 발생"
+          message={error}
+          variant="error"
+          showHomeButton
+          showRetryButton
+          onRetry={() => window.location.reload()}
+          className="py-12"
+        />
       </div>
     );
   }
