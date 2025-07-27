@@ -13,17 +13,40 @@ import { ClerkProvider } from "@clerk/nextjs";
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "Patchlog",
+    default: "패치로그 | Patchlog",
     template: "%s | Patchlog",
   },
-  description: "한글 스팀 패치 노트",
+  description: "한글 스팀 패치 노트 - 최신 게임 업데이트와 패치 정보를 한글로 제공",
+  keywords: ["패치노트", "스팀", "게임", "업데이트", "한글", "패치로그", "Steam", "게임 패치"],
+  authors: [{ name: "Patchlog" }],
+  creator: "Patchlog",
+  publisher: "Patchlog",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
-    title: "Patchlog - 스팀 게임 패치 노트",
-    description: "한글로 제공되는 게임 패치 노트",
+    title: "패치로그 | Patchlog - 스팀 게임 패치 노트",
+    description: "한글로 제공되는 최신 게임 패치 노트와 업데이트 정보",
     url: baseUrl,
-    siteName: "Patchlog",
+    siteName: "패치로그 | Patchlog",
     locale: "ko_KR",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "패치로그 - 한글 스팀 패치 노트",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "패치로그 | Patchlog",
+    description: "한글 스팀 패치 노트",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -35,6 +58,9 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
+  },
+  verification: {
+    google: "google-site-verification-code",
   },
 };
 
