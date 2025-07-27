@@ -3,14 +3,50 @@ import Link from "next/link";
 export default function Page() {
   return (
     <div className="min-h-screen bg-white">
-      <div className="max-w-4xl mx-auto px-4 py-16 md:py-24">
-        {/* Hero Section */}
-        <div className="text-center mb-20">
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6 pb-1">
-            Patchlog
-          </h1>
-        </div>
+      {/* First Screen - Hero & CTA */}
+      <div className="min-h-screen flex flex-col">
+        <div className="max-w-4xl mx-auto px-4 flex-1 flex flex-col justify-center">
+          {/* Hero Section */}
+          <div className="text-center mb-6 -mt-40">
+            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4 pb-1">
+              Patchlog
+            </h1>
+            <p className="text-xl md:text-2xl text-slate-600 font-medium">
+              게임 패치노트를 <span className="text-blue-600">한글로</span>,{" "}
+              <span className="text-purple-600">간편하게</span>
+            </p>
+          </div>
 
+          {/* CTA Section */}
+          <div className="text-center mt-32">
+            <Link
+              href="/patch"
+              className="group inline-flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-10 py-5 rounded-xl font-semibold text-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+            >
+              <span>패치노트 확인하기</span>
+              <svg
+                className="w-6 h-6 group-hover:translate-x-1 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
+              </svg>
+            </Link>
+            <p className="text-sm text-slate-500 mt-6">
+              현재 Marvel Rivals 패치노트를 제공하고 있습니다
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Second Screen - Content */}
+      <div className="max-w-4xl mx-auto px-4 py-16 md:py-24">
         {/* Problem & Solution Statement */}
         <div className="text-center mb-32">
           <div className="max-w-4xl mx-auto">
@@ -327,32 +363,6 @@ export default function Page() {
               <span className="text-sm text-slate-400">Coming Soon</span>
             </div>
           </div>
-        </div>
-
-        {/* CTA Section */}
-        <div className="text-center">
-          <Link
-            href="/patch"
-            className="inline-flex items-center space-x-2 border border-slate-300 hover:border-slate-400 text-slate-700 hover:text-slate-900 px-8 py-4 rounded-lg font-medium text-lg transition-all duration-200"
-          >
-            <span>패치노트 확인하기</span>
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 7l5 5m0 0l-5 5m5-5H6"
-              />
-            </svg>
-          </Link>
-          <p className="text-sm text-slate-500 mt-4">
-            현재 Marvel Rivals 패치노트를 제공하고 있습니다
-          </p>
         </div>
       </div>
     </div>
