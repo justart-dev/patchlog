@@ -7,8 +7,8 @@ export default function Page() {
       <div className="min-h-screen flex flex-col">
         <div className="max-w-4xl mx-auto px-4 flex-1 flex flex-col justify-center">
           {/* Hero Section */}
-          <div className="text-center mb-6 -mt-40">
-            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4 pb-1">
+          <div className="text-center mb-6 mt-10">
+            <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4 pb-4">
               Patchlog
             </h1>
             <p className="text-xl md:text-2xl text-slate-600 font-medium">
@@ -18,7 +18,7 @@ export default function Page() {
           </div>
 
           {/* CTA Section */}
-          <div className="text-center mt-72">
+          <div className="text-center mt-40">
             <Link
               href="/patch"
               className="group inline-flex items-center space-x-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-10 py-5 rounded-xl font-semibold text-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
@@ -41,24 +41,24 @@ export default function Page() {
             <p className="text-sm text-slate-500 mt-6">
               현재 Marvel Rivals 패치노트를 제공하고 있습니다
             </p>
-          </div>
-
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
-            <div className="flex items-center justify-center w-8 h-8 bg-slate-100 rounded-full">
-              <svg
-                className="w-4 h-4 text-slate-600 animate-bounce"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 14l-7 7m0 0l-7-7m7 7V3"
-                />
-              </svg>
+            
+            {/* Scroll Indicator */}
+            <div className="flex justify-center mt-12">
+              <div className="flex items-center justify-center w-8 h-8 bg-slate-100 rounded-full">
+                <svg
+                  className="w-4 h-4 text-slate-600 animate-bounce"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                  />
+                </svg>
+              </div>
             </div>
           </div>
         </div>
