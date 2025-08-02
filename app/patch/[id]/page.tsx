@@ -6,6 +6,7 @@ import TabNavigation from "../../components/TabNavigation";
 import { addStylesToHtml } from "../../../app/utils/htmlUtils";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import StatusDisplay from "../../components/StatusDisplay";
+import CommentSection from "../../components/CommentSection";
 
 interface PatchDetail {
   id: string;
@@ -143,6 +144,11 @@ export default function PatchDetailPage() {
           >
             [원문 보러 가기]
           </button>
+        </div>
+
+        {/* 댓글 섹션 */}
+        <div id="comments" className="mt-16">
+          <CommentSection patchLogId={patchDetail.id} />
         </div>
 
         <div className="mt-12 flex justify-center">
