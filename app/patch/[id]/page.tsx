@@ -127,7 +127,7 @@ export default function PatchDetailPage() {
             }}
             // className="mb-8"
           />
-          <div className="mt-14 max-w-none">
+          <div className="mt-14 max-w-none min-h-60 flex flex-col justify-center">
             {activeLanguage === "ko" && (
               <div
                 dangerouslySetInnerHTML={{
