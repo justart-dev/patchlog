@@ -24,12 +24,12 @@ export default function PatchDetailPage() {
   const [patchDetail, setPatchDetail] = useState<PatchDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeLanguage, setActiveLanguage] = useState("ko");
+  const [activeTab, setActiveTab] = useState("patch");
   const router = useRouter();
 
   const languageTabs = [
-    { label: "정보", value: "ko" },
-    { label: "코멘트", value: "comment", disabled: true },
+    { label: "패치 노트", value: "patch" },
+    { label: "프리미엄 요약", value: "premium", disabled: true },
   ];
 
   useEffect(() => {
@@ -116,25 +116,26 @@ export default function PatchDetailPage() {
         <div className="mt-8">
           <TabNavigation
             items={languageTabs}
-            defaultActive="ko"
+            defaultActive="patch"
             onChange={(value) => {
               const selectedTab = languageTabs.find(
                 (tab) => tab.value === value
               );
               if (selectedTab && !selectedTab.disabled) {
-                setActiveLanguage(value);
+                setActiveTab(value);
               }
             }}
             // className="mb-8"
           />
           <div className="mt-14 max-w-none min-h-60 flex flex-col justify-center">
-            {activeLanguage === "ko" && (
+            {activeTab === "patch" && (
               <div
                 dangerouslySetInnerHTML={{
                   __html: addStylesToHtml(patchDetail.translated_ko || ""),
                 }}
               />
             )}
+            {activeTab === "premium" && <div></div>}
           </div>
         </div>
         <div className="flex justify-center">
