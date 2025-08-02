@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { BatchLogger } from "@/lib/batch-logger";
 
 export async function POST(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -18,9 +19,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // 현재 요청의 host 정보를 사용하여 baseUrl 동적 생성
+  const host = request.headers.get("host") || "localhost:3000";
+  const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+  
   const baseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
+    : `${protocol}://${host}`;
+
+  // 배치 실행 시작 로그
+  const logId = await BatchLogger.logStart("marvel-rivals-batch", {
+    testMode,
+    userAgent: request.headers.get("user-agent"),
+    isVercelCron,
+  });
 
   try {
     console.log("Starting Marvel Rivals batch process...");
@@ -28,10 +40,7 @@ export async function POST(request: Request) {
     // 1단계: 패치 데이터 업데이트
     console.log("Step 1: Updating patch data...");
     const updateResponse = await fetch(`${baseUrl}/api/marvel-patch-update`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      method: "GET",
     });
 
     if (!updateResponse.ok) {
@@ -69,6 +78,19 @@ export async function POST(request: Request) {
       translateResult = { message: "Translation skipped in test mode" };
     }
 
+    // 배치 성공 로그
+    if (logId) {
+      await BatchLogger.logSuccess(logId, {
+        testMode,
+        steamDataFetched: updateResult.success === true,
+        steamItemsCount: updateResult.inserted || 0,
+        results: {
+          update: updateResult,
+          translate: translateResult,
+        },
+      });
+    }
+
     return NextResponse.json({
       success: true,
       testMode,
@@ -80,6 +102,21 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Batch process failed:", error);
+    
+    // 배치 실패 로그
+    if (logId) {
+      await BatchLogger.logFailure(
+        logId,
+        error instanceof Error ? error.message : "Unknown error",
+        {
+          testMode,
+          steamDataFetched: false,
+          steamItemsCount: 0,
+          stack: error instanceof Error ? error.stack : undefined,
+        }
+      );
+    }
+
     return NextResponse.json(
       {
         success: false,
