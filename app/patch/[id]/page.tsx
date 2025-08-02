@@ -146,8 +146,13 @@ export default function PatchDetailPage() {
           </button>
         </div>
 
+        {/* 디바이더 */}
+        <div className="mt-16 mb-8">
+          <div className="border-t border-slate-200"></div>
+        </div>
+
         {/* 댓글 섹션 */}
-        <div id="comments" className="mt-16">
+        <div id="comments">
           <CommentSection patchLogId={patchDetail.id} />
         </div>
 
