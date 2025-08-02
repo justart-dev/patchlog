@@ -3,8 +3,13 @@ import { createClient } from "@supabase/supabase-js";
 import { currentUser } from "@clerk/nextjs/server";
 
 const supabaseUrl = process.env.SUPABASE_URL!;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+// 읽기용 클라이언트 (ANON_KEY)
+const supabaseRead = createClient(supabaseUrl, supabaseAnonKey);
+// 쓰기용 클라이언트 (SERVICE_ROLE_KEY)
+const supabaseWrite = createClient(supabaseUrl, supabaseServiceKey);
 
 export async function GET(request: Request) {
   try {
@@ -19,7 +24,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseRead
       .from("comments")
       .select(`
         id,
@@ -77,7 +82,7 @@ export async function POST(request: Request) {
     }
 
     // 먼저 users 테이블에서 사용자 정보 확인/생성
-    const { data: existingUser } = await supabase
+    const { data: existingUser } = await supabaseWrite
       .from("users")
       .select("id")
       .eq("clerk_user_id", userId)
@@ -87,7 +92,7 @@ export async function POST(request: Request) {
 
     if (!existingUser) {
       // 사용자가 없으면 생성
-      const { data: newUser, error: userError } = await supabase
+      const { data: newUser, error: userError } = await supabaseWrite
         .from("users")
         .insert({ 
           clerk_user_id: userId,
@@ -108,7 +113,7 @@ export async function POST(request: Request) {
     }
 
     // 댓글 생성
-    const { data, error } = await supabase
+    const { data, error } = await supabaseWrite
       .from("comments")
       .insert({
         patch_log_id,
