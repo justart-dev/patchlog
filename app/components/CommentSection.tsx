@@ -272,6 +272,34 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
     return "익명";
   };
 
+  const renderUserAvatar = (user: Comment['user'], size: 'small' | 'medium' = 'medium') => {
+    const sizeClasses = size === 'small' ? 'w-6 h-6' : 'w-8 h-8';
+    const textSizeClasses = size === 'small' ? 'text-xs' : 'text-sm';
+    
+    if (user.profile_image_url) {
+      return (
+        <img
+          src={user.profile_image_url}
+          alt={getDisplayName({ user } as Comment)}
+          className={`${sizeClasses} rounded-full object-cover border-2 border-white`}
+        />
+      );
+    }
+    
+    // 프로필 이미지가 없는 경우 기본 아바타
+    const displayName = getDisplayName({ user } as Comment);
+    const bgColorClass = size === 'small' ? 'bg-slate-100' : 'bg-blue-100';
+    const textColorClass = size === 'small' ? 'text-slate-600' : 'text-blue-600';
+    
+    return (
+      <div className={`${sizeClasses} ${bgColorClass} rounded-full flex items-center justify-center`}>
+        <span className={`${textSizeClasses} font-medium ${textColorClass}`}>
+          {displayName.charAt(0).toUpperCase()}
+        </span>
+      </div>
+    );
+  };
+
   const renderContentWithMentions = (content: string) => {
     const mentionRegex = /@(\S+)/g;
     const parts = content.split(mentionRegex);
@@ -315,11 +343,19 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
         <form onSubmit={handleSubmitComment} className="mb-8">
           <div className="flex items-start space-x-3">
             <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                <span className="text-sm font-medium text-blue-600">
-                  {user?.firstName?.charAt(0) || user?.username?.charAt(0) || "U"}
-                </span>
-              </div>
+              {user?.imageUrl ? (
+                <img
+                  src={user.imageUrl}
+                  alt={user.firstName || user.username || "User"}
+                  className="w-8 h-8 rounded-full object-cover border-2 border-white"
+                />
+              ) : (
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                  <span className="text-sm font-medium text-blue-600">
+                    {user?.firstName?.charAt(0) || user?.username?.charAt(0) || "U"}
+                  </span>
+                </div>
+              )}
             </div>
             <div className="flex-1">
               <textarea
@@ -364,11 +400,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
               {/* 최상위 댓글 */}
               <div className="flex space-x-3">
                 <div className="flex-shrink-0">
-                  <div className="w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center">
-                    <span className="text-sm font-medium text-slate-600">
-                      {getDisplayName(comment).charAt(0).toUpperCase()}
-                    </span>
-                  </div>
+                  {renderUserAvatar(comment.user, 'medium')}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="bg-slate-50 rounded-lg p-3">
@@ -454,11 +486,19 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                     <form onSubmit={(e) => handleSubmitReply(e, comment.id)} className="mt-3 ml-4">
                       <div className="flex items-start space-x-2">
                         <div className="flex-shrink-0">
-                          <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                            <span className="text-xs font-medium text-blue-600">
-                              {user?.firstName?.charAt(0) || user?.username?.charAt(0) || "U"}
-                            </span>
-                          </div>
+                          {user?.imageUrl ? (
+                            <img
+                              src={user.imageUrl}
+                              alt={user.firstName || user.username || "User"}
+                              className="w-6 h-6 rounded-full object-cover border-2 border-white"
+                            />
+                          ) : (
+                            <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                              <span className="text-xs font-medium text-blue-600">
+                                {user?.firstName?.charAt(0) || user?.username?.charAt(0) || "U"}
+                              </span>
+                            </div>
+                          )}
                         </div>
                         <div className="flex-1">
                           <textarea
@@ -509,11 +549,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                             <div className="absolute left-3 top-3 w-4 h-0.5 bg-slate-200"></div>
                             <div className="flex space-x-3 relative z-10">
                               <div className="flex-shrink-0">
-                                <div className="w-6 h-6 bg-slate-100 rounded-full flex items-center justify-center border-2 border-white">
-                                  <span className="text-xs font-medium text-slate-600">
-                                    {getDisplayName(reply).charAt(0).toUpperCase()}
-                                  </span>
-                                </div>
+                                {renderUserAvatar(reply.user, 'small')}
                               </div>
                               <div className="flex-1 min-w-0">
                                 <div className="bg-slate-100 rounded-lg p-2">
