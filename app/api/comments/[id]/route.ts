@@ -9,9 +9,10 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // 댓글 수정
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await Promise.resolve(params);
     const user = await currentUser();
     
     if (!user) {
@@ -37,7 +38,7 @@ export async function PUT(
         id,
         user:users(clerk_user_id)
       `)
-      .eq("id", params.id)
+      .eq("id", resolvedParams.id)
       .eq("is_deleted", false)
       .single();
 
@@ -48,7 +49,7 @@ export async function PUT(
       );
     }
 
-    if (comment.user.clerk_user_id !== user.id) {
+    if ((comment.user as any).clerk_user_id !== user.id) {
       return NextResponse.json(
         { error: "Forbidden" },
         { status: 403 }
@@ -62,7 +63,7 @@ export async function PUT(
         content: content.trim(),
         updated_at: new Date().toISOString(),
       })
-      .eq("id", params.id)
+      .eq("id", resolvedParams.id)
       .select(`
         id,
         content,
@@ -90,9 +91,10 @@ export async function PUT(
 // 댓글 삭제 (소프트 삭제)
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await Promise.resolve(params);
     const user = await currentUser();
     
     if (!user) {
@@ -109,7 +111,7 @@ export async function DELETE(
         id,
         user:users(clerk_user_id)
       `)
-      .eq("id", params.id)
+      .eq("id", resolvedParams.id)
       .eq("is_deleted", false)
       .single();
 
@@ -120,7 +122,7 @@ export async function DELETE(
       );
     }
 
-    if (comment.user.clerk_user_id !== user.id) {
+    if ((comment.user as any).clerk_user_id !== user.id) {
       return NextResponse.json(
         { error: "Forbidden" },
         { status: 403 }
@@ -134,7 +136,7 @@ export async function DELETE(
         is_deleted: true,
         updated_at: new Date().toISOString(),
       })
-      .eq("id", params.id);
+      .eq("id", resolvedParams.id);
 
     if (error) {
       throw error;
