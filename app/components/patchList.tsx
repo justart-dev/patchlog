@@ -38,13 +38,11 @@ export function PatchList({ patchLogs }: PatchListProps) {
             className="group relative"
             style={{ animationDelay: `${index * 100}ms` }}
           >
-            {/* Glow effect */}
-            <div className="absolute -inset-px bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
 
-            <div className="relative bg-white/80 backdrop-blur-sm border border-slate-200/60 rounded-2xl overflow-hidden hover:border-slate-300/60 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/5 md:p  -[1.5px]">
+            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden hover:shadow-sm transition-all duration-200">
               <div className="flex">
                 {/* Image Section */}
-                <div className="relative w-28 md:w-36 flex-shrink-0 overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100">
+                <div className="relative w-28 md:w-36 flex-shrink-0 overflow-hidden bg-slate-50">
                   {log.capsule_image ? (
                     <div className="relative h-full">
                       <Image
@@ -56,7 +54,6 @@ export function PatchList({ patchLogs }: PatchListProps) {
                         sizes="112px"
                         priority={false}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
                   ) : (
                     <div className="h-full flex items-center justify-center">
@@ -98,7 +95,7 @@ export function PatchList({ patchLogs }: PatchListProps) {
                   </div>
 
                   {/* Title */}
-                  <h2 className="text-base md:text-xl font-bold text-slate-900 line-clamp-2 leading-tight mb-3 md:mb-4 group-hover:text-blue-700 transition-colors">
+                  <h2 className="text-base md:text-xl font-bold text-slate-900 line-clamp-2 leading-tight mb-3 md:mb-4">
                     {log.title}
                   </h2>
 
@@ -112,10 +109,10 @@ export function PatchList({ patchLogs }: PatchListProps) {
 
                   {/* Action */}
                   <div className="mt-auto">
-                    <div className="flex items-center text-sm font-medium text-blue-600 group-hover:text-blue-700">
+                    <div className="flex items-center text-sm font-medium text-indigo-600">
                       <span>패치 상세 보기</span>
                       <svg
-                        className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1"
+                        className="w-4 h-4 ml-2"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -132,8 +129,6 @@ export function PatchList({ patchLogs }: PatchListProps) {
                 </div>
               </div>
 
-              {/* Bottom gradient line */}
-              <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
           </Link>
         );
