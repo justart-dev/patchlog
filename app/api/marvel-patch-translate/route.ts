@@ -15,27 +15,20 @@ interface PatchLog {
 }
 
 export async function POST(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const testMode = searchParams.get('test') === 'true';
   try {
-    // 오늘 synced_at인 레코드들 가져오기 (한국시간 기준)
-    const kstDate = new Date(Date.now() + 9 * 60 * 60 * 1000); // UTC+9
-    const today = kstDate.toISOString().split("T")[0]; // YYYY-MM-DD 형태
-
-    console.log(
-      "Query range:",
-      `${today}T00:00:00.000Z`,
-      "to",
-      `${today}T23:59:59.999Z`
-    );
+    // 최근 2일 이내 & translated_ko가 null인 레코드들만 가져오기
+    const twoDaysAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString();
+    console.log("Fetching patch logs from last 2 days with null translated_ko...");
+    console.log("Date range: from", twoDaysAgo, "to now");
 
     const { data: patchLogs, error: fetchError } = await supabase
       .from("steam_patch_logs")
-      .select("id, content, translated_ko, synced_at")
-      .gte("synced_at", `${today}T00:00:00.000Z`)
-      .lt("synced_at", `${today}T23:59:59.999Z`);
+      .select("id, content, translated_ko")
+      .is("translated_ko", null)
+      .gte("synced_at", twoDaysAgo)
+      .limit(20);
 
-    console.log("Filtered results:", patchLogs);
+    console.log("Found patch logs to translate:", patchLogs?.length || 0);
 
     if (fetchError) {
       console.error("Error fetching patch logs:", fetchError);
@@ -46,7 +39,7 @@ export async function POST(request: Request) {
     }
 
     if (!patchLogs || patchLogs.length === 0) {
-      return NextResponse.json({ message: "No patch logs to translate today" });
+      return NextResponse.json({ message: "No patch logs to translate" });
     }
 
     let translatedCount = 0;
@@ -54,61 +47,50 @@ export async function POST(request: Request) {
     // 각 패치 로그를 번역
     for (const log of patchLogs as PatchLog[]) {
       try {
-        let translatedContent: string;
-
-        if (testMode) {
-          // 테스트 모드: OpenAI API 호출 없이 더미 번역
-          translatedContent = `[테스트 번역] ${log.content.substring(0, 100)}...`;
-          console.log(`Test mode: Skipping OpenAI API for log ${log.id}`);
-        } else {
-          // 실제 모드: OpenAI API 호출
-          const requestBody = {
-            ...marvelPrompt,
-            messages: [
-              marvelPrompt.messages[0], // system message
-              {
-                role: "user",
-                content: log.content,
-              },
-            ],
-          };
-
-          const openaiResponse = await fetch(
-            "https://api.openai.com/v1/chat/completions",
+        // OpenAI API 호출하여 번역
+        const requestBody = {
+          ...marvelPrompt,
+          messages: [
+            marvelPrompt.messages[0], // system message
             {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${openaiApiKey}`,
-              },
-              body: JSON.stringify(requestBody),
-            }
+              role: "user",
+              content: log.content,
+            },
+          ],
+        };
+
+        const openaiResponse = await fetch(
+          "https://api.openai.com/v1/chat/completions",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${openaiApiKey}`,
+            },
+            body: JSON.stringify(requestBody),
+          }
+        );
+
+        if (!openaiResponse.ok) {
+          console.error(
+            `OpenAI API error for log ${log.id}:`,
+            openaiResponse.status
           );
-
-          if (!openaiResponse.ok) {
-            console.error(
-              `OpenAI API error for log ${log.id}:`,
-              openaiResponse.status
-            );
-            continue;
-          }
-
-          const openaiData = await openaiResponse.json();
-          translatedContent = openaiData.choices?.[0]?.message?.content;
-
-          if (!translatedContent) {
-            console.error(`No translation received for log ${log.id}`);
-            continue;
-          }
+          continue;
         }
 
-        // DB에 번역 결과와 synced_at 업데이트
+        const openaiData = await openaiResponse.json();
+        const translatedContent = openaiData.choices?.[0]?.message?.content;
+
+        if (!translatedContent) {
+          console.error(`No translation received for log ${log.id}`);
+          continue;
+        }
+
+        // DB에 번역 결과 업데이트
         const { error: updateError } = await supabase
           .from("steam_patch_logs")
-          .update({ 
-            translated_ko: translatedContent,
-            synced_at: new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString() // KST
-          })
+          .update({ translated_ko: translatedContent })
           .eq("id", log.id);
 
         if (updateError) {
@@ -119,8 +101,8 @@ export async function POST(request: Request) {
         translatedCount++;
         console.log(`Successfully translated log ${log.id}`);
 
-        // API 호출 간 잠시 대기 (rate limit 방지) - 테스트 모드에서는 짧게
-        await new Promise((resolve) => setTimeout(resolve, testMode ? 100 : 1000));
+        // API 호출 간 잠시 대기 (rate limit 방지)
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       } catch (error) {
         console.error(`Error processing log ${log.id}:`, error);
         continue;
