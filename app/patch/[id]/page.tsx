@@ -130,7 +130,7 @@ export default function PatchDetailPage() {
           <div className="mt-14 max-w-none min-h-60 flex flex-col justify-center">
             {activeTab === "patch" && (
               <>
-                {!patchDetail.translated_ko ? (
+                {patchDetail.translated_ko ? (
                   <div
                     dangerouslySetInnerHTML={{
                       __html: addStylesToHtml(patchDetail.translated_ko),
