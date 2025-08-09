@@ -129,11 +129,48 @@ export default function PatchDetailPage() {
           />
           <div className="mt-14 max-w-none min-h-60 flex flex-col justify-center">
             {activeTab === "patch" && (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: addStylesToHtml(patchDetail.translated_ko || ""),
-                }}
-              />
+              <>
+                {!patchDetail.translated_ko ? (
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: addStylesToHtml(patchDetail.translated_ko),
+                    }}
+                  />
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-16 text-center">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-12">
+                      🦈 제프가 열심히 번역 중입니다.
+                    </h3>
+                    <div className="mb-12">
+                      <svg
+                        className="w-16 h-16 text-blue-400 mx-auto animate-spin"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
+                      </svg>
+                    </div>
+
+                    <p className="text-gray-600 max-w-md leading-relaxed">
+                      곧 한글 패치 노트로 만나보실 수 있어요!
+                      <br />
+                      잠시만 기다려주세요 ⚡
+                    </p>
+                  </div>
+                )}
+              </>
             )}
             {activeTab === "premium" && <div></div>}
           </div>
