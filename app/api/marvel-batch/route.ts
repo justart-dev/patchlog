@@ -54,32 +54,25 @@ export async function POST(request: Request) {
       throw new Error(`Update failed: ${updateResponse.status}`);
     }
 
-    let translateResult: { message: string } | null = null;
+    // 2단계: 번역 처리
+    console.log("Step 2: Starting translation...");
+    await new Promise((resolve) => setTimeout(resolve, 5000)); // 5초 대기
 
-    if (!testMode) {
-      // 2단계: 번역 처리 (실제 모드에서만)
-      console.log("Step 2: Starting translation...");
-      await new Promise((resolve) => setTimeout(resolve, 5000)); // 5초 대기
-
-      // 내부 API 로직을 직접 사용
-      const { POST: translatePost } = await import("../marvel-patch-translate/route");
-      const mockTranslateRequest = new Request(`${baseUrl}/api/marvel-patch-translate`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const translateResponse = await translatePost(mockTranslateRequest);
-      translateResult = await translateResponse.json();
-      
-      console.log("Translation result:", translateResult);
-      
-      if (!translateResponse.ok) {
-        throw new Error(`Translation failed: ${translateResponse.status}`);
-      }
-    } else {
-      console.log("Step 2: Skipping translation in test mode");
-      translateResult = { message: "Translation skipped in test mode" };
+    // 내부 API 로직을 직접 사용
+    const { POST: translatePost } = await import("../marvel-patch-translate/route");
+    const mockTranslateRequest = new Request(`${baseUrl}/api/marvel-patch-translate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const translateResponse = await translatePost(mockTranslateRequest);
+    const translateResult = await translateResponse.json();
+    
+    console.log("Translation result:", translateResult);
+    
+    if (!translateResponse.ok) {
+      throw new Error(`Translation failed: ${translateResponse.status}`);
     }
 
     // 배치 성공 로그
