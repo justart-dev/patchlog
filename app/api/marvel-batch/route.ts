@@ -37,18 +37,22 @@ export async function POST(request: Request) {
   try {
     console.log("Starting Marvel Rivals batch process...");
 
-    // 1단계: 패치 데이터 업데이트
+    // 1단계: 패치 데이터 업데이트 (직접 호출)
     console.log("Step 1: Updating patch data...");
-    const updateResponse = await fetch(`${baseUrl}/api/marvel-patch-update`, {
-      method: "GET",
+    
+    // 내부 API 로직을 직접 사용
+    const { POST: updatePost } = await import("../marvel-patch-update/route");
+    const mockUpdateRequest = new Request(`${baseUrl}/api/marvel-patch-update`, {
+      method: "POST",
     });
-
+    const updateResponse = await updatePost(mockUpdateRequest);
+    const updateResult = await updateResponse.json();
+    
+    console.log("Update result:", updateResult);
+    
     if (!updateResponse.ok) {
       throw new Error(`Update failed: ${updateResponse.status}`);
     }
-
-    const updateResult = await updateResponse.json();
-    console.log("Update result:", updateResult);
 
     let translateResult: { message: string } | null = null;
 
@@ -57,22 +61,22 @@ export async function POST(request: Request) {
       console.log("Step 2: Starting translation...");
       await new Promise((resolve) => setTimeout(resolve, 5000)); // 5초 대기
 
-      const translateResponse = await fetch(
-        `${baseUrl}/api/marvel-patch-translate`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
+      // 내부 API 로직을 직접 사용
+      const { POST: translatePost } = await import("../marvel-patch-translate/route");
+      const mockTranslateRequest = new Request(`${baseUrl}/api/marvel-patch-translate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const translateResponse = await translatePost(mockTranslateRequest);
+      translateResult = await translateResponse.json();
+      
+      console.log("Translation result:", translateResult);
+      
       if (!translateResponse.ok) {
         throw new Error(`Translation failed: ${translateResponse.status}`);
       }
-
-      translateResult = await translateResponse.json();
-      console.log("Translation result:", translateResult);
     } else {
       console.log("Step 2: Skipping translation in test mode");
       translateResult = { message: "Translation skipped in test mode" };
