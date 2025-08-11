@@ -2,9 +2,6 @@ import { NextResponse } from "next/server";
 import { BatchLogger } from "@/lib/batch-logger";
 
 export async function POST(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const testMode = searchParams.get("test") === "true";
-
   const authHeader = request.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;
 
@@ -24,21 +21,19 @@ export async function POST(request: Request) {
 
   // 배치 실행 시작 로그 (인증 체크 전에 로그 생성)
   const logId = await BatchLogger.logStart("marvel-rivals-batch", {
-    testMode,
     userAgent: request.headers.get("user-agent"),
     isVercelCron,
     authHeader: authHeader ? "present" : "missing",
     cronSecret: cronSecret ? "present" : "missing",
   });
 
-  // 테스트 모드가 아니고 Vercel Cron이 아닐 때만 인증 확인
-  if (!testMode && !isVercelCron && authHeader !== `Bearer ${cronSecret}`) {
+  // Vercel Cron이 아닐 때만 인증 확인
+  if (!isVercelCron && authHeader !== `Bearer ${cronSecret}`) {
     if (logId) {
       await BatchLogger.logFailure(
         logId,
         "Unauthorized: Authentication failed",
         {
-          testMode,
           userAgent,
           isVercelCron,
           authHeader: authHeader ? "present" : "missing",
@@ -93,7 +88,6 @@ export async function POST(request: Request) {
     // 배치 성공 로그
     if (logId) {
       await BatchLogger.logSuccess(logId, {
-        testMode,
         steamDataFetched: updateResult.success === true,
         steamItemsCount: updateResult.inserted || 0,
         results: {
@@ -105,7 +99,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      testMode,
       timestamp: new Date().toISOString(),
       results: {
         update: updateResult,
@@ -121,7 +114,6 @@ export async function POST(request: Request) {
         logId,
         error instanceof Error ? error.message : "Unknown error",
         {
-          testMode,
           steamDataFetched: false,
           steamItemsCount: 0,
           stack: error instanceof Error ? error.stack : undefined,
