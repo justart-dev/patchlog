@@ -14,11 +14,6 @@ export async function POST(request: Request) {
     userAgent?.includes("vercel-cron") ||
     request.headers.get("x-vercel-cron") === "1";
 
-  // 테스트 모드가 아니고 Vercel Cron이 아닐 때만 인증 확인
-  if (!testMode && !isVercelCron && authHeader !== `Bearer ${cronSecret}`) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   // 현재 요청의 host 정보를 사용하여 baseUrl 동적 생성
   const host = request.headers.get("host") || "localhost:3000";
   const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
@@ -27,12 +22,32 @@ export async function POST(request: Request) {
     ? `https://${process.env.VERCEL_URL}`
     : `${protocol}://${host}`;
 
-  // 배치 실행 시작 로그
+  // 배치 실행 시작 로그 (인증 체크 전에 로그 생성)
   const logId = await BatchLogger.logStart("marvel-rivals-batch", {
     testMode,
     userAgent: request.headers.get("user-agent"),
     isVercelCron,
+    authHeader: authHeader ? "present" : "missing",
+    cronSecret: cronSecret ? "present" : "missing",
   });
+
+  // 테스트 모드가 아니고 Vercel Cron이 아닐 때만 인증 확인
+  if (!testMode && !isVercelCron && authHeader !== `Bearer ${cronSecret}`) {
+    if (logId) {
+      await BatchLogger.logFailure(
+        logId,
+        "Unauthorized: Authentication failed",
+        {
+          testMode,
+          userAgent,
+          isVercelCron,
+          authHeader: authHeader ? "present" : "missing",
+          cronSecret: cronSecret ? "present" : "missing",
+        }
+      );
+    }
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   try {
     console.log("Starting Marvel Rivals batch process...");
