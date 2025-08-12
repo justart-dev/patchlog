@@ -5,11 +5,9 @@ export async function POST(request: Request) {
   const authHeader = request.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;
 
-  // Vercel Cron Job 검증 (User-Agent 또는 특정 헤더 체크)
+  // Vercel Cron Job 검증 (Authorization 헤더 체크)
   const userAgent = request.headers.get("user-agent");
-  const isVercelCron =
-    userAgent?.includes("vercel-cron") ||
-    request.headers.get("x-vercel-cron") === "1";
+  const isVercelCron = authHeader === `Bearer ${cronSecret}`;
 
   // 현재 요청의 host 정보를 사용하여 baseUrl 동적 생성
   const host = request.headers.get("host") || "localhost:3000";
@@ -29,8 +27,8 @@ export async function POST(request: Request) {
     allHeaders: allHeaders,
   });
 
-  // Vercel Cron이 아닐 때만 인증 확인
-  if (!isVercelCron && authHeader !== `Bearer ${cronSecret}`) {
+  // Vercel Cron 인증 확인
+  if (!isVercelCron) {
     if (logId) {
       await BatchLogger.logFailure(
         logId,
