@@ -19,12 +19,14 @@ export async function POST(request: Request) {
     ? `https://${process.env.VERCEL_URL}`
     : `${protocol}://${host}`;
 
-  // 배치 실행 시작 로그 (인증 체크 전에 로그 생성)
+  // 배치 실행 시작 로그 (인증 체크 전에 로그 생성) - 모든 헤더 로깅 추가
+  const allHeaders = Object.fromEntries(request.headers.entries());
   const logId = await BatchLogger.logStart("marvel-rivals-batch", {
     userAgent: request.headers.get("user-agent"),
     isVercelCron,
     authHeader: authHeader ? "present" : "missing",
     cronSecret: cronSecret ? "present" : "missing",
+    allHeaders: allHeaders,
   });
 
   // Vercel Cron이 아닐 때만 인증 확인
