@@ -56,10 +56,22 @@ export class BatchLogger {
 
   static async logSuccess(logId: string, details?: BatchExecutionDetails) {
     try {
+      // 기존 execution_details 가져오기
+      const { data: existingLog } = await supabase
+        .from('batch_execution_logs')
+        .select('execution_details')
+        .eq('id', logId)
+        .single();
+
+      const mergedDetails = {
+        ...existingLog?.execution_details || {},
+        ...details || {}
+      };
+
       const updateData: any = {
         status: 'success',
         finished_at: new Date().toISOString(),
-        execution_details: details || {},
+        execution_details: mergedDetails,
       };
 
       if (details?.steamDataFetched !== undefined) {
@@ -84,11 +96,23 @@ export class BatchLogger {
 
   static async logFailure(logId: string, errorMessage: string, details?: BatchExecutionDetails) {
     try {
+      // 기존 execution_details 가져오기
+      const { data: existingLog } = await supabase
+        .from('batch_execution_logs')
+        .select('execution_details')
+        .eq('id', logId)
+        .single();
+
+      const mergedDetails = {
+        ...existingLog?.execution_details || {},
+        ...details || {}
+      };
+
       const updateData: any = {
         status: 'failed',
         finished_at: new Date().toISOString(),
         error_message: errorMessage,
-        execution_details: details || {},
+        execution_details: mergedDetails,
       };
 
       if (details?.steamDataFetched !== undefined) {
