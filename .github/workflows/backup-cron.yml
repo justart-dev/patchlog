@@ -1,0 +1,43 @@
+name: Backup Batch Cron
+
+on:
+  schedule:
+    # 매일 UTC 09:00 (한국시간 18:00) - Vercel 크론과 동일한 시간
+    - cron: '0 9 * * *'
+    # 매일 UTC 09:30 (한국시간 18:30) - 백업용 (30분 후)
+    - cron: '30 9 * * *'
+  workflow_dispatch: # 수동 실행 가능
+
+jobs:
+  backup-batch:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Trigger Marvel Batch
+        run: |
+          echo "🚀 Starting backup batch execution..."
+          
+          # Vercel 크론과 동일한 헤더로 요청
+          response=$(curl -s -w "%{http_code}" -o /tmp/response.json \
+            -X POST https://patchlog.vercel.app/api/marvel-batch \
+            -H "x-vercel-cron: 1" \
+            -H "user-agent: vercel-cron/1.0")
+          
+          http_code="${response: -3}"
+          
+          echo "📊 HTTP Status: $http_code"
+          echo "📋 Response:"
+          cat /tmp/response.json
+          
+          if [ "$http_code" -eq 200 ]; then
+            echo "✅ Batch execution successful!"
+          else
+            echo "❌ Batch execution failed with status: $http_code"
+            exit 1
+          fi
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "🔔 Batch failed! Manual intervention required."
+          echo "Check logs at: https://github.com/${{ github.repository }}/actions"

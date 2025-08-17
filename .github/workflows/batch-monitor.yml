@@ -1,0 +1,80 @@
+name: Batch Monitor
+
+on:
+  schedule:
+    # 매일 UTC 10:00 (한국시간 19:00) - 배치 실행 1시간 후 체크
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check Batch Status
+        run: |
+          echo "🔍 Checking batch execution status..."
+          
+          response=$(curl -s https://patchlog.vercel.app/api/batch-status)
+          echo "📊 Batch Status Response:"
+          echo "$response" | jq '.'
+          
+          # 오늘 배치 실행 여부 확인
+          today_executions=$(echo "$response" | jq -r '.todayExecutions // 0')
+          healthy=$(echo "$response" | jq -r '.healthy // false')
+          
+          echo "Today executions: $today_executions"
+          echo "Healthy: $healthy"
+          
+          if [ "$healthy" = "false" ] || [ "$today_executions" -eq 0 ]; then
+            echo "❌ Batch execution failed or missing today!"
+            echo "🚨 Manual intervention required"
+            
+            # 실패 알림 (여기에 Slack, Discord 등 웹훅 추가 가능)
+            echo "::warning::Batch execution failed today. Check logs and trigger manual batch if needed."
+            
+            exit 1
+          else
+            echo "✅ Batch execution healthy"
+          fi
+
+      - name: Create Issue on Failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `🚨 Batch Execution Failed - ${new Date().toISOString().split('T')[0]}`;
+            const body = `
+            ## Batch 실행 실패 감지
+            
+            **날짜**: ${new Date().toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'})}
+            
+            ### 문제
+            - 오늘 배치가 실행되지 않았거나 실패했습니다.
+            
+            ### 확인 사항
+            1. [Vercel 대시보드](https://vercel.com/dashboard) → Functions → Cron Jobs 상태 확인
+            2. [배치 상태 API](https://patchlog.vercel.app/api/batch-status) 확인
+            3. 수동 배치 실행: \`curl -X POST https://patchlog.vercel.app/api/marvel-batch -H "x-vercel-cron: 1" -H "user-agent: vercel-cron/1.0"\`
+            
+            ### Auto-generated
+            이 이슈는 배치 모니터링 시스템에 의해 자동 생성되었습니다.
+            `;
+            
+            // 기존 오픈된 배치 실패 이슈가 있는지 확인
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'batch-failure'
+            });
+            
+            if (issues.data.length === 0) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['batch-failure', 'bug', 'high-priority']
+              });
+            }
