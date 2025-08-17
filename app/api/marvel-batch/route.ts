@@ -2,15 +2,10 @@ import { NextResponse } from "next/server";
 import { BatchLogger } from "@/lib/batch-logger";
 
 export async function POST(request: Request) {
-  const authHeader = request.headers.get("authorization");
-  const cronSecret = process.env.CRON_SECRET;
-
-  // Vercel Cron Job 검증 (Authorization 헤더와 x-vercel-cron 헤더 체크)
+  // Vercel Cron Job 검증 (공식 헤더만 사용)
   const userAgent = request.headers.get("user-agent");
   const vercelCronHeader = request.headers.get("x-vercel-cron");
-  const isVercelCronByHeader = vercelCronHeader === "1" && userAgent === "vercel-cron/1.0";
-  const isVercelCronByAuth = authHeader === `Bearer ${cronSecret}` && cronSecret;
-  const isVercelCron = isVercelCronByAuth || isVercelCronByHeader;
+  const isVercelCron = vercelCronHeader === "1" && userAgent === "vercel-cron/1.0";
 
   // 현재 요청의 host 정보를 사용하여 baseUrl 동적 생성
   const host = request.headers.get("host") || "localhost:3000";
@@ -25,11 +20,7 @@ export async function POST(request: Request) {
   const logId = await BatchLogger.logStart("marvel-rivals-batch", {
     userAgent: request.headers.get("user-agent"),
     isVercelCron,
-    isVercelCronByAuth,
-    isVercelCronByHeader,
     vercelCronHeader: vercelCronHeader || "missing",
-    authHeader: authHeader ? "present" : "missing",
-    cronSecret: cronSecret ? "present" : "missing",
     allHeaders: allHeaders,
   });
 
@@ -38,15 +29,11 @@ export async function POST(request: Request) {
     if (logId) {
       await BatchLogger.logFailure(
         logId,
-        "Unauthorized: Authentication failed",
+        "Unauthorized: Only Vercel Cron allowed",
         {
           userAgent,
           isVercelCron,
-          isVercelCronByAuth,
-          isVercelCronByHeader,
           vercelCronHeader: vercelCronHeader || "missing",
-          authHeader: authHeader ? "present" : "missing",
-          cronSecret: cronSecret ? "present" : "missing",
         }
       );
     }
