@@ -35,7 +35,7 @@ export async function GET() {
       healthy: todayBatches && todayBatches.length > 0,
       lastSuccess: lastSuccess ? {
         timestamp: lastSuccess.started_at,
-        steamItemsCount: lastSuccess.steam_items_count || 0
+        translatedPatchesCount: lastSuccess.steam_items_count || 0 // 실제 번역한 패치 수
       } : null,
       lastFailure: lastFailure ? {
         timestamp: lastFailure.started_at,
