@@ -2,15 +2,16 @@ import { NextResponse } from "next/server";
 import { BatchLogger } from "@/lib/batch-logger";
 
 export async function POST(request: Request) {
-  // Vercel Cron Job 검증 (공식 헤더만 사용)
+  // Vercel Cron Job 검증
   const userAgent = request.headers.get("user-agent");
   const vercelCronHeader = request.headers.get("x-vercel-cron");
-  const isVercelCron = vercelCronHeader === "1" && userAgent === "vercel-cron/1.0";
+  const isVercelCron =
+    vercelCronHeader === "1" && userAgent === "vercel-cron/1.0";
 
   // 현재 요청의 host 정보를 사용하여 baseUrl 동적 생성
   const host = request.headers.get("host") || "localhost:3000";
   const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
-  
+
   const baseUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
     : `${protocol}://${host}`;
@@ -45,17 +46,20 @@ export async function POST(request: Request) {
 
     // 1단계: 패치 데이터 업데이트 (직접 호출)
     console.log("Step 1: Updating patch data...");
-    
+
     // 내부 API 로직을 직접 사용
     const { POST: updatePost } = await import("../marvel-patch-update/route");
-    const mockUpdateRequest = new Request(`${baseUrl}/api/marvel-patch-update`, {
-      method: "POST",
-    });
+    const mockUpdateRequest = new Request(
+      `${baseUrl}/api/marvel-patch-update`,
+      {
+        method: "POST",
+      }
+    );
     const updateResponse = await updatePost(mockUpdateRequest);
     const updateResult = await updateResponse.json();
-    
+
     console.log("Update result:", updateResult);
-    
+
     if (!updateResponse.ok) {
       throw new Error(`Update failed: ${updateResponse.status}`);
     }
@@ -65,18 +69,23 @@ export async function POST(request: Request) {
     await new Promise((resolve) => setTimeout(resolve, 5000)); // 5초 대기
 
     // 내부 API 로직을 직접 사용
-    const { POST: translatePost } = await import("../marvel-patch-translate/route");
-    const mockTranslateRequest = new Request(`${baseUrl}/api/marvel-patch-translate`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const { POST: translatePost } = await import(
+      "../marvel-patch-translate/route"
+    );
+    const mockTranslateRequest = new Request(
+      `${baseUrl}/api/marvel-patch-translate`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const translateResponse = await translatePost(mockTranslateRequest);
     const translateResult = await translateResponse.json();
-    
+
     console.log("Translation result:", translateResult);
-    
+
     if (!translateResponse.ok) {
       throw new Error(`Translation failed: ${translateResponse.status}`);
     }
@@ -85,7 +94,7 @@ export async function POST(request: Request) {
     if (logId) {
       await BatchLogger.logSuccess(logId, {
         steamDataFetched: updateResult.success === true,
-        steamItemsCount: updateResult.inserted || 0,
+        steamItemsCount: translateResult.translatedCount || 0, // 실제 번역한 패치 수
         results: {
           update: updateResult,
           translate: translateResult,
@@ -103,7 +112,7 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Batch process failed:", error);
-    
+
     // 배치 실패 로그
     if (logId) {
       await BatchLogger.logFailure(
@@ -111,7 +120,7 @@ export async function POST(request: Request) {
         error instanceof Error ? error.message : "Unknown error",
         {
           steamDataFetched: false,
-          steamItemsCount: 0,
+          steamItemsCount: 0, // 실패시 번역 수는 0
           stack: error instanceof Error ? error.stack : undefined,
         }
       );
