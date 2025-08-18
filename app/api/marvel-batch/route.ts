@@ -2,11 +2,10 @@ import { NextResponse } from "next/server";
 import { BatchLogger } from "@/lib/batch-logger";
 
 export async function POST(request: Request) {
-  // Vercel Cron Job 검증
-  const userAgent = request.headers.get("user-agent");
-  const vercelCronHeader = request.headers.get("x-vercel-cron");
-  const isVercelCron =
-    vercelCronHeader === "1" && userAgent === "vercel-cron/1.0";
+  // Vercel Cron Job 검증 (공식 Authorization 헤더 방식)
+  const authHeader = request.headers.get("authorization");
+  const expectedAuth = `Bearer ${process.env.CRON_SECRET}`;
+  const isVercelCron = authHeader === expectedAuth;
 
   // 현재 요청의 host 정보를 사용하여 baseUrl 동적 생성
   const host = request.headers.get("host") || "localhost:3000";
@@ -16,12 +15,12 @@ export async function POST(request: Request) {
     ? `https://${process.env.VERCEL_URL}`
     : `${protocol}://${host}`;
 
-  // 배치 실행 시작 로그 (인증 체크 전에 로그 생성) - 모든 헤더 로깅 추가
+  // 배치 실행 시작 로그 (인증 체크 전에 로그 생성)
   const allHeaders = Object.fromEntries(request.headers.entries());
   const logId = await BatchLogger.logStart("marvel-rivals-batch", {
     userAgent: request.headers.get("user-agent"),
     isVercelCron,
-    vercelCronHeader: vercelCronHeader || "missing",
+    authHeader: authHeader ? "provided" : "missing",
     allHeaders: allHeaders,
   });
 
@@ -30,11 +29,10 @@ export async function POST(request: Request) {
     if (logId) {
       await BatchLogger.logFailure(
         logId,
-        "Unauthorized: Only Vercel Cron allowed",
+        "Unauthorized: Invalid CRON_SECRET",
         {
-          userAgent,
+          authHeader: authHeader ? "provided" : "missing",
           isVercelCron,
-          vercelCronHeader: vercelCronHeader || "missing",
         }
       );
     }
