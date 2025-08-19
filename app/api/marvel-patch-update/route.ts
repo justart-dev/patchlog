@@ -60,7 +60,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      inserted: processedItems.length,
+      compare_target_items: processedItems.length,
       appid: data.appnews.appid,
     });
   } catch (error) {
