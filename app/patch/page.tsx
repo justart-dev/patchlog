@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { PatchList, type PatchLog } from "../components/patchList";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -40,14 +40,15 @@ export default function PatchPage() {
     fetchPatchLogs();
   }, []);
 
-  const latestDate =
-    patchLogs && patchLogs.length > 0
-      ? new Date(
-          Math.max(
-            ...patchLogs.map((log) => new Date(log.published_at).getTime())
-          )
-        )
-      : new Date();
+  const latestDate = useMemo(() => {
+    if (!patchLogs || patchLogs.length === 0) return new Date();
+    
+    return new Date(
+      Math.max(
+        ...patchLogs.map((log) => new Date(log.published_at).getTime())
+      )
+    );
+  }, [patchLogs]);
 
   if (loading) {
     return (
@@ -145,10 +146,10 @@ export default function PatchPage() {
                     {["일", "월", "화", "수", "목", "금", "토"].map(
                       (day, index) => {
                         // Count updates for each day of the week (0-6, where 0 is Sunday)
-                        const dayCount = patchLogs.filter((log) => {
+                        const dayCount = patchLogs?.filter((log) => {
                           const dayOfWeek = new Date(log.published_at).getDay();
                           return dayOfWeek === index;
-                        }).length;
+                        }).length || 0;
 
                         // Calculate height based on count (further increased max height)
                         const maxHeight = 48; // Increased from 36
@@ -223,9 +224,6 @@ export default function PatchPage() {
                   <div className="flex-1 space-y-4">
                     {patchLogs.slice(0, 3).map((log, index) => {
                       const updateDate = new Date(log.published_at);
-                      const isRecent =
-                        new Date().getTime() - updateDate.getTime() <
-                        7 * 24 * 60 * 60 * 1000;
 
                       return (
                         <Link

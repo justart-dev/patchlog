@@ -2,6 +2,7 @@ import { format, formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import Link from "next/link";
 import Image from "next/image";
+import { memo, useMemo } from "react";
 
 export interface PatchLog {
   id: string;
@@ -18,27 +19,39 @@ interface PatchListProps {
   patchLogs: PatchLog[];
 }
 
-export function PatchList({ patchLogs }: PatchListProps) {
+export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) {
+  const formattedPatchLogs = useMemo(() => {
+    return patchLogs.map((log, index) => {
+      const publishedDate = new Date(log.published_at);
+      const timeAgo = formatDistanceToNow(publishedDate, {
+        addSuffix: true,
+        locale: ko,
+      });
+      const formattedDate = format(publishedDate, "yyyy년 MM월 dd일 HH:mm", {
+        locale: ko,
+      });
+
+      return {
+        ...log,
+        publishedDate,
+        timeAgo,
+        formattedDate,
+        animationDelay: `${index * 100}ms`,
+      };
+    });
+  }, [patchLogs]);
+
   return (
     <div className="grid gap-6 grid-cols-1">
-      {patchLogs.map((log, index) => {
-        const publishedDate = new Date(log.published_at);
-        const timeAgo = formatDistanceToNow(publishedDate, {
-          addSuffix: true,
-          locale: ko,
-        });
-        const formattedDate = format(publishedDate, "yyyy년 MM월 dd일 HH:mm", {
-          locale: ko,
-        });
+      {formattedPatchLogs.map((log) => {
 
         return (
           <Link
             key={log.id}
             href={`/patch/${log.id}`}
             className="group relative"
-            style={{ animationDelay: `${index * 100}ms` }}
+            style={{ animationDelay: log.animationDelay }}
           >
-
             <div className="bg-white border border-slate-200 rounded-xl overflow-hidden hover:shadow-sm transition-all duration-200">
               <div className="flex">
                 {/* Image Section */}
@@ -87,9 +100,9 @@ export function PatchList({ patchLogs }: PatchListProps) {
                       <div className="w-1 h-1 bg-slate-300 rounded-full" />
                       <time
                         className="text-xs text-slate-500 font-medium"
-                        title={formattedDate}
+                        title={log.formattedDate}
                       >
-                        {timeAgo}
+                        {log.timeAgo}
                       </time>
                     </div>
                   </div>
@@ -135,4 +148,4 @@ export function PatchList({ patchLogs }: PatchListProps) {
       })}
     </div>
   );
-}
+});
