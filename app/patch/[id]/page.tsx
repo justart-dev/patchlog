@@ -6,7 +6,17 @@ import TabNavigation from "../../components/TabNavigation";
 import { addStylesToHtml } from "../../../app/utils/htmlUtils";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import StatusDisplay from "../../components/StatusDisplay";
-import CommentSection from "../../components/CommentSection";
+import dynamic from "next/dynamic";
+
+const CommentSection = dynamic(
+  () => import("../../components/CommentSection"),
+  {
+    loading: () => (
+      <div className="animate-pulse h-32 bg-slate-100 rounded-lg"></div>
+    ),
+    ssr: false,
+  }
+);
 
 interface PatchDetail {
   id: string;
@@ -19,9 +29,18 @@ interface PatchDetail {
   // Add other properties that exist in your patch detail data
 }
 
+interface PatchNavigation {
+  prev: { id: string; title: string } | null;
+  next: { id: string; title: string } | null;
+}
+
 export default function PatchDetailPage() {
   const params = useParams();
   const [patchDetail, setPatchDetail] = useState<PatchDetail | null>(null);
+  const [patchNavigation, setPatchNavigation] = useState<PatchNavigation>({
+    prev: null,
+    next: null,
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("patch");
@@ -35,12 +54,42 @@ export default function PatchDetailPage() {
   useEffect(() => {
     const fetchPatchDetail = async () => {
       try {
-        const response = await fetch(`/api/marvel-patch-logs/${params.id}`);
-        if (!response.ok) {
+        // 패치 상세 정보 가져오기
+        const detailResponse = await fetch(
+          `/api/marvel-patch-logs/${params.id}`
+        );
+        if (!detailResponse.ok) {
           throw new Error("패치 정보를 불러오는데 실패했습니다.");
         }
-        const data = await response.json();
-        setPatchDetail(data);
+        const detailData = await detailResponse.json();
+        setPatchDetail(detailData);
+
+        // 전체 패치 목록 가져와서 네비게이션 정보 구성
+        const listResponse = await fetch("/api/marvel-patch-logs");
+        if (listResponse.ok) {
+          const patchList = await listResponse.json();
+          const currentIndex = patchList.findIndex(
+            (patch: any) => patch.id === params.id
+          );
+
+          if (currentIndex !== -1) {
+            const prevPatch =
+              currentIndex > 0 ? patchList[currentIndex - 1] : null;
+            const nextPatch =
+              currentIndex < patchList.length - 1
+                ? patchList[currentIndex + 1]
+                : null;
+
+            setPatchNavigation({
+              prev: prevPatch
+                ? { id: prevPatch.id, title: prevPatch.title }
+                : null,
+              next: nextPatch
+                ? { id: nextPatch.id, title: nextPatch.title }
+                : null,
+            });
+          }
+        }
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다."
@@ -184,8 +233,145 @@ export default function PatchDetailPage() {
           </button>
         </div>
 
-        {/* 디바이더 */}
+        {/* 패치 네비게이션 */}
         <div className="mt-16 mb-8">
+          <div className="flex flex-col sm:flex-row gap-4">
+            {/* 이전 패치 */}
+            <div className="w-full sm:w-1/2">
+              {patchNavigation.prev ? (
+                <button
+                  onClick={() =>
+                    router.push(`/patch/${patchNavigation.prev!.id}`)
+                  }
+                  className="group w-full flex items-center p-4 rounded-xl border border-slate-200 hover:border-slate-300 hover:shadow-sm transition-all duration-200 bg-white h-20"
+                >
+                  <div className="flex items-center space-x-3 min-w-0 w-full">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 group-hover:bg-slate-200 flex items-center justify-center transition-colors">
+                      <svg
+                        className="w-4 h-4 text-slate-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 19l-7-7 7-7"
+                        />
+                      </svg>
+                    </div>
+                    <div className="text-left min-w-0 flex-1">
+                      <div className="text-xs text-slate-500 font-medium mb-1">
+                        이전 패치
+                      </div>
+                      <div className="text-sm font-medium text-slate-900 truncate">
+                        {patchNavigation.prev.title}
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              ) : (
+                <div className="w-full flex items-center p-4 rounded-xl border border-slate-200 bg-slate-50 h-20">
+                  <div className="flex items-center space-x-3 min-w-0 w-full">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center">
+                      <svg
+                        className="w-4 h-4 text-slate-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                    <div className="text-left min-w-0 flex-1">
+                      <div className="text-xs text-slate-400 font-medium mb-1">
+                        최신 패치노트
+                      </div>
+                      <div className="text-sm font-medium text-slate-500 truncate">
+                        더 이상 새로운 패치가 없습니다
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* 다음 패치 또는 마지막 노트 */}
+            <div className="w-full sm:w-1/2">
+              {patchNavigation.next ? (
+                <button
+                  onClick={() =>
+                    router.push(`/patch/${patchNavigation.next!.id}`)
+                  }
+                  className="group w-full flex items-center p-4 rounded-xl border border-slate-200 hover:border-slate-300 hover:shadow-sm transition-all duration-200 bg-white h-20"
+                >
+                  <div className="flex items-center space-x-3 min-w-0 w-full justify-end">
+                    <div className="text-right min-w-0 flex-1">
+                      <div className="text-xs text-slate-500 font-medium mb-1">
+                        다음 패치
+                      </div>
+                      <div className="text-sm font-medium text-slate-900 truncate">
+                        {patchNavigation.next.title}
+                      </div>
+                    </div>
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 group-hover:bg-slate-200 flex items-center justify-center transition-colors">
+                      <svg
+                        className="w-4 h-4 text-slate-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </button>
+              ) : (
+                <div className="w-full flex items-center p-4 rounded-xl border border-slate-200 bg-slate-50 h-20">
+                  <div className="flex items-center space-x-3 min-w-0 w-full justify-end">
+                    <div className="text-right min-w-0 flex-1">
+                      <div className="text-xs text-slate-400 font-medium mb-1">
+                        마지막 패치노트
+                      </div>
+                      <div className="text-sm font-medium text-slate-500 truncate">
+                        더 이상 가져올 패치가 없습니다
+                      </div>
+                    </div>
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center">
+                      <svg
+                        className="w-4 h-4 text-slate-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* 디바이더 */}
+        <div className="mt-8 mb-8">
           <div className="border-t border-slate-200"></div>
         </div>
 
@@ -196,24 +382,11 @@ export default function PatchDetailPage() {
 
         <div className="mt-12 flex justify-center">
           <button
-            onClick={() => router.back()}
+            onClick={() => router.push("/patch")}
             className="flex items-center space-x-2 px-6 py-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer"
-            aria-label="뒤로 가기"
+            aria-label="패치 목록으로 돌아가기"
           >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
-            <span className="font-medium">뒤로가기</span>
+            <span className="font-medium">목록으로 돌아가기</span>
           </button>
         </div>
       </div>
