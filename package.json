@@ -12,6 +12,7 @@
     "@bbob/preset-html5": "^4.2.0",
     "@clerk/nextjs": "^6.27.1",
     "@executeautomation/playwright-mcp-server": "^1.0.6",
+    "@heroicons/react": "^2.2.0",
     "@modelcontextprotocol/server-sequential-thinking": "^2025.7.1",
     "@supabase/mcp-server-supabase": "^0.4.5",
     "@supabase/mcp-utils": "^0.2.1",

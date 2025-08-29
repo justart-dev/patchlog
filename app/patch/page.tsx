@@ -6,6 +6,7 @@ import { PatchList, type PatchLog } from "../components/patchList";
 import LoadingSpinner from "../components/LoadingSpinner";
 import StatusDisplay from "../components/StatusDisplay";
 import { useUser, SignInButton } from "@clerk/nextjs";
+import { ChartBarIcon, FireIcon } from "@heroicons/react/24/outline";
 
 export default function PatchPage() {
   const { isSignedIn, isLoaded } = useUser();
@@ -100,9 +101,12 @@ export default function PatchPage() {
                 <h2 className="text-xl font-bold text-slate-900">
                   업데이트 인사이트
                 </h2>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                  NEW
-                </span>
+                <div className="relative">
+                  <div className="inline-flex items-center px-2 py-0.5 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-sm transform rotate-3 shadow-md border-2 border-yellow-500">
+                    NEW
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-bounce"></div>
+                </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -111,13 +115,15 @@ export default function PatchPage() {
                   {isLoaded && !isSignedIn && (
                     <div className="absolute inset-0 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center z-10">
                       <div className="text-center p-6">
-                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                          </svg>
+                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                          <ChartBarIcon className="w-6 h-6 text-white" />
                         </div>
-                        <h4 className="font-semibold text-slate-900 mb-2 text-sm">업데이트 패턴 분석</h4>
-                        <p className="text-xs text-slate-600 mb-3">로그인하고 상세한 업데이트 패턴을 확인하세요</p>
+                        <h4 className="font-semibold text-slate-900 mb-2 text-sm">
+                          업데이트 패턴 분석
+                        </h4>
+                        <p className="text-xs text-slate-600 mb-3">
+                          로그인하고 상세한 업데이트 패턴을 확인하세요
+                        </p>
                         <SignInButton mode="modal">
                           <button className="px-4 py-2 bg-blue-600 text-white text-xs rounded-lg font-medium hover:bg-blue-700 transition-colors">
                             로그인하기
@@ -188,13 +194,15 @@ export default function PatchPage() {
                   {isLoaded && !isSignedIn && (
                     <div className="absolute inset-0 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center z-10">
                       <div className="text-center p-6">
-                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-3">
-                          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                          </svg>
+                        <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-3">
+                          <FireIcon className="w-6 h-6 text-white" />
                         </div>
-                        <h4 className="font-semibold text-slate-900 mb-2 text-sm">주요 업데이트 하이라이트</h4>
-                        <p className="text-xs text-slate-600 mb-3">로그인하고 핵심 업데이트를 놓치지 마세요</p>
+                        <h4 className="font-semibold text-slate-900 mb-2 text-sm">
+                          주요 업데이트 하이라이트
+                        </h4>
+                        <p className="text-xs text-slate-600 mb-3">
+                          로그인하고 핵심 업데이트를 놓치지 마세요
+                        </p>
                         <SignInButton mode="modal">
                           <button className="px-4 py-2 bg-blue-600 text-white text-xs rounded-lg font-medium hover:bg-blue-700 transition-colors">
                             로그인하기
