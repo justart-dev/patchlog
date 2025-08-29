@@ -38,18 +38,21 @@ export async function GET() {
       throw error;
     }
 
-    const formattedData = (data as unknown as DatabaseRow[]).map((item) => {
-      console.log("[patched current log item]:", item);
-      return {
-        id: item.id,
-        app_name: item.app_name,
-        app_gid: item.app_gid,
-        title: item.title,
-        published_at: item.published_at,
-        capsule_image: item.steam_app_metadata.capsule_image,
-      };
-    });
-    return NextResponse.json(formattedData);
+    const formattedData = (data as unknown as DatabaseRow[]).map((item) => ({
+      id: item.id,
+      app_name: item.app_name,
+      app_gid: item.app_gid,
+      title: item.title,
+      published_at: item.published_at,
+      capsule_image: item.steam_app_metadata.capsule_image,
+    }));
+    
+    const response = NextResponse.json(formattedData);
+    
+    // 캐시 헤더 추가 (1시간 캐시)
+    response.headers.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=1800');
+    
+    return response;
   } catch (error) {
     console.error("Error fetching patch logs:", error);
     return NextResponse.json(

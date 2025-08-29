@@ -57,10 +57,7 @@ export async function POST(request: Request) {
   try {
     const user = await currentUser();
     
-    console.log("POST /api/comments - user:", user?.id);
-    
     if (!user) {
-      console.log("POST /api/comments - No user, returning 401");
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
@@ -71,8 +68,6 @@ export async function POST(request: Request) {
 
     const body = await request.json();
     const { patch_log_id, content, parent_comment_id } = body;
-    
-    console.log("POST /api/comments - body:", { patch_log_id, content, parent_comment_id });
 
     if (!patch_log_id || !content) {
       return NextResponse.json(
