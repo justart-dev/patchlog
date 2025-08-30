@@ -121,7 +121,7 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       <div className="max-w-6xl mx-auto p-6">
         <h1 className="text-3xl font-bold mb-8 text-gray-800">
           마블 라이벌즈 스킬명 변환 도구
@@ -134,7 +134,7 @@ export default function AdminPage() {
             className={`px-6 py-3 rounded-t-lg font-medium transition-colors ${
               activeTab === "input"
                 ? "bg-white text-blue-600 border-b-2 border-blue-600"
-                : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                : "text-gray-600 hover:text-gray-800"
             }`}
           >
             데이터 입력
@@ -144,7 +144,7 @@ export default function AdminPage() {
             className={`px-6 py-3 rounded-t-lg font-medium transition-colors ${
               activeTab === "result"
                 ? "bg-white text-blue-600 border-b-2 border-blue-600"
-                : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                : "text-gray-600 hover:text-gray-800"
             }`}
           >
             변환 결과 ({parsedSkills.length})
