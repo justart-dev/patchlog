@@ -1,4 +1,4 @@
-const skillMap: Record<string, string> = {
+export const skillMap: Record<string, string> = {
   // 캡틴 아메리카
   "Sentinel Strike": "방패 강타(좌클릭)",
   "Super-Soldier Slam": "든든한 지원(좌클릭)",
