@@ -13,7 +13,9 @@ export function addStylesToHtml(html: string): string {
     .replace(/\\t/g, '\t')
     .replace(/\\"/g, '"')
     .replace(/\\'/g, "'")
-    .replace(/\\\\/g, '\\');
+    .replace(/\\\\/g, '\\')
+    // STEAM_CLAN_IMAGE 플레이스홀더 치환
+    .replace(/\{STEAM_CLAN_IMAGE\}/g, 'https://clan.cloudflare.steamstatic.com/images');
 
   // 공통 스타일링 함수
   const addStyle = (tag: string, style: string) => {
