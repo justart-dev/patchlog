@@ -25,8 +25,8 @@ export async function POST(request: Request) {
     const { data: patchLogs, error: fetchError } = await supabase
       .from("steam_patch_logs")
       .select("id, content, translated_ko")
-      .is("translated_ko", null)
       .gte("synced_at", sevenDaysAgo)
+      .is("translated_ko", null)
       .limit(20);
 
     console.log("Found patch logs to translate:", patchLogs?.length || 0);
@@ -99,12 +99,34 @@ export async function POST(request: Request) {
         }
 
         const openaiData = await openaiResponse.json();
-        const translatedContent = openaiData.choices?.[0]?.message?.content;
+        let translatedContent = openaiData.choices?.[0]?.message?.content;
 
         if (!translatedContent) {
           console.error(`No translation received for log ${log.id}`);
           continue;
         }
+
+        // ```html ``` 태그 제거
+        translatedContent = translatedContent.replace(/```html\n?/g, '').replace(/```\n?/g, '');
+        
+        // 따옴표 제거
+        translatedContent = translatedContent.replace(/'([^']+)'/g, '$1');
+        
+        // 후처리: 잘못 번역된 스킬명들을 올바르게 교체
+        Object.entries(skillMap).forEach(([englishName, koreanName]) => {
+          // 영어명이 그대로 남아있는 경우 한글로 교체
+          const englishPattern = new RegExp(englishName, 'g');
+          translatedContent = translatedContent.replace(englishPattern, koreanName);
+          
+          // 키 정보가 빠진 한글명을 전체 형태로 교체 (이미 키 정보가 있으면 건너뛰기)
+          const koreanMatch = koreanName.match(/^(.+?)\((.+)\)$/);
+          if (koreanMatch) {
+            const [, nameOnly, keyInfo] = koreanMatch;
+            // 이미 키 정보가 있는지 확인하여 중복 방지
+            const nameOnlyPattern = new RegExp(`${nameOnly}(?!\\([^)]*\\))`, 'g');
+            translatedContent = translatedContent.replace(nameOnlyPattern, koreanName);
+          }
+        });
 
         // DB에 번역 결과 업데이트
         const { error: updateError } = await supabase
