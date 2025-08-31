@@ -1,8 +1,30 @@
 import Link from "next/link";
+import { Metadata } from "next";
+import { GameStructuredData } from "./components/StructuredData";
+
+export const metadata: Metadata = {
+  title: "패치로그 | 스팀 게임 한글 패치노트",
+  description: "스팀(Steam) 게임의 최신 패치노트를 한글로 번역해드립니다. 마블 라이벌즈를 비롯한 다양한 게임의 업데이트와 밸런스 변경사항을 놓치지 마세요. 매일 자동 업데이트되는 패치 정보를 확인하세요.",
+  keywords: ["스팀 패치노트", "Steam 패치노트", "한글 패치노트", "게임 패치", "마블 라이벌즈", "Marvel Rivals", "패치 번역", "게임 업데이트", "스팀 게임"],
+  openGraph: {
+    title: "패치로그 | 스팀 게임 한글 패치노트",
+    description: "스팀(Steam) 게임의 최신 패치노트를 한글로 번역. 마블 라이벌즈 등 다양한 게임의 업데이트 정보를 확인하세요.",
+    type: "website",
+    images: [
+      {
+        url: "/og",
+        width: 1200,
+        height: 630,
+        alt: "스팀 게임 한글 패치노트 - 패치로그",
+      },
+    ],
+  },
+};
 
 export default function Page() {
   return (
     <div className="min-h-screen bg-white">
+      <GameStructuredData />
       {/* First Screen - Hero & CTA */}
       <div className="min-h-screen flex flex-col">
         <div className="max-w-4xl mx-auto px-4 flex-1 flex flex-col justify-center">
@@ -40,7 +62,7 @@ export default function Page() {
               </svg>
             </Link>
             <p className="text-sm text-slate-500 mt-6">
-              현재 Marvel Rivals 패치노트를 제공하고 있습니다
+              현재 <span className="font-medium">마블 라이벌즈(Marvel Rivals)</span> 한글 패치노트를 제공하고 있습니다
             </p>
 
             {/* Scroll Indicator */}
@@ -190,7 +212,7 @@ export default function Page() {
                   스마트 번역
                 </h3>
                 <p className="text-slate-600 text-sm md:text-base leading-relaxed">
-                  게임의 맥락을 이해하는{" "}
+                  마블 라이벌즈 게임의 맥락을 이해하는{" "}
                   <span className="font-semibold text-indigo-600">GPT-4o</span>로
                   정확하고 자연스러운 한글 패치노트를 제공합니다.
                 </p>
@@ -222,7 +244,7 @@ export default function Page() {
                   지속적 확장
                 </h3>
                 <p className="text-slate-600 text-sm md:text-base leading-relaxed">
-                  Marvel Rivals를 시작으로{" "}
+                  마블 라이벌즈(Marvel Rivals)를 시작으로{" "}
                   <span className="font-semibold text-amber-600">
                     더 많은 게임
                   </span>
@@ -351,9 +373,9 @@ export default function Page() {
                 <div className="w-3 h-3 bg-green-500 rounded-full mr-3 animate-pulse"></div>
                 <span className="text-sm font-medium text-green-600">활성</span>
               </div>
-              <h3 className="font-bold text-slate-900 mb-2">Marvel Rivals</h3>
+              <h3 className="font-bold text-slate-900 mb-2">마블 라이벌즈 (Marvel Rivals)</h3>
               <p className="text-sm text-slate-600 mb-4">
-                매일 업데이트되는 패치노트
+                매일 업데이트되는 한글 패치노트
               </p>
             </div>
 
