@@ -17,6 +17,14 @@ export const metadata: Metadata = {
     default: "패치로그 | 스팀 게임 한글 패치노트",
     template: "패치로그 | %s",
   },
+  robots: {
+    index: true,
+    follow: true,
+    googlebot: {
+      index: true,
+      follow: true,
+    },
+  },
   description: "스팀(Steam) 게임의 최신 패치노트를 한글로 번역해드립니다. 마블 라이벌즈를 비롯한 다양한 게임의 업데이트와 밸런스 변경사항을 놓치지 마세요.",
   keywords: ["스팀 패치노트", "Steam 패치노트", "한글 패치노트", "게임 패치", "마블 라이벌즈", "Marvel Rivals", "패치 번역", "게임 업데이트", "스팀 게임", "패치 정보"],
   authors: [{ name: "Patchlog" }],
