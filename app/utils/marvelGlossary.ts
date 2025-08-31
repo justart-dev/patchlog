@@ -55,4 +55,15 @@ export const skillMap: Record<string, string> = {
   "Light & Shadow Karma": "빛과 그림자의 카르마(C)",
   "Icy Disco": "눈의 노래(패시브)",
   "Frozen Chi": "서늘한 남풍(C)",
+
+  // 그루트
+  "Flora Colossus": "플로라 콜로서스(패시브)",
+  "Vine Strike": "가시 덩굴(좌클릭)",
+  "Spore Bomb": "포자 폭탄(우클릭)",
+  "Thornlash Wall": "가시 장벽(Shift)",
+  "Ironwood Wall": "쇠나무 장벽(E)",
+  "Furious Flora": "분노한 플로라(기타)",
+  "Strangling Prison": "절대 속박(Q)",
+  "Friendly Shoulder": "든든한 아군(패시브)",
+  "Wild Wall": "야생 장벽(C)",
 };
