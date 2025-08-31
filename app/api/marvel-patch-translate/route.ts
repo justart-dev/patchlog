@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import marvelPrompt from "../../utils/marvel.json";
+import { skillMap } from "../../utils/marvelGlossary";
 
 const supabaseUrl = process.env.SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -47,11 +48,22 @@ export async function POST(request: Request) {
     // 각 패치 로그를 번역
     for (const log of patchLogs as PatchLog[]) {
       try {
+        // skillMap을 프롬프트에 추가
+        const skillMappings = Object.entries(skillMap)
+          .map(([key, value]) => `        "${key}": "${value}"`)
+          .join(",\n");
+        
+        const enhancedSystemPrompt = marvelPrompt.messages[0].content + 
+          `\n\nWhen translating skill names, use these exact mappings:\n{\n${skillMappings}\n}`;
+
         // OpenAI API 호출하여 번역
         const requestBody = {
           ...marvelPrompt,
           messages: [
-            marvelPrompt.messages[0], // system message
+            {
+              ...marvelPrompt.messages[0],
+              content: enhancedSystemPrompt
+            }, // enhanced system message
             {
               role: "user",
               content: log.content,
