@@ -17,16 +17,16 @@ interface PatchLog {
 
 export async function POST(request: Request) {
   try {
-    // 최근 2일 이내 & translated_ko가 null인 레코드들만 가져오기
-    const twoDaysAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString();
-    console.log("Fetching patch logs from last 2 days with null translated_ko...");
-    console.log("Date range: from", twoDaysAgo, "to now");
+    // 최근 7일 이내 & translated_ko가 null인 레코드들만 가져오기  
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    console.log("Fetching patch logs from last 7 days with null translated_ko...");
+    console.log("Date range: from", sevenDaysAgo, "to now");
 
     const { data: patchLogs, error: fetchError } = await supabase
       .from("steam_patch_logs")
       .select("id, content, translated_ko")
       .is("translated_ko", null)
-      .gte("synced_at", twoDaysAgo)
+      .gte("synced_at", sevenDaysAgo)
       .limit(20);
 
     console.log("Found patch logs to translate:", patchLogs?.length || 0);
@@ -48,6 +48,11 @@ export async function POST(request: Request) {
     // 각 패치 로그를 번역
     for (const log of patchLogs as PatchLog[]) {
       try {
+        // content가 null이거나 빈 문자열인 경우 건너뛰기
+        if (!log.content || log.content.trim() === '') {
+          console.log(`Skipping log ${log.id}: empty content`);
+          continue;
+        }
         // skillMap을 프롬프트에 추가
         const skillMappings = Object.entries(skillMap)
           .map(([key, value]) => `        "${key}": "${value}"`)
@@ -84,9 +89,11 @@ export async function POST(request: Request) {
         );
 
         if (!openaiResponse.ok) {
+          const errorText = await openaiResponse.text();
           console.error(
             `OpenAI API error for log ${log.id}:`,
-            openaiResponse.status
+            openaiResponse.status,
+            errorText
           );
           continue;
         }
