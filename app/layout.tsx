@@ -14,8 +14,8 @@ import { WebSiteStructuredData } from "./components/StructuredData";
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "패치로그 | 스팀 게임 한글 패치노트",
-    template: "패치로그 | %s",
+    default: "스팀 게임 한글 패치노트",
+    template: "%s | 스팀 게임 한글 패치노트",
   },
   robots: {
     index: true,
