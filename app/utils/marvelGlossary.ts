@@ -66,4 +66,18 @@ export const skillMap: Record<string, string> = {
   "Strangling Prison": "절대 속박(Q)",
   "Friendly Shoulder": "든든한 아군(패시브)",
   "Wild Wall": "야생 장벽(C)",
+
+  //헐크
+  "Gamma Ray Gun": "감마 레이건(좌클릭)",
+  "Gamma Grenade": "감마 폭탄(Shift)",
+  "Puny Banner": "약골 배너(Q)",
+  "Heavy Blow": "스매시(좌클릭)",
+  "Gamma Burst": "감마 버스트(우클릭)",
+  "Indestructible Guard": "견고한 가드(Shift)",
+  "Radioactive Lockdown": "방사선 감옥(E)",
+  "Incredible Leap": "인크레더블 점프(기타)",
+  "Hulk Smash!": "헐크 스매시!(Q)",
+  "World Breaker": "지구 파괴자(Q)",
+  "Gamma Boost": "감마 부스터(패시브)",
+  "Gamma Fastball": "감마 볼(C)",
 };
