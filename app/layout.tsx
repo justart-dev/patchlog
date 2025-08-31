@@ -9,15 +9,16 @@ import Script from "next/script";
 import Footer from "./components/footer";
 import { baseUrl } from "./sitemap";
 import { ClerkProvider } from "@clerk/nextjs";
+import { WebSiteStructuredData } from "./components/StructuredData";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "패치로그 | Patchlog",
-    template: "%s | Patchlog",
+    default: "패치로그 | 스팀 게임 한글 패치노트",
+    template: "패치로그 | %s",
   },
-  description: "한글 스팀 패치 노트 - 최신 게임 업데이트와 패치 정보를 한글로 제공",
-  keywords: ["패치노트", "스팀", "게임", "업데이트", "한글", "패치로그", "Steam", "게임 패치"],
+  description: "스팀(Steam) 게임의 최신 패치노트를 한글로 번역해드립니다. 마블 라이벌즈를 비롯한 다양한 게임의 업데이트와 밸런스 변경사항을 놓치지 마세요.",
+  keywords: ["스팀 패치노트", "Steam 패치노트", "한글 패치노트", "게임 패치", "마블 라이벌즈", "Marvel Rivals", "패치 번역", "게임 업데이트", "스팀 게임", "패치 정보"],
   authors: [{ name: "Patchlog" }],
   creator: "Patchlog",
   publisher: "Patchlog",
@@ -27,26 +28,26 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: "패치로그 | Patchlog - 스팀 게임 패치 노트",
-    description: "한글로 제공되는 최신 게임 패치 노트와 업데이트 정보",
+    title: "스팀 게임 한글 패치노트 | 패치로그",
+    description: "스팀(Steam) 게임의 최신 패치노트를 한글로 번역. 마블 라이벌즈 등 다양한 게임의 업데이트 정보를 확인하세요.",
     url: baseUrl,
-    siteName: "패치로그 | Patchlog",
+    siteName: "패치로그 - 스팀 게임 한글 패치노트",
     locale: "ko_KR",
     type: "website",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og",
         width: 1200,
         height: 630,
-        alt: "패치로그 - 한글 스팀 패치 노트",
+        alt: "스팀 게임 한글 패치노트 - 패치로그",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "패치로그 | Patchlog",
-    description: "한글 스팀 패치 노트",
-    images: ["/og-image.png"],
+    title: "스팀 게임 한글 패치노트 | 패치로그",
+    description: "스팀 게임 한글 패치노트와 업데이트 정보",
+    images: ["/og"],
   },
   robots: {
     index: true,
@@ -82,6 +83,7 @@ export default function RootLayout({
         )}
       >
         <body className="antialiased flex flex-col min-h-screen">
+          <WebSiteStructuredData />
           <div className="w-full bg-white border-b border-gray-100">
             <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4">
               <Navbar />

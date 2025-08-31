@@ -9,6 +9,7 @@ import { skillMap } from "../../../app/utils/marvelGlossary";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import StatusDisplay from "../../components/StatusDisplay";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 
 const CommentSection = dynamic(
   () => import("../../components/CommentSection"),
