@@ -1,22 +1,19 @@
-import { ImageResponse } from "next/og";
+import { NextRequest } from "next/server";
+import { readFileSync } from "fs";
+import { join } from "path";
 
-export function GET(request: Request) {
-  let url = new URL(request.url);
-  let title = url.searchParams.get("title") || "Next.js Portfolio Starter";
-
-  return new ImageResponse(
-    (
-      <div tw="flex flex-col w-full h-full items-center justify-center bg-white">
-        <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-between p-8">
-          <h2 tw="flex flex-col text-4xl font-bold tracking-tight text-left">
-            {title}
-          </h2>
-        </div>
-      </div>
-    ),
-    {
-      width: 1200,
-      height: 630,
-    }
-  );
+export async function GET(request: NextRequest) {
+  try {
+    const imagePath = join(process.cwd(), 'public', 'images', 'thumbnail.png');
+    const imageBuffer = readFileSync(imagePath);
+    
+    return new Response(imageBuffer, {
+      headers: {
+        'Content-Type': 'image/png',
+        'Cache-Control': 'public, max-age=3600',
+      },
+    });
+  } catch (error) {
+    return new Response('Image not found', { status: 404 });
+  }
 }
