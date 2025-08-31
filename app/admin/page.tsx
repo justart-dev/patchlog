@@ -106,9 +106,17 @@ export default function AdminPage() {
 
   const exportAsJSON = () => {
     const skillMap = Object.fromEntries(
-      parsedSkills.map((skill) => [skill.englishName, skill.koreanName])
+      parsedSkills.map((skill) => [
+        skill.englishName,
+        `${skill.koreanName}(${
+          skill.key || (skill.type === "패시브" ? "패시브" : skill.type)
+        })`,
+      ])
     );
-    navigator.clipboard.writeText(JSON.stringify(skillMap, null, 2));
+    const formattedOutput = Object.entries(skillMap)
+      .map(([key, value]) => `"${key}": "${value}",`)
+      .join("\n");
+    navigator.clipboard.writeText(formattedOutput);
     alert("JSON 형태로 클립보드에 복사되었습니다!");
   };
 
@@ -206,7 +214,7 @@ export default function AdminPage() {
                       onClick={exportAsJSON}
                       className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm"
                     >
-                      JSON으로 복사
+                      Json용 복사
                     </button>
                     <button
                       onClick={exportAsPromptData}
