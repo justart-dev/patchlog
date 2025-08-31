@@ -4,7 +4,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import TabNavigation from "../../components/TabNavigation";
 import { addStylesToHtml } from "../../../app/utils/htmlUtils";
-import { wrapSkillsWithUnderline } from "../../../app/utils/skillReplacer";
+import { wrapSkillsWithUnderline, replaceEnglishTitles } from "../../../app/utils/textReplacer";
 import { skillMap } from "../../../app/utils/marvelGlossary";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import StatusDisplay from "../../components/StatusDisplay";
@@ -154,7 +154,7 @@ export default function PatchDetailPage() {
           </span>
         </div>
         <h1 className="mb-2 text-3xl font-bold tracking-tight">
-          {patchDetail.title}
+          {replaceEnglishTitles(patchDetail.title)}
         </h1>
         <div className="text-gray-500 mb-8">
           {new Date(patchDetail.published_at).toLocaleDateString("ko-KR", {
@@ -271,7 +271,7 @@ export default function PatchDetailPage() {
                         이전 패치
                       </div>
                       <div className="text-sm font-medium text-slate-900 truncate">
-                        {patchNavigation.prev.title}
+                        {replaceEnglishTitles(patchNavigation.prev.title)}
                       </div>
                     </div>
                   </div>
@@ -322,7 +322,7 @@ export default function PatchDetailPage() {
                         다음 패치
                       </div>
                       <div className="text-sm font-medium text-slate-900 truncate">
-                        {patchNavigation.next.title}
+                        {replaceEnglishTitles(patchNavigation.next.title)}
                       </div>
                     </div>
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 group-hover:bg-slate-200 flex items-center justify-center transition-colors">
