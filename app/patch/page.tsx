@@ -7,6 +7,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import StatusDisplay from "../components/StatusDisplay";
 import { useUser, SignInButton } from "@clerk/nextjs";
 import { ChartBarIcon, FireIcon } from "@heroicons/react/24/outline";
+import { replaceEnglishTitles } from "../utils/textReplacer";
 
 export default function PatchPage() {
   const { isSignedIn, isLoaded } = useUser();
@@ -239,7 +240,7 @@ export default function PatchPage() {
                             </div>
                             <div className="flex-1 min-w-0">
                               <h4 className="font-medium text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
-                                {log.title}
+                                {replaceEnglishTitles(log.title)}
                                 <span className="ml-2 inline-flex items-center">
                                   <svg
                                     className="w-3.5 h-3.5 text-blue-400 group-hover:translate-x-0.5 transition-transform"

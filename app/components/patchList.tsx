@@ -3,6 +3,7 @@ import { ko } from "date-fns/locale";
 import Link from "next/link";
 import Image from "next/image";
 import { memo, useMemo } from "react";
+import { replaceEnglishTitles } from "../utils/textReplacer";
 
 export interface PatchLog {
   id: string;
@@ -109,7 +110,7 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
 
                   {/* Title */}
                   <h2 className="text-base md:text-xl font-bold text-slate-900 line-clamp-2 leading-tight mb-3 md:mb-4">
-                    {log.title}
+                    {replaceEnglishTitles(log.title)}
                   </h2>
 
                   {/* Content Preview */}

@@ -2,6 +2,25 @@ function escapeRegex(str: string) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+// 제목 번역 매핑
+const titleReplacements: Record<string, string> = {
+  "Marvel Rivals": "마블 라이벌즈",
+  "Patch Notes": "패치 노트",
+  "Balance Post": "밸런스 패치",
+  Season: "시즌",
+};
+
+export function replaceEnglishTitles(title: string): string {
+  let result = title;
+
+  Object.entries(titleReplacements).forEach(([english, korean]) => {
+    const pattern = new RegExp(escapeRegex(english), "gi");
+    result = result.replace(pattern, korean);
+  });
+
+  return result;
+}
+
 export function wrapSkillsWithUnderline(
   html: string,
   skillMap: Record<string, string>
