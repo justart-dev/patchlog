@@ -42,3 +42,23 @@ export function wrapSkillsWithUnderline(
 
   return result;
 }
+
+export function convertYouTubePreviewTags(html: string): string {
+  // [previewyoutube="VIDEO_ID;full"][/previewyoutube] 패턴을 YouTube 임베드로 변환
+  const youtubePattern = /\[previewyoutube="([^;]+);[^"]*"\]\[\/previewyoutube\]/g;
+  
+  return html.replace(youtubePattern, (match, videoId) => {
+    return `
+      <div class="youtube-embed-container" style="position: relative; padding-bottom: 56.25%; height: 0; margin: 20px 0;">
+        <iframe 
+          src="https://www.youtube.com/embed/${videoId}" 
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen
+          title="YouTube video player">
+        </iframe>
+      </div>
+    `.trim();
+  });
+}
