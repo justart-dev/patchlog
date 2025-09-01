@@ -4,7 +4,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import TabNavigation from "../../components/TabNavigation";
 import { addStylesToHtml } from "../../../app/utils/htmlUtils";
-import { wrapSkillsWithUnderline, replaceEnglishTitles } from "../../../app/utils/textReplacer";
+import { wrapSkillsWithUnderline, replaceEnglishTitles, convertYouTubePreviewTags } from "../../../app/utils/textReplacer";
 import { skillMap } from "../../../app/utils/marvelGlossary";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import StatusDisplay from "../../components/StatusDisplay";
@@ -185,7 +185,9 @@ export default function PatchDetailPage() {
                   <div
                     dangerouslySetInnerHTML={{
                       __html: wrapSkillsWithUnderline(
-                        addStylesToHtml(patchDetail.translated_ko),
+                        convertYouTubePreviewTags(
+                          addStylesToHtml(patchDetail.translated_ko)
+                        ),
                         skillMap
                       ),
                     }}
