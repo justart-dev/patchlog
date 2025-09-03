@@ -80,4 +80,97 @@ export const skillMap: Record<string, string> = {
   "World Breaker": "지구 파괴자(Q)",
   "Gamma Boost": "감마 부스터(패시브)",
   "Gamma Fastball": "감마 볼(C)",
+
+  // 블랙위도우
+  "Widow's Bite Baton": "위도우 바이트(좌클릭)",
+  "Red Room Rifle": "레드룸 라이플(좌클릭)",
+  "Straight Shooter": "크리티컬 샷(우클릭)",
+  "Fleet Foot": "날렵한 발걸음(Shift)",
+  "Edge Dancer": "에이전트 마스터리(E)",
+  "Electro-Plasma Explosion": "에너지 버스트(Q)",
+  "Pulse Rifle": "펄스 라이플(C)",
+  "Supersensory Hunt": "초감각 추적(C)",
+
+  // 호크아이
+  "Archer'S Focus": "매의 시야(패시브)",
+  "Piercing Arrow": "피어싱 애로우(좌클릭)",
+  "Blast Arrow": "블라스트 애로우(좌클릭)",
+  "Crescent Slash": "반달 베기(Shift)",
+  "Hypersonic Arrow": "하이퍼소닉 애로우(E)",
+  "Ronin Slash": "허공베기(기타)",
+  "Skyward Leap": "비상하는 매(기타)",
+  "Hunter's Sight": "매의 시선(Q)",
+  "Ice Arrow": "얼음 화살(C)",
+  "Supersensory Vision": "초감각 시야(패시브)",
+
+  // 블랙 팬서
+  "Panther's Cunning": "블랙 팬서 아머(패시브)",
+  "Vibranium Claws": "비브라늄 클로(좌클릭)",
+  "Spear Toss": "투창(우클릭)",
+  "Spirit Rend": "유성 충돌(Shift)",
+  "Spinning Kick": "회전 킥(E)",
+  "Subtle Step": "그림자 밟기(기타)",
+  "Bast's Descent": "바스테드 강림(Q)",
+  "Wakandan Master": "와칸다 히치하이크(C)",
+
+  // 닥터스트레인지
+  "Price of Magic": "마법의 대가(패시브)",
+  "Daggers of Denak": "데낙의 단검(좌클릭)",
+  "Shield of the Seraphim": "세라핌 실드(우클릭)",
+  "Cloak of Levitation": "공중부양 망토(Shift)",
+  "Maelstrom of Madness": "암흑의 소용돌이(E)",
+  "Pentagram of Farallah": "파랄라의 오성진(F)",
+  "Eye of Agamotto": "아가모토의 눈(Q)",
+  "Enchanted Enhancement": "마력 강화(패시브)",
+  "Gamma Maelstrom": "감마 소용돌이(E)",
+
+  // 스칼렛위치
+  "Chaos Control": "카오스 컨트롤(좌클릭)",
+  "Chthonian Burst": "카오스 블라스트(우클릭)",
+  "Mystic Projection": "미스틱 프로젝션(Shift)",
+  "Dark Seal": "암흑의 봉인(E)",
+  Telekinesis: "염동력(기타)",
+  "Reality Erasure": "현실 삭제(Q)",
+  "Sorcery Surge": "마력 폭주(C)",
+  "Chaotic Bond": "혼돈의 인연(패시브)",
+
+  // 윈터솔져
+  "Ceaseless Charge": "끝없는 화력(패시브)",
+  Roterstern: "재의 심판(좌클릭)",
+  "Bionic Hook": "데스 로프(우클릭)",
+  "Trooper's Fist": "스컬 크러시(Shift)",
+  "Tainted Voltage": "초강력 전류(E)",
+  "Kraken Impact": "인크레더블(Q)",
+  "Stellar Impact": "스텔라 임팩트(C)",
+  "Infinite Grit": "인피니트 솔져(패시브)",
+
+  // 스타로드
+  "Element Guns": "쿼드 블래스터(좌클릭)",
+  "Stellar Shift": "스텔라 시프트(우클릭)",
+  "Rocket Propulsion": "로켓 부스터(Shift)",
+  "Blaster Barrage": "블래스터 폭격(E)",
+  "Galactic Legend": "레전드 등장(Q)",
+  "Astral Jump": "네트워크 리프스파이더(C)",
+  "Leader's Soul": "개척의 영혼(패시브)",
+
+  // 맨티스
+  "Nature's Favor": "자연의 가호(패시브)",
+  "Life Energy Blast": "꺼져가는 생명(좌클릭)",
+  "Healing Flower": "치유의 꽃(우클릭)",
+  "Spore Slumber": "수면 포자(Shift)",
+  "Allied Inspiration": "격려(E)",
+  "Natural Anger": "자연의 분노(F)",
+  "Soul Resurgence": "영혼의 공명(Q)",
+  "Heavenly Guardian": "천상의 수호자(패시브)",
+  "Nature's Soul": "자연의 영혼(패시브)",
+
+  // 아담워록
+  "Regenerative Cocoon": "부활 고치(패시브)",
+  "Quantum Magic": "양자 마법(좌클릭)",
+  "Cosmic Cluster": "코즈믹 클러스터(우클릭)",
+  "Soul Bond": "영혼의 공명(Shift)",
+  "Avatar Life Stream": "생명의 흐름(E)",
+  "Karmic Revival": "텔레키네시스 부활(Q)",
+  "Cosmic Awareness": "코스믹 어웨어니스(패시브)",
+  "Soul Perseverance": "얼어붙은 영혼(패시브)",
 };
