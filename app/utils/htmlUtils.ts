@@ -45,6 +45,9 @@ export function addStylesToHtml(html: string): string {
     "h2",
     "font-weight: 700; font-size: 2rem; margin-bottom: 1.25rem; margin-top: 2rem; color: #1f2937;"
   );
+
+  // h3 태그 앞에 네모 추가
+  html = html.replace(/<h3([^>]*)>/gi, "<h3$1>■ ");
   html = addStyle(
     "h3",
     "font-weight: 600; font-size: 1.2rem; margin-bottom: 1rem; margin-top: 1.75rem; color: #374151;"
@@ -91,6 +94,31 @@ export function addStylesToHtml(html: string): string {
   html = addStyle(
     "blockquote",
     "border-left: 4px solid #d1d5db; padding-left: 1.5rem; padding-top: 1rem; padding-bottom: 1rem; margin: 2rem 0; color: #4b5563; font-style: italic;"
+  );
+
+  // 새로운 효과 형광펜 하이라이트
+  html = html.replace(
+    /새로운 효과[:：]\s*/gi,
+    '<span style="background-color: #dcfce7; padding: 0.2rem; border-radius: 0.25rem;">새로운 효과</span>: '
+  );
+
+  // 수치 변경사항 하이라이트 (다양한 패턴 지원)
+  // 패턴 1: "숫자에서 숫자로"
+  html = html.replace(
+    /([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*에서\s*([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*로/g,
+    '<span style="color: #dc2626; text-decoration: line-through;">$1</span>에서 <span style="color: #2563eb; font-weight: 600;">$2</span>로'
+  );
+
+  // 패턴 2: "숫자에서 숫자으로" (으로 변형)
+  html = html.replace(
+    /([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*에서\s*([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*으로/g,
+    '<span style="color: #dc2626; text-decoration: line-through;">$1</span>에서 <span style="color: #2563eb; font-weight: 600;">$2</span>으로'
+  );
+
+  // 패턴 3: "숫자를 숫자로"
+  html = html.replace(
+    /([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*를\s*([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*로/g,
+    '<span style="color: #dc2626; text-decoration: line-through;">$1</span>를 <span style="color: #2563eb; font-weight: 600;">$2</span>로'
   );
 
   return html;
