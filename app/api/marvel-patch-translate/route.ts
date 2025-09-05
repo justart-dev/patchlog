@@ -106,11 +106,8 @@ export async function POST(request: Request) {
           continue;
         }
 
-        // ```html ``` 태그 제거
+        // ```html ``` 태그 제거 (ChatGPT가 코드블록으로 감쌀 경우)
         translatedContent = translatedContent.replace(/```html\n?/g, '').replace(/```\n?/g, '');
-        
-        // 따옴표 제거
-        translatedContent = translatedContent.replace(/'([^']+)'/g, '$1');
         
         // 후처리: 잘못 번역된 스킬명들을 올바르게 교체
         Object.entries(skillMap).forEach(([englishName, koreanName]) => {
