@@ -274,4 +274,171 @@ export const skillMap: Record<string, string> = {
   "Veiled Step": "베일 스텝(기타)",
   "Invisible Boundary": "투명 경계(Q)",
   "Fantasti-Force": "환상적인 힘(패시브)",
+
+  // 씽
+  "Unyielding Will": "불굴의 의지(패시브)",
+  "Rocky Jab": "바위 잽(좌클릭)",
+  "Stone Haymaker": "암석 강타(우클릭)",
+  "Yancy Street Charge": "얀시 스트리트 차지(Shift)",
+  "Embattled Leap": "전투의 도약(E)",
+  "Battle Blitz": "전투 블리츠(F)",
+  "Clobberin' Time": "클로버린 타임(Q)",
+  "Cosmic Fastball": "코스믹 볼(Z)",
+  "Flying Thing": "비행 물체(X)",
+  "Cooperative Comrades": "협력하는 동료들(C)",
+
+  // 휴먼토치
+  "Fire Cluster": "화재 집중(좌클릭)",
+  "Blazing Blast": "블래스트(우클릭)",
+  "Plasma Body": "플라즈마 바디(Shift)",
+  "Pyro-Prison": "화염 감옥(E)",
+  "Flaming Meteor": "불타는 유성(F)",
+  Supernova: "초신성(Q)",
+  "Pyrokinetic Energy": "열역학적 에너지(패시브)",
+  "Two in One": "두 가지를 하나로(X)",
+  "Storm Siblings": "연합 동포(C)",
+  "Omega Fire": "오메가 파이어(X)",
+
+  // 스파이더맨
+  "Spider-Sense": "스파이더 센스(패시브)",
+  "Wall Crawl": "벽 기어다니기(Space)",
+  "Spider-Power": "스파이더 파워(좌클릭)",
+  "Web-Cluster": "거미줄 포탄(우클릭)",
+  "Web-Swing": "거미줄 활강(Shift)",
+  "Get Over Here!": "거미줄 포획(E)",
+  "Amazing Combo": "스파이더 스매시(F)",
+  "Thwip and Flip": "바운스(기타)",
+  "Spectacular Spin": "퍼펙트 웹(Q)",
+  "Inferno Blast": "인페르노 폭발(C)",
+  "Extra Web-Fluid": "거미줄 용액(패시브)",
+  "Suit Expulsion": "슈트 해제(C)",
+
+  // 로키
+  "Mystical Missile": "운명의 은혜(좌클릭)",
+  Deception: "속임수(우클릭)",
+  "Regeneration Domain": "신의 영역(Shift)",
+  Doppelganger: "도플갱어(E)",
+  "Devious Exchange": "바꿔치기(F)",
+  Backstab: "습격(기타)",
+  "God of Mischief": "계략의 신(Q)",
+  "Deific Blessing": "신성한 축복(협공 스킬)",
+  "Laufeyson Reborn": "로키 부활(패시브)",
+
+  // 헬라
+  "Nastrond Crowstorm": "크로우 스톰(패시브)",
+  "Hel's Descent": "여왕의 강림(패시브)",
+  "Nightsword Thorn": "나이트소드 가시(좌클릭)",
+  "Piercing Night": "죽음의 비(우클릭)",
+  "Astral Flock": "별의 비행(Shift)",
+  "Soul Drainer": "영혼 흡수(E)",
+  "Goddess of Death": "죽음의 징벌(Q)",
+  "Queen of Hel": "지옥의 여왕(패시브)",
+  "Hel Tendrils": "헬 촉수(협공 스킬)",
+
+  // 페니파커
+  "Cyber-Web Cluster": "거미줄 포탄(좌클릭)",
+  "Cyber-Web Snare": "웹 트랩(우클릭)",
+  "Bionic Spider-Nest": "바이오닉 거미집(Shift)",
+  "Arachno-Mine": "스파이더 마인(E)",
+  "Cyber-Bond": "사이버 본드(F)",
+  // "Wall Crawl": "벽 기어다니기(Space)", // 스파이더맨이랑 스킬명 같음
+  "Spider-Sweeper": "스파이더 스위퍼(Q)",
+  "Armorized Spider-Nest": "강화 거미집(C)",
+  "Armor Expulsion": "아머 해제(C)",
+
+  // 아피
+  "Wall Runner": "민첩한 몸놀림(패시브)",
+  "Chi Absorption": "단전 집중(패시브)",
+  "Jeet Kune Do": "절권도(좌클릭)",
+  "Yat Jee Chung Kuen": "정권 지르기(좌클릭)",
+  "Dragon's Defense": "피해 반격(우클릭)",
+  "K'un-Lun Kick": "전광석화(Shift)",
+  "Harmony Recovery": "초월의 경지(E)",
+  "Crane Leap": "물 위의 제비(기타)",
+  "Living Chi": "용의 기운(Q)",
+  // "Lunar Chi": "달 기운(협공 스킬)", // 루나랑 같음
+  "Dragon's Chill": "빙결의 불꽃(패시브)",
+
+  // 퍼니셔
+  "Warrior's Gaze": "죄악 감지(패시브)",
+  Adjudication: "심판자(좌클릭)",
+  Deliverance: "종결자(좌클릭)",
+  "Scourge Grenade": "징벌 수류탄(우클릭)",
+  "Vantage Connection": "끈질긴 추격(Shift)",
+  "Culling Turret": "사냥꾼 터렛(E)",
+  "Final Judgement": "궁극의 심판(Q)",
+  "Cutting-Edge Tech": "최첨단 기술(패시브)",
+  "Infinite Punishment": "가중처벌(패시브)",
+
+  // 클록앤대거
+  "Darkforce Cloak": "어둠의 망토(좌클릭)",
+  "Dark Teleportation": "어둠의 포탈(우클릭)",
+  "Light's Embrace": "빛의 포옹(Shift)",
+  "Terror Cape": "공포의 망토(E)",
+  "Lightforce Dagger": "라이트 대거(좌클릭)",
+  "Dagger Storm": "대거 스톰(우클릭)",
+  "Shadow's Embrace": "그림자의 포옹(Shift)",
+  "Veil of Lightforce": "생명의 빛(E)",
+  "Eternal Bond": "빛과 그림자(Q)",
+  "From Shadow to Light": "서로를 비추는 빛(패시브)",
+
+  // 문나
+  "Crescent Dart": "크레센트 다트(좌클릭)",
+  "Moon Blade": "문 블레이드(우클릭)",
+  "Night Glider": "야간 활동(Shift)",
+  "Ancient Ankh": "앙크 중력장(E)",
+  "Moonlight Hook": "달의 고리(F)",
+  "Triple Eclipse": "문 섀도우 스태프(기타)",
+  "Rising Leap": "달빛 밟기(기타)",
+  "Hand of Khonshu": "콘슈의 주먹(Q)",
+  "Full Moon": "보름달(C)",
+
+  // 블레이드
+  "Ancestral Sword": "조상 검(좌클릭)",
+  "Hunter's Shotgun": "헌터의 샷건(좌클릭)",
+  "Scarlet Shroud": "스칼렛 슈라우드(우클릭)",
+  "Daywalker Dash": "데이워커 대시(Shift)",
+  "Bloodline Awakening": "혈통 각성(E)",
+  "Thousand-Fold Slash": "천 겹의 베기(Q)",
+  "New Moon": "신월(C)",
+
+  // 베놈
+  "Dark Predation": "포식(좌클릭)",
+  "Cellular Corrosion": "부식(우클릭)",
+  "Venom Swing": "베놈 활강(Shift)",
+  "Symbiotic Resilience": "상처의 가호(E)",
+  "Frenzied Arrival": "화려한 등장(F)",
+  "Alien Biology": "변이 생물학(기타)",
+  "Feast of the Abyss": "풍성한 만찬(Q)",
+  "Healing Tendrils": "치유 촉수(패시브)",
+  "Touch of Klyntar": "클린타르의 손길(패시브)",
+
+  // 제프
+  "Oblivious Cuteness": "인기쟁이(패시브)",
+  "Joyful Splash": "샘솟는 생명(좌클릭)",
+  "Aqua Burst": "스파이럴 워터(우클릭)",
+  "Hide And Seek": "물 만난 상어(Shift)",
+  "Healing Bubble": "치유 버블(E)",
+  "It's Jeff!": "제프 등장!(Q)",
+  "It's Jeff-Nado!": "제프-네이도!(Z)",
+  "Guardian of the Deep": "심해의 수호자(X)",
+  "New Friends": "새로운 친구(C)",
+  "Frozen Spitball": "스파이럴 아이스(X)",
+
+  // 스커럴걸
+  "Burst Acorn": "도토리 폭탄(좌클릭)",
+  "Squirrel Blockade": "다람쥐 방어선(우클릭)",
+  "Tail Bounce": "테일 트램폴린(Shift)",
+  "Mammal Bond": "자연의 유대감(E)",
+  "Unbeatable Squirrel Tsunami": "다람쥐 군단, 필승(Q)",
+  "Squirrel Missile": "스쿼럴 미사일(C)",
+  "Webbed Acorn": "거미줄 도토리(C)",
+
+  // 울트론
+  "Encephalo-Ray": "에너지 빔(좌클릭)",
+  "Imperative: Firewall": "명령: 방어(우클릭)",
+  "Dynamic Flight": "부스터 비행(Shift)",
+  "Imperative: Patch": "명령: 수리(E)",
+  "Rage of Ultron": "울트론의 분노(Q)",
+  "Nano Ray": "나노 빔(C)",
 };
