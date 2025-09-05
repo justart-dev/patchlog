@@ -26,8 +26,26 @@ export default function AdminPage() {
   const parseSkillData = (data: string) => {
     const lines = data.split("\n").filter((line) => line.trim());
     const parsed: ParsedSkill[] = [];
+    
+    // 현재 섹션 추적
+    let currentSection = "";
 
     lines.forEach((line) => {
+      // 섹션 헤더 체크
+      if (line.includes("협공 스킬") || line.includes("비활성화된 협공")) {
+        currentSection = "협공 스킬";
+        return;
+      } else if (line.includes("일반 공격")) {
+        currentSection = "일반 공격";
+        return;
+      } else if (line.includes("스킬") && !line.includes("협공")) {
+        currentSection = "스킬";
+        return;
+      } else if (line.includes("능력 정보")) {
+        currentSection = "";
+        return;
+      }
+
       // 패턴: 한글명(영어명) 또는 키 - 한글명(영어명)
       const match = line.match(/(?:([^-]+)\s*-\s*)?(.+?)\((.+?)\)/);
 
@@ -37,9 +55,21 @@ export default function AdminPage() {
         let type = "기타";
         let key = "";
 
+        // 협공 스킬 섹션 체크 (우선순위 높음)
+        const isTeamUpSection = currentSection === "협공 스킬" || 
+                               line.includes("협공") || 
+                               /3\.\d+\.\s*협공/.test(line) ||
+                               line.includes("비활성화된 협공");
+
         if (keyPart) {
           const keyMatch = keyPart.trim();
-          if (keyMatch.includes("패시브")) {
+          if (isTeamUpSection || keyMatch.includes("C") || keyMatch.includes("Z") || keyMatch.includes("X")) {
+            type = "협공 스킬";
+            if (keyMatch.includes("C")) key = "C";
+            else if (keyMatch.includes("Z")) key = "Z";
+            else if (keyMatch.includes("X")) key = "X";
+            else if (keyMatch.includes("패시브")) key = "패시브";
+          } else if (keyMatch.includes("패시브")) {
             type = "패시브";
           } else if (
             keyMatch.includes("좌클릭") ||
@@ -58,14 +88,11 @@ export default function AdminPage() {
             else if (keyMatch.includes("E")) key = "E";
             else if (keyMatch.includes("Q")) key = "Q";
             else if (keyMatch.includes("F")) key = "F";
-          } else if (keyMatch.includes("C") || keyMatch.includes("Z")) {
-            type = "협공 스킬";
-            key = keyMatch.includes("C") ? "C" : "Z";
           }
+        } else if (isTeamUpSection) {
+          type = "협공 스킬";
         } else if (line.includes("패시브")) {
           type = "패시브";
-        } else if (line.includes("협공")) {
-          type = "협공 스킬";
         }
 
         parsed.push({
