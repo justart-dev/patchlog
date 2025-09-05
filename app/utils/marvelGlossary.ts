@@ -173,4 +173,105 @@ export const skillMap: Record<string, string> = {
   "Karmic Revival": "텔레키네시스 부활(Q)",
   "Cosmic Awareness": "코스믹 어웨어니스(패시브)",
   "Soul Perseverance": "얼어붙은 영혼(패시브)",
+
+  // 매그니토
+  "Magnetic Descent": "자기장 하강(패시브)",
+  "Iron Volley": "자기력 볼(좌클릭)",
+  "Mag-Cannon": "자기장 캐논(우클릭)",
+  "Metallic Curtain": "아이언 배리어(Shift)",
+  "Metal Bulwark": "아이언 실드(E)",
+  "Iron Bulwark": "자기력 실드(F)",
+  "Meteor M": "메테오 스톰(Q)",
+  "Magnetic Resonance": "마그네틱 공명(C)",
+  "Metallic Fusion": "금속 융합(C)",
+
+  // 울버린
+  "Regenerative Healing Factor": "재생 치유 세포(패시브)",
+  "Berserker Rage": "버서커의 분노(패시브)",
+  "Savage Claw": "강철 발톱(좌클릭)",
+  "Vicious Rampage": "블러디 어택(우클릭)",
+  "Feral Leap": "맹수의 습격(Shift)",
+  "Undying Animal": "최후의 발악(E)",
+  "Last Stand": "결사의 전투(Q)",
+  "Metal Cannonball": "속구 어택(C)",
+  "Phoenix Warrior": "피닉스 전사(Shift)",
+
+  // 피닉스
+  "Cosmic Flame": "코스믹 플레임(좌클릭)",
+  "Telekinesis Burst": "텔레키네시스 폭발(우클릭)",
+  "Telepathic Illusion": "텔레파시 환영(Shift)",
+  "Dark Ascent": "어두운 상승(E)",
+  "Endsong Inferno": "엔드송 인페르노(Q)",
+  "Mind's Grace": "생각의 은총(패시브)",
+
+  // 스톰
+  "Wind Blade": "윈드 블레이드(좌클릭)",
+  "Bolt Rush": "전류(우클릭)",
+  "Weather Control": "날씨 조종(Shift)",
+  "Goddess Boost": "여신의 손길(E)",
+  "Omega Hurricane": "오메가 스톰(Q)",
+  "Shark Surge": "상어 스톰(패시브)",
+  "Charged Gale": "차징 질풍(C)",
+  "Burning Hurricane": "화염 허리케인(X)",
+
+  // 사일록
+  "Psionic Crossbow": "화살·진정한 비상(좌클릭)",
+  "Wing Shurikens": "별·귀환하는 날개(우클릭)",
+  "Psi-Blade Dash": "인법·꽃을 가르는 칼날(Shift)",
+  "Psychic Stealth": "회피·신의 안개(E)",
+  "Dance of the Butterfly": "오의·나비 그림자의 난무(Q)",
+  "Psychic Echoes": "사이킥 에코(C)",
+  "Psionic Disc": "사이오닉 디스크(C)",
+
+  // 엠마
+  "Telepathic Pulse": "텔레파시 충격(좌클릭)",
+  "Mind's Aegis": "마인드 실드(우클릭)",
+  "Diamond Form": "다이아몬드 형태(Shift)",
+  "Faceted Fury": "크리스탈 퓨리(좌클릭)",
+  "Crystal Kick": "크리스탈 킥(우클릭)",
+  "Carbon Crush": "다이아 크러시(E)",
+  "Psychic Spear": "사이킥 스피어(E)",
+  "Psionic Seduction": "텔레파시 컨트롤(Q)",
+  "Mind Link": "정신 연결(패시브)",
+
+  // 매직
+  "Limbo's Might": "마법 갑옷(패시브)",
+  Soulsword: "소울 소드(좌클릭)",
+  "Magik Slash": "매직 슬래쉬(우클릭)",
+  "Stepping Discs": "지옥의 발걸음(Shift)",
+  "Eldritch Whirl": "영혼의 소용돌이(좌클릭)",
+  "Demon's Rage": "악마의 불꽃(우클릭)",
+  "Umbral Incursion": "어둠의 습격(E)",
+  Darkchild: "다크 차일드(Q)",
+  "Disc Master": "변경의 히치하이크(패시브)",
+
+  // 네이머
+  "Trident of Neptune": "넵튠의 트라이던트(좌클릭)",
+  "Wrath of the Seven Seas": "일곱 바다의 죄악(우클릭)",
+  "Blessing of the Deep": "심해의 가호(Shift)",
+  "Aquatic Dominion": "탈로칸의 통제(E)",
+  "Tide Fall": "윈드 웨이브(기타)",
+  "Horn of Proteus": "웨일 웨이브(Q)",
+  "Gamma Monstro": "감마 몬스터(C)",
+  "Frozen Spawn": "얼어붙은 알(C)",
+
+  // 미스터판타스틱
+  "Elastic Strength": "무한 왕복(패시브)",
+  "Stretch Punch": "탄력 펀치(좌클릭)",
+  "Distended Grip": "탄력 속박(우클릭)",
+  "Reflexive Rubber": "방탄 고무(Shift)",
+  "Flexible Elongation": "유연성(E)",
+  "Brainiac Bounce": "쾌속 바운드(Q)",
+  "Wedded Harmony": "은하를 찌를 듯한 조화(C)",
+
+  // 인비
+  "Convert Advance": "은밀 전진(패시브)",
+  "Orb Projection": "오브 프로젝션(좌클릭)",
+  "Guardian Shield": "가디언 실드(우클릭)",
+  "Psionic Vortex": "사이오닉 소용돌이(Shift)",
+  "Force Physics": "포스 피직스(E)",
+  "Agile Strike": "민첩 타격(기타)",
+  "Veiled Step": "베일 스텝(기타)",
+  "Invisible Boundary": "투명 경계(Q)",
+  "Fantasti-Force": "환상적인 힘(패시브)",
 };
