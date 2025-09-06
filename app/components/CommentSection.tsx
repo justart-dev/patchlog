@@ -335,8 +335,13 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
           </span>
         );
       }
-      // 일반 텍스트 부분
-      return part;
+      // 일반 텍스트 부분 - 줄바꿈 처리
+      return part.split('\n').map((line, lineIndex, lines) => (
+        <span key={`${index}-${lineIndex}`}>
+          {line}
+          {lineIndex < lines.length - 1 && <br />}
+        </span>
+      ));
     });
   };
 
