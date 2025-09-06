@@ -24,7 +24,7 @@ export async function GET(request: Request) {
       );
     }
 
-    const { data, error } = await supabaseRead
+    const { data, error } = await supabaseWrite
       .from("comments")
       .select(`
         id,
@@ -32,6 +32,7 @@ export async function GET(request: Request) {
         created_at,
         updated_at,
         parent_comment_id,
+        user_id,
         user:users(id, username, first_name, last_name, profile_image_url, clerk_user_id)
       `)
       .eq("patch_log_id", patchLogId)
@@ -42,6 +43,21 @@ export async function GET(request: Request) {
     if (error) {
       throw error;
     }
+
+    // 디버깅: user가 null인 댓글 확인
+    console.log("Raw comment data:", JSON.stringify(data, null, 2));
+    data?.forEach((comment: any, index: number) => {
+      console.log(`Comment ${index}:`, {
+        id: comment.id,
+        user_id: comment.user_id,
+        user: comment.user,
+        hasUser: !!comment.user
+      });
+      
+      if (!comment.user) {
+        console.warn(`⚠️  Comment ${comment.id} has null user! user_id: ${comment.user_id}`);
+      }
+    });
 
     return NextResponse.json({ success: true, data });
   } catch (error) {
