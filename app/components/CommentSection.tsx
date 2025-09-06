@@ -18,7 +18,7 @@ interface Comment {
     last_name: string | null;
     profile_image_url: string | null;
     clerk_user_id: string;
-  } | null;
+  };
   replies?: Comment[];
 }
 
@@ -30,7 +30,7 @@ interface CommentSectionProps {
 const organizeComments = (comments: Comment[]): Comment[] => {
   const commentMap = new Map<string, Comment>();
   const rootComments: Comment[] = [];
-
+  console.log("comments", comments);
   // 모든 댓글을 맵에 저장하고 replies 배열 초기화
   comments.forEach((comment) => {
     commentMap.set(comment.id, { ...comment, replies: [] });
@@ -275,12 +275,11 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
   };
 
   const isOwner = (comment: Comment): boolean => {
-    return user?.id === comment.user?.clerk_user_id || false;
+    return user?.id === comment.user.clerk_user_id || false;
   };
 
   const getDisplayName = (comment: Comment) => {
     const { user: commentUser } = comment;
-    if (!commentUser) return "익명";
     if (commentUser.username) return commentUser.username;
     if (commentUser.first_name && commentUser.last_name) {
       return `${commentUser.first_name} ${commentUser.last_name}`;
@@ -290,27 +289,11 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
   };
 
   const renderUserAvatar = (
-    user: Comment["user"] | null,
+    user: Comment["user"],
     size: "small" | "medium" = "medium"
   ) => {
     const sizeClasses = size === "small" ? "w-6 h-6" : "w-8 h-8";
     const textSizeClasses = size === "small" ? "text-xs" : "text-sm";
-
-    // user가 null인 경우 기본 아바타 반환
-    if (!user) {
-      const bgColorClass = size === "small" ? "bg-slate-100" : "bg-blue-100";
-      const textColorClass = size === "small" ? "text-slate-600" : "text-blue-600";
-      
-      return (
-        <div
-          className={`${sizeClasses} ${bgColorClass} rounded-full flex items-center justify-center`}
-        >
-          <span className={`${textSizeClasses} font-medium ${textColorClass}`}>
-            ?
-          </span>
-        </div>
-      );
-    }
 
     if (user.profile_image_url) {
       return (
@@ -353,7 +336,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
         );
       }
       // 일반 텍스트 부분 - 줄바꿈 처리
-      return part.split('\n').map((line, lineIndex, lines) => (
+      return part.split("\n").map((line, lineIndex, lines) => (
         <span key={`${index}-${lineIndex}`}>
           {line}
           {lineIndex < lines.length - 1 && <br />}
@@ -640,7 +623,9 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                                           }
                                           className="px-3 py-1.5 bg-slate-600 text-white rounded text-xs hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
-                                          {submitting ? "수정 중..." : "수정하기"}
+                                          {submitting
+                                            ? "수정 중..."
+                                            : "수정하기"}
                                         </button>
                                       </div>
                                     </div>
