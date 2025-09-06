@@ -8,6 +8,7 @@ import { wrapSkillsWithUnderline, replaceEnglishTitles, convertYouTubePreviewTag
 import { skillMap } from "../../../app/utils/marvelGlossary";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import StatusDisplay from "../../components/StatusDisplay";
+import ErrorBoundary from "../../components/ErrorBoundary";
 import dynamic from "next/dynamic";
 
 const CommentSection = dynamic(
@@ -384,7 +385,21 @@ export default function PatchDetailPage() {
 
         {/* 댓글 섹션 */}
         <div id="comments">
-          <CommentSection patchLogId={patchDetail.id} />
+          <ErrorBoundary 
+            fallback={
+              <div className="text-center py-8 text-gray-500">
+                <p className="mb-4">댓글을 불러오는 중 문제가 발생했습니다.</p>
+                <button 
+                  onClick={() => window.location.reload()} 
+                  className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-md"
+                >
+                  새로고침
+                </button>
+              </div>
+            }
+          >
+            <CommentSection patchLogId={patchDetail.id} />
+          </ErrorBoundary>
         </div>
 
         <div className="mt-12 flex justify-center">
