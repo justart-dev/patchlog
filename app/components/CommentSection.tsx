@@ -18,7 +18,7 @@ interface Comment {
     last_name: string | null;
     profile_image_url: string | null;
     clerk_user_id: string;
-  };
+  } | null;
   replies?: Comment[];
 }
 
@@ -275,11 +275,12 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
   };
 
   const isOwner = (comment: Comment): boolean => {
-    return user?.id === comment.user.clerk_user_id || false;
+    return user?.id === comment.user?.clerk_user_id || false;
   };
 
   const getDisplayName = (comment: Comment) => {
     const { user: commentUser } = comment;
+    if (!commentUser) return "익명";
     if (commentUser.username) return commentUser.username;
     if (commentUser.first_name && commentUser.last_name) {
       return `${commentUser.first_name} ${commentUser.last_name}`;
@@ -289,11 +290,27 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
   };
 
   const renderUserAvatar = (
-    user: Comment["user"],
+    user: Comment["user"] | null,
     size: "small" | "medium" = "medium"
   ) => {
     const sizeClasses = size === "small" ? "w-6 h-6" : "w-8 h-8";
     const textSizeClasses = size === "small" ? "text-xs" : "text-sm";
+
+    // user가 null인 경우 기본 아바타 반환
+    if (!user) {
+      const bgColorClass = size === "small" ? "bg-slate-100" : "bg-blue-100";
+      const textColorClass = size === "small" ? "text-slate-600" : "text-blue-600";
+      
+      return (
+        <div
+          className={`${sizeClasses} ${bgColorClass} rounded-full flex items-center justify-center`}
+        >
+          <span className={`${textSizeClasses} font-medium ${textColorClass}`}>
+            ?
+          </span>
+        </div>
+      );
+    }
 
     if (user.profile_image_url) {
       return (
