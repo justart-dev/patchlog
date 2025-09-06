@@ -102,23 +102,38 @@ export function addStylesToHtml(html: string): string {
     '<span style="background-color: #dcfce7; padding: 0.2rem; border-radius: 0.25rem;">새로운 효과</span>: '
   );
 
-  // 수치 변경사항 하이라이트 (다양한 패턴 지원)
+  // 수치 변경사항 하이라이트 (증가는 파란색, 감소는 빨간색)
   // 패턴 1: "숫자에서 숫자로"
   html = html.replace(
     /([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*에서\s*([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*로/g,
-    '<span style="color: #dc2626; text-decoration: line-through;">$1</span>에서 <span style="color: #2563eb; font-weight: 600;">$2</span>로'
+    (_, oldValue, newValue) => {
+      const oldNum = parseFloat(oldValue.replace(/[^0-9.]/g, ''));
+      const newNum = parseFloat(newValue.replace(/[^0-9.]/g, ''));
+      const color = newNum > oldNum ? '#2563eb' : '#dc2626'; // 증가: 파란색, 감소: 빨간색
+      return `${oldValue}에서 <span style="color: ${color}; font-weight: 600;">${newValue}</span>로`;
+    }
   );
 
   // 패턴 2: "숫자에서 숫자으로" (으로 변형)
   html = html.replace(
     /([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*에서\s*([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*으로/g,
-    '<span style="color: #dc2626; text-decoration: line-through;">$1</span>에서 <span style="color: #2563eb; font-weight: 600;">$2</span>으로'
+    (_, oldValue, newValue) => {
+      const oldNum = parseFloat(oldValue.replace(/[^0-9.]/g, ''));
+      const newNum = parseFloat(newValue.replace(/[^0-9.]/g, ''));
+      const color = newNum > oldNum ? '#2563eb' : '#dc2626'; // 증가: 파란색, 감소: 빨간색
+      return `${oldValue}에서 <span style="color: ${color}; font-weight: 600;">${newValue}</span>으로`;
+    }
   );
 
   // 패턴 3: "숫자를 숫자로"
   html = html.replace(
     /([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*를\s*([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*로/g,
-    '<span style="color: #dc2626; text-decoration: line-through;">$1</span>를 <span style="color: #2563eb; font-weight: 600;">$2</span>로'
+    (_, oldValue, newValue) => {
+      const oldNum = parseFloat(oldValue.replace(/[^0-9.]/g, ''));
+      const newNum = parseFloat(newValue.replace(/[^0-9.]/g, ''));
+      const color = newNum > oldNum ? '#2563eb' : '#dc2626'; // 증가: 파란색, 감소: 빨간색
+      return `${oldValue}를 <span style="color: ${color}; font-weight: 600;">${newValue}</span>로`;
+    }
   );
 
   return html;
