@@ -300,16 +300,16 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
         <img
           src={user.profile_image_url}
           alt={getDisplayName({ user } as Comment)}
-          className={`${sizeClasses} rounded-full object-cover border-2 border-white`}
+          className={`${sizeClasses} rounded-full object-cover border-2 border-white dark:border-gray-700`}
         />
       );
     }
 
     // 프로필 이미지가 없는 경우 기본 아바타
     const displayName = getDisplayName({ user } as Comment);
-    const bgColorClass = size === "small" ? "bg-slate-100" : "bg-blue-100";
+    const bgColorClass = size === "small" ? "bg-slate-100 dark:bg-gray-700" : "bg-blue-100 dark:bg-blue-900";
     const textColorClass =
-      size === "small" ? "text-slate-600" : "text-blue-600";
+      size === "small" ? "text-slate-600 dark:text-gray-300" : "text-blue-600 dark:text-blue-400";
 
     return (
       <div
@@ -330,7 +330,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
       if (index % 2 === 1) {
         // 멘션 부분
         return (
-          <span key={index} className="text-blue-600 font-medium">
+          <span key={index} className="text-blue-600 dark:text-blue-400 font-medium">
             @{part}
           </span>
         );
@@ -349,10 +349,10 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
     return (
       <div>
         <div className="animate-pulse">
-          <div className="h-4 bg-slate-200 rounded w-1/4 mb-4"></div>
+          <div className="h-4 bg-slate-200 dark:bg-gray-700 rounded w-1/4 mb-4"></div>
           <div className="space-y-3">
-            <div className="h-4 bg-slate-200 rounded"></div>
-            <div className="h-4 bg-slate-200 rounded w-3/4"></div>
+            <div className="h-4 bg-slate-200 dark:bg-gray-700 rounded"></div>
+            <div className="h-4 bg-slate-200 dark:bg-gray-700 rounded w-3/4"></div>
           </div>
         </div>
       </div>
@@ -361,7 +361,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
 
   return (
     <div>
-      <h3 className="text-lg font-semibold text-slate-900 mb-6">
+      <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">
         커뮤니티 ({getTotalCommentCount(organizedComments)})
       </h3>
 
@@ -373,14 +373,14 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               placeholder="패치에 대한 의견을 남겨보세요."
-              className="w-full p-3 border border-slate-300 rounded-lg resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 focus:border-slate-300"
+              className="w-full p-3 border border-slate-300 dark:border-gray-600 rounded-lg resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-gray-500 focus:border-slate-300 dark:focus:border-gray-500 bg-white dark:bg-gray-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-gray-400"
               rows={3}
             />
             <div className="flex justify-end">
               <button
                 type="submit"
                 disabled={!newComment.trim() || submitting}
-                className="px-3 py-1.5 bg-slate-600 text-white rounded text-sm hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-1.5 bg-slate-600 dark:bg-gray-700 text-white rounded text-sm hover:bg-slate-700 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {submitting ? "작성 중..." : "작성하기"}
               </button>
@@ -388,12 +388,12 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
           </div>
         </form>
       ) : (
-        <div className="text-center py-8 bg-slate-50 rounded-lg mb-8">
-          <p className="text-slate-600 mb-3">
+        <div className="text-center py-8 bg-slate-50 dark:bg-gray-800 rounded-lg mb-8">
+          <p className="text-slate-600 dark:text-gray-300 mb-3">
             로그인하고 커뮤니티에 참여해보세요!
           </p>
           <SignInButton mode="modal">
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">
+            <button className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg text-sm font-medium hover:bg-blue-700 dark:hover:bg-blue-600">
               로그인하기
             </button>
           </SignInButton>
@@ -403,7 +403,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
       {/* 댓글 목록 */}
       <div className="space-y-4">
         {organizedComments.length === 0 ? (
-          <div className="text-center py-8 text-slate-500">
+          <div className="text-center py-8 text-slate-500 dark:text-gray-400">
             아직 댓글이 없습니다. 첫 번째 댓글을 남겨보세요!
           </div>
         ) : (
@@ -415,12 +415,12 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                   {renderUserAvatar(comment.user, "medium")}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="bg-slate-50 rounded-lg p-3">
+                  <div className="bg-slate-50 dark:bg-gray-800 rounded-lg p-3">
                     <div className="flex items-center space-x-2 mb-1">
-                      <span className="text-sm font-medium text-slate-900">
+                      <span className="text-sm font-medium text-slate-900 dark:text-white">
                         {getDisplayName(comment)}
                       </span>
-                      <span className="text-xs text-slate-500">
+                      <span className="text-xs text-slate-500 dark:text-gray-400">
                         {format(
                           new Date(comment.created_at),
                           "yyyy년 MM월 dd일 HH:mm",
@@ -436,7 +436,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                         <textarea
                           value={editContent}
                           onChange={(e) => setEditContent(e.target.value)}
-                          className="w-full p-2 text-sm border border-slate-300 rounded-lg resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 focus:border-slate-300"
+                          className="w-full p-2 text-sm border border-slate-300 dark:border-gray-600 rounded-lg resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-gray-500 focus:border-slate-300 dark:focus:border-gray-500 bg-white dark:bg-gray-700 text-slate-900 dark:text-white"
                           rows={3}
                         />
                         <div className="mt-2 flex justify-end space-x-2">
@@ -445,21 +445,21 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                               setEditingComment(null);
                               setEditContent("");
                             }}
-                            className="px-3 py-1.5 text-xs text-slate-600 hover:text-slate-800"
+                            className="px-3 py-1.5 text-xs text-slate-600 dark:text-gray-300 hover:text-slate-800 dark:hover:text-white"
                           >
                             취소
                           </button>
                           <button
                             onClick={() => handleEditComment(comment.id)}
                             disabled={!editContent.trim() || submitting}
-                            className="px-3 py-1.5 bg-slate-600 text-white rounded text-xs hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="px-3 py-1.5 bg-slate-600 dark:bg-gray-700 text-white rounded text-xs hover:bg-slate-700 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             {submitting ? "수정 중..." : "수정하기"}
                           </button>
                         </div>
                       </div>
                     ) : (
-                      <p className="text-sm text-slate-700 leading-relaxed mb-2">
+                      <p className="text-sm text-slate-700 dark:text-gray-200 leading-relaxed mb-2">
                         {renderContentWithMentions(comment.content)}
                       </p>
                     )}
@@ -473,7 +473,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                               replyingTo === comment.id ? null : comment.id
                             )
                           }
-                          className="text-slate-500 hover:text-slate-700 font-medium"
+                          className="text-slate-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-gray-200 font-medium"
                         >
                           답글
                         </button>
@@ -486,13 +486,13 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                               setEditingComment(comment.id);
                               setEditContent(comment.content);
                             }}
-                            className="text-slate-500 hover:text-slate-700 font-medium"
+                            className="text-slate-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-gray-200 font-medium"
                           >
                             수정
                           </button>
                           <button
                             onClick={() => handleDeleteComment(comment.id)}
-                            className="text-red-500 hover:text-red-700 font-medium"
+                            className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium"
                           >
                             삭제
                           </button>
@@ -513,11 +513,11 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                             <img
                               src={user.imageUrl}
                               alt={user.firstName || user.username || "User"}
-                              className="w-6 h-6 rounded-full object-cover border-2 border-white"
+                              className="w-6 h-6 rounded-full object-cover border-2 border-white dark:border-gray-700"
                             />
                           ) : (
-                            <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                              <span className="text-xs font-medium text-blue-600">
+                            <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                              <span className="text-xs font-medium text-blue-600 dark:text-blue-400">
                                 {user?.firstName?.charAt(0) ||
                                   user?.username?.charAt(0) ||
                                   "U"}
@@ -530,7 +530,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                             value={replyContent}
                             onChange={(e) => setReplyContent(e.target.value)}
                             placeholder={`@${getDisplayName(comment)} `}
-                            className="w-full p-2 text-sm border border-slate-300 rounded-lg resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 focus:border-slate-300"
+                            className="w-full p-2 text-sm border border-slate-300 dark:border-gray-600 rounded-lg resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-gray-500 focus:border-slate-300 dark:focus:border-gray-500 bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-gray-400"
                             rows={2}
                             onFocus={(e) => {
                               if (!replyContent) {
@@ -545,14 +545,14 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                                 setReplyingTo(null);
                                 setReplyContent("");
                               }}
-                              className="px-3 py-1.5 text-xs text-slate-600 hover:text-slate-800"
+                              className="px-3 py-1.5 text-xs text-slate-600 dark:text-gray-300 hover:text-slate-800 dark:hover:text-white"
                             >
                               취소
                             </button>
                             <button
                               type="submit"
                               disabled={!replyContent.trim() || submitting}
-                              className="px-3 py-1.5 bg-slate-600 text-white rounded text-xs hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="px-3 py-1.5 bg-slate-600 dark:bg-gray-700 text-white rounded text-xs hover:bg-slate-700 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                               {submitting ? "작성 중..." : "작성하기"}
                             </button>
@@ -566,23 +566,23 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                   {comment.replies && comment.replies.length > 0 && (
                     <div className="mt-3 ml-4 relative">
                       {/* 연결선 */}
-                      <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-slate-200"></div>
+                      <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-slate-200 dark:bg-gray-600"></div>
                       <div className="space-y-3">
                         {comment.replies.map((reply) => (
                           <div key={reply.id} className="relative">
                             {/* 가로 연결선 */}
-                            <div className="absolute left-3 top-3 w-4 h-0.5 bg-slate-200"></div>
+                            <div className="absolute left-3 top-3 w-4 h-0.5 bg-slate-200 dark:bg-gray-600"></div>
                             <div className="flex space-x-3 relative z-10">
                               <div className="flex-shrink-0">
                                 {renderUserAvatar(reply.user, "small")}
                               </div>
                               <div className="flex-1 min-w-0">
-                                <div className="bg-slate-50 rounded-lg p-2">
+                                <div className="bg-slate-50 dark:bg-gray-800 rounded-lg p-2">
                                   <div className="flex items-center space-x-2 mb-1">
-                                    <span className="text-xs font-medium text-slate-900">
+                                    <span className="text-xs font-medium text-slate-900 dark:text-white">
                                       {getDisplayName(reply)}
                                     </span>
-                                    <span className="text-xs text-slate-500">
+                                    <span className="text-xs text-slate-500 dark:text-gray-400">
                                       {format(
                                         new Date(reply.created_at),
                                         "MM월 dd일 HH:mm",
@@ -601,7 +601,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                                         onChange={(e) =>
                                           setEditContent(e.target.value)
                                         }
-                                        className="w-full p-2 text-xs border border-slate-300 rounded resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 focus:border-slate-300"
+                                        className="w-full p-2 text-xs border border-slate-300 dark:border-gray-600 rounded resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-gray-500 focus:border-slate-300 dark:focus:border-gray-500 bg-white dark:bg-gray-700 text-slate-900 dark:text-white"
                                         rows={2}
                                       />
                                       <div className="mt-1 flex justify-end space-x-1">
@@ -610,7 +610,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                                             setEditingComment(null);
                                             setEditContent("");
                                           }}
-                                          className="px-3 py-1.5 text-xs text-slate-600 hover:text-slate-800"
+                                          className="px-3 py-1.5 text-xs text-slate-600 dark:text-gray-300 hover:text-slate-800 dark:hover:text-white"
                                         >
                                           취소
                                         </button>
@@ -621,7 +621,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                                           disabled={
                                             !editContent.trim() || submitting
                                           }
-                                          className="px-3 py-1.5 bg-slate-600 text-white rounded text-xs hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                          className="px-3 py-1.5 bg-slate-600 dark:bg-gray-700 text-white rounded text-xs hover:bg-slate-700 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                           {submitting
                                             ? "수정 중..."
@@ -631,7 +631,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                                     </div>
                                   ) : (
                                     <>
-                                      <p className="text-xs text-slate-700 leading-relaxed mb-1">
+                                      <p className="text-xs text-slate-700 dark:text-gray-200 leading-relaxed mb-1">
                                         {renderContentWithMentions(
                                           reply.content
                                         )}
@@ -645,7 +645,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                                               setEditingComment(reply.id);
                                               setEditContent(reply.content);
                                             }}
-                                            className="text-slate-400 hover:text-slate-600"
+                                            className="text-slate-400 dark:text-gray-500 hover:text-slate-600 dark:hover:text-gray-300"
                                           >
                                             수정
                                           </button>
@@ -653,7 +653,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                                             onClick={() =>
                                               handleDeleteComment(reply.id)
                                             }
-                                            className="text-red-400 hover:text-red-600"
+                                            className="text-red-400 dark:text-red-500 hover:text-red-600 dark:hover:text-red-400"
                                           >
                                             삭제
                                           </button>

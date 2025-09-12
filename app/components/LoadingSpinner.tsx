@@ -26,7 +26,7 @@ export default function LoadingSpinner({
         />
       </div>
       {message && (
-        <p className="text-slate-600 font-medium mt-4">
+        <p className="text-slate-600 dark:text-gray-300 font-medium mt-4">
           {message}
         </p>
       )}

@@ -53,10 +53,10 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
             className="group relative"
             style={{ animationDelay: log.animationDelay }}
           >
-            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden hover:shadow-sm transition-all duration-200">
+            <div className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-xl overflow-hidden hover:shadow-sm transition-all duration-200">
               <div className="flex">
                 {/* Image Section */}
-                <div className="relative w-28 md:w-36 flex-shrink-0 overflow-hidden bg-slate-50">
+                <div className="relative w-28 md:w-36 flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-gray-700">
                   {log.capsule_image ? (
                     <div className="relative h-full">
                       <Image
@@ -71,7 +71,7 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
                     </div>
                   ) : (
                     <div className="h-full flex items-center justify-center">
-                      <div className="text-slate-300">
+                      <div className="text-slate-300 dark:text-gray-500">
                         <svg
                           className="w-8 h-8"
                           fill="none"
@@ -94,13 +94,13 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
                 <div className="flex-1 p-5 md:p-6 flex flex-col min-w-0">
                   {/* Header */}
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-slate-500 font-medium">
+                    <span className="text-xs text-slate-500 dark:text-gray-400 font-medium">
                       {log.app_name}
                     </span>
                     <div className="flex items-center space-x-2">
-                      <div className="w-1 h-1 bg-slate-300 rounded-full" />
+                      <div className="w-1 h-1 bg-slate-300 dark:bg-gray-600 rounded-full" />
                       <time
-                        className="text-xs text-slate-500 font-medium"
+                        className="text-xs text-slate-500 dark:text-gray-400 font-medium"
                         title={log.formattedDate}
                       >
                         {log.timeAgo}
@@ -109,13 +109,13 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
                   </div>
 
                   {/* Title */}
-                  <h2 className="text-base md:text-xl font-bold text-slate-900 line-clamp-2 leading-tight mb-3 md:mb-4">
+                  <h2 className="text-base md:text-xl font-bold text-slate-900 dark:text-white line-clamp-2 leading-tight mb-3 md:mb-4">
                     {replaceEnglishTitles(log.title)}
                   </h2>
 
                   {/* Content Preview */}
                   {log.content && (
-                    <p className="text-sm text-slate-600 line-clamp-2 mb-4 leading-relaxed text-sm md:text-[15px]">
+                    <p className="text-sm text-slate-600 dark:text-gray-300 line-clamp-2 mb-4 leading-relaxed text-sm md:text-[15px]">
                       {log.content.replace(/<[^>]*>?/gm, "").substring(0, 120)}
                       ...
                     </p>
@@ -123,7 +123,7 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
 
                   {/* Action */}
                   <div className="mt-auto">
-                    <div className="flex items-center text-sm font-medium text-indigo-600">
+                    <div className="flex items-center text-sm font-medium text-indigo-600 dark:text-indigo-400">
                       <span>패치 상세 보기</span>
                       <svg
                         className="w-4 h-4 ml-2"

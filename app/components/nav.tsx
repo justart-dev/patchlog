@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { useState } from "react";
+import { ThemeToggle } from "./theme-toggle";
 
 interface NavItem {
   name: string;
@@ -86,7 +87,7 @@ export function Navbar() {
               href={item.href}
               target={item.blank ? "_blank" : "_self"}
               rel={item.blank ? "noopener noreferrer" : ""}
-              className="flex items-center space-x-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors py-2"
+              className="flex items-center space-x-2 text-sm font-medium text-gray-600 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 transition-colors py-2"
             >
               <span className="text-base">{item.icon}</span>
               <span className="hidden sm:inline">{item.name}</span>
@@ -98,7 +99,7 @@ export function Navbar() {
         <div className="md:hidden">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="p-2 text-gray-500 hover:text-gray-900 focus:outline-none"
+            className="p-2 text-gray-500 dark:text-white hover:text-gray-900 dark:hover:text-gray-200 focus:outline-none"
             aria-label="Toggle menu"
           >
             <svg
@@ -126,11 +127,12 @@ export function Navbar() {
           </button>
         </div>
 
-        {/* Auth buttons */}
-        <div className="flex items-center space-x-2">
+        {/* Theme toggle and Auth buttons */}
+        <div className="flex items-center space-x-3">
+          <ThemeToggle />
           <SignedOut>
             <SignInButton mode="modal">
-              <button className="flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors whitespace-nowrap">
+              <button className="flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors whitespace-nowrap">
                 로그인
               </button>
             </SignInButton>
@@ -152,11 +154,11 @@ export function Navbar() {
               href={item.href}
               target={item.blank ? "_blank" : "_self"}
               rel={item.blank ? "noopener noreferrer" : ""}
-              className="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 rounded-md"
+              className="block px-3 py-2 text-base font-medium text-gray-700 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md"
               onClick={() => setIsMenuOpen(false)}
             >
               <div className="flex items-center space-x-2">
-                <span className="text-gray-500">{item.icon}</span>
+                <span className="text-gray-500 dark:text-gray-300">{item.icon}</span>
                 <span>{item.name}</span>
               </div>
             </Link>
