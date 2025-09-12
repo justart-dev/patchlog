@@ -36,25 +36,25 @@ export function addStylesToHtml(html: string): string {
     });
   };
 
-  // 제목 스타일
+  // 제목 스타일 (다크모드 지원)
   html = addStyle(
     "h1",
-    "font-weight: 700; font-size: 2rem; margin-bottom: 1.5rem; margin-top: 3rem; color: #111827; padding-bottom: 0.5rem;"
+    "font-weight: 700; font-size: 2rem; margin-bottom: 1.5rem; margin-top: 3rem; color: rgb(17, 24, 39); padding-bottom: 0.5rem;"
   );
   html = addStyle(
     "h2",
-    "font-weight: 700; font-size: 2rem; margin-bottom: 1.25rem; margin-top: 2rem; color: #1f2937;"
+    "font-weight: 700; font-size: 2rem; margin-bottom: 1.25rem; margin-top: 2rem; color: rgb(31, 41, 55);"
   );
 
   // h3 태그 앞에 네모 추가
   html = html.replace(/<h3([^>]*)>/gi, "<h3$1>■ ");
   html = addStyle(
     "h3",
-    "font-weight: 600; font-size: 1.2rem; margin-bottom: 1rem; margin-top: 1.75rem; color: #374151;"
+    "font-weight: 600; font-size: 1.2rem; margin-bottom: 1rem; margin-top: 1.75rem; color: rgb(55, 65, 81);"
   );
 
-  // 단락 스타일
-  html = addStyle("p", "margin : 0.5rem 0; font-size: 1rem; color: #374151;");
+  // 단락 스타일 (다크모드 지원)
+  html = addStyle("p", "margin : 0.5rem 0; font-size: 1rem; color: rgb(55, 65, 81);");
 
   // 목록 스타일
   html = addStyle(
@@ -67,21 +67,21 @@ export function addStylesToHtml(html: string): string {
   );
   html = addStyle("li", "margin-bottom: 0.5rem; font-size: 0.95rem;");
 
-  // 링크 스타일
+  // 링크 스타일 (다크모드 지원)
   html = addStyle(
     "a",
-    "color: #2563eb; text-decoration: none; font-size: 1rem;"
+    "color: rgb(37, 99, 235); text-decoration: none; font-size: 1rem;"
   );
-  html = addStyle("a:hover", "text-decoration: underline; color: #1e40af;");
+  html = addStyle("a:hover", "text-decoration: underline; color: rgb(30, 64, 175);");
 
-  // 코드 블록 스타일
+  // 코드 블록 스타일 (다크모드 지원)
   html = addStyle(
     "code",
-    "background-color: #f3f4f6; padding: 0.125rem 0.5rem; border-radius: 0.25rem; font-family: monospace; font-size: 1rem;"
+    "background-color: rgb(243, 244, 246); color: rgb(17, 24, 39); padding: 0.125rem 0.5rem; border-radius: 0.25rem; font-family: monospace; font-size: 1rem;"
   );
   html = addStyle(
     "pre",
-    "background-color: #f3f4f6; padding: 1.5rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; font-size: 1rem;"
+    "background-color: rgb(243, 244, 246); color: rgb(17, 24, 39); padding: 1.5rem; border-radius: 0.5rem; overflow-x: auto; margin: 1.5rem 0; font-size: 1rem;"
   );
 
   // 이미지 스타일
@@ -90,16 +90,16 @@ export function addStylesToHtml(html: string): string {
     "margin: 2rem 0; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); max-width: 100%; height: auto;"
   );
 
-  // 인용구 스타일
+  // 인용구 스타일 (다크모드 지원)
   html = addStyle(
     "blockquote",
-    "border-left: 4px solid #d1d5db; padding-left: 1.5rem; padding-top: 1rem; padding-bottom: 1rem; margin: 2rem 0; color: #4b5563; font-style: italic;"
+    "border-left: 4px solid rgb(209, 213, 219); padding-left: 1.5rem; padding-top: 1rem; padding-bottom: 1rem; margin: 2rem 0; color: rgb(75, 85, 99); font-style: italic;"
   );
 
-  // 새로운 효과 형광펜 하이라이트
+  // 새로운 효과 형광펜 하이라이트 (다크모드 지원)
   html = html.replace(
     /새로운 효과[:：]\s*/gi,
-    '<span style="background-color: #dcfce7; padding: 0.2rem; border-radius: 0.25rem;">새로운 효과</span>: '
+    '<span style="background-color: rgb(220, 252, 231); color: rgb(22, 101, 52); padding: 0.2rem; border-radius: 0.25rem;">새로운 효과</span>: '
   );
 
   // 수치 변경사항 하이라이트 (증가는 파란색, 감소는 빨간색)
@@ -109,7 +109,7 @@ export function addStylesToHtml(html: string): string {
     (_, oldValue, newValue) => {
       const oldNum = parseFloat(oldValue.replace(/[^0-9.]/g, ''));
       const newNum = parseFloat(newValue.replace(/[^0-9.]/g, ''));
-      const color = newNum > oldNum ? '#2563eb' : '#dc2626'; // 증가: 파란색, 감소: 빨간색
+      const color = newNum > oldNum ? 'rgb(37, 99, 235)' : 'rgb(220, 38, 38)'; // 증가: 파란색, 감소: 빨간색
       return `${oldValue}에서 <span style="color: ${color}; font-weight: 600;">${newValue}</span>로`;
     }
   );
@@ -120,7 +120,7 @@ export function addStylesToHtml(html: string): string {
     (_, oldValue, newValue) => {
       const oldNum = parseFloat(oldValue.replace(/[^0-9.]/g, ''));
       const newNum = parseFloat(newValue.replace(/[^0-9.]/g, ''));
-      const color = newNum > oldNum ? '#2563eb' : '#dc2626'; // 증가: 파란색, 감소: 빨간색
+      const color = newNum > oldNum ? 'rgb(37, 99, 235)' : 'rgb(220, 38, 38)'; // 증가: 파란색, 감소: 빨간색
       return `${oldValue}에서 <span style="color: ${color}; font-weight: 600;">${newValue}</span>으로`;
     }
   );
@@ -131,7 +131,7 @@ export function addStylesToHtml(html: string): string {
     (_, oldValue, newValue) => {
       const oldNum = parseFloat(oldValue.replace(/[^0-9.]/g, ''));
       const newNum = parseFloat(newValue.replace(/[^0-9.]/g, ''));
-      const color = newNum > oldNum ? '#2563eb' : '#dc2626'; // 증가: 파란색, 감소: 빨간색
+      const color = newNum > oldNum ? 'rgb(37, 99, 235)' : 'rgb(220, 38, 38)'; // 증가: 파란색, 감소: 빨간색
       return `${oldValue}를 <span style="color: ${color}; font-weight: 600;">${newValue}</span>로`;
     }
   );

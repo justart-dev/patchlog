@@ -10,6 +10,7 @@ import Footer from "./components/footer";
 import { baseUrl } from "./sitemap";
 import { ClerkProvider } from "@clerk/nextjs";
 import { WebSiteStructuredData } from "./components/StructuredData";
+import { ThemeProvider } from "@/lib/theme-provider";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -77,26 +78,44 @@ export default function RootLayout({
       <html
         lang="ko"
         className={cx(
-          "text-black bg-white",
           GeistSans.variable,
           GeistMono.variable
         )}
+        suppressHydrationWarning
       >
-        <body className="antialiased flex flex-col min-h-screen">
-          <WebSiteStructuredData />
-          <div className="w-full bg-white border-b border-gray-100">
-            <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4">
-              <Navbar />
+        <head>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                try {
+                  const theme = localStorage.getItem('patchlog-ui-theme') || 'system';
+                  let actualTheme = theme;
+                  if (theme === 'system') {
+                    actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                  }
+                  document.documentElement.classList.add(actualTheme);
+                } catch (e) {}
+              `,
+            }}
+          />
+        </head>
+        <body className="antialiased flex flex-col min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white">
+          <ThemeProvider>
+            <WebSiteStructuredData />
+            <div className="w-full bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+              <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4">
+                <Navbar />
+              </div>
             </div>
-          </div>
-          <main className="flex-grow">
-            <div className="max-w-7xl mx-auto px-4 py-8">{children}</div>
-          </main>
-          <div className="w-full bg-white border-t border-gray-100 mt-auto">
-            <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4">
-              <Footer />
+            <main className="flex-grow">
+              <div className="max-w-7xl mx-auto px-4 py-8">{children}</div>
+            </main>
+            <div className="w-full bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 mt-auto">
+              <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4">
+                <Footer />
+              </div>
             </div>
-          </div>
+          </ThemeProvider>
           <Analytics />
           <SpeedInsights />
           <Script
