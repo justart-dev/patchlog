@@ -111,7 +111,7 @@ export default function PatchPage() {
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
                 {/* Update Pattern Card */}
                 <div className="relative h-full flex flex-col bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-gray-700">
                   {isLoaded && !isSignedIn && (
@@ -143,7 +143,7 @@ export default function PatchPage() {
                     이루어지는 요일을 확인하실 수 있습니다.
                   </p>
 
-                  <div className="grid grid-cols-7 gap-4 mt-8">
+                  <div className="grid grid-cols-7 gap-1 sm:gap-2 lg:gap-3 xl:gap-4 mt-8">
                     {["일", "월", "화", "수", "목", "금", "토"].map(
                       (day, index) => {
                         // Count updates for each day of the week (0-6, where 0 is Sunday)
@@ -152,15 +152,15 @@ export default function PatchPage() {
                           return dayOfWeek === index;
                         }).length || 0;
 
-                        // Calculate height based on count (further increased max height)
-                        const maxHeight = 48; // Increased from 36
-                        const height = Math.min(maxHeight, 8 + dayCount * 6); // Increased base height and multiplier
+                        // Calculate height based on count (responsive height)
+                        const maxHeight = 48;
+                        const height = Math.min(maxHeight, 8 + dayCount * 6);
 
                         return (
                           <div key={day} className="flex flex-col items-center">
-                            <div className="w-full flex justify-center items-end h-40">
+                            <div className="w-full flex justify-center items-end h-28 sm:h-32 lg:h-36 xl:h-40">
                               <div
-                                className={`w-5/6 ${
+                                className={`w-full sm:w-4/5 lg:w-5/6 ${
                                   dayCount > 0
                                     ? "bg-gradient-to-t from-blue-600 to-blue-500"
                                     : "bg-slate-100 dark:bg-gray-700"
@@ -230,16 +230,16 @@ export default function PatchPage() {
                         <Link
                           key={log.id}
                           href={`/patch/${log.id}`}
-                          className="block bg-white dark:bg-gray-700 p-4 rounded-lg border border-slate-100 dark:border-gray-600 hover:shadow-sm transition-all group hover:-translate-y-0.5 active:translate-y-0 hover:border-blue-200 dark:hover:border-blue-400 active:border-blue-300 dark:active:border-blue-500 h-[72px]"
+                          className="block bg-white dark:bg-gray-700 p-3 sm:p-4 lg:p-3 xl:p-4 rounded-lg border border-slate-100 dark:border-gray-600 hover:shadow-sm transition-all group hover:-translate-y-0.5 active:translate-y-0 hover:border-blue-200 dark:hover:border-blue-400 active:border-blue-300 dark:active:border-blue-500 min-h-[60px] sm:min-h-[64px] xl:h-[72px]"
                         >
-                          <div className="flex items-center h-full">
-                            <div className="flex-shrink-0 w-8 h-8 rounded-md bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 flex items-center justify-center mr-3">
-                              <span className="text-sm font-medium">
+                          <div className="flex items-start sm:items-center h-full">
+                            <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 xl:w-8 xl:h-8 rounded-md bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 flex items-center justify-center mr-3 mt-0.5 sm:mt-0">
+                              <span className="text-xs sm:text-sm xl:text-base font-medium">
                                 {index + 1}
                               </span>
                             </div>
                             <div className="flex-1 min-w-0 flex flex-col justify-center">
-                              <h4 className="font-medium text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+                              <h4 className="font-medium text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors text-sm sm:text-base leading-tight sm:leading-normal xl:truncate">
                                 {replaceEnglishTitles(log.title)}
                               </h4>
                               <div className="flex items-center mt-1">
@@ -255,7 +255,7 @@ export default function PatchPage() {
                             </div>
                             <div className="flex-shrink-0 ml-2">
                               <svg
-                                className="w-3.5 h-3.5 text-blue-400 group-hover:translate-x-0.5 transition-transform"
+                                className="w-3 h-3 sm:w-3.5 sm:h-3.5 xl:w-4 xl:h-4 text-blue-400 group-hover:translate-x-0.5 transition-transform"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
