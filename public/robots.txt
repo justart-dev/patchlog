@@ -1,0 +1,16 @@
+# Allow all search engines to crawl the entire site
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://patchlog.vercel.app/sitemap.xml
+
+# Disallow crawling of admin and API routes
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+
+# Allow all other paths
+Allow: /*
+
+# Crawl-delay: 10  # Uncomment and adjust if needed to limit crawl rate
