@@ -5,6 +5,12 @@
       "schedule": "0 9 * * *"
     }
   ],
-  "buildCommand": "pnpm dlx @vercel/allow-preview build",
-  "installCommand": "pnpm install"
+  "buildCommand": "pnpm run build",
+  "installCommand": "pnpm install",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ]
 }
