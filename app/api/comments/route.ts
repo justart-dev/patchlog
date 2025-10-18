@@ -26,7 +26,8 @@ export async function GET(request: Request) {
 
     const { data, error } = await supabaseWrite
       .from("comments")
-      .select(`
+      .select(
+        `
         id,
         content,
         created_at,
@@ -34,7 +35,8 @@ export async function GET(request: Request) {
         parent_comment_id,
         user_id,
         user:users(id, username, first_name, last_name, profile_image_url, clerk_user_id)
-      `)
+      `
+      )
       .eq("patch_log_id", patchLogId)
       .eq("is_deleted", false)
       .order("created_at", { ascending: true })
@@ -45,17 +47,19 @@ export async function GET(request: Request) {
     }
 
     // 디버깅: user가 null인 댓글 확인
-    console.log("Raw comment data:", JSON.stringify(data, null, 2));
+    // console.log("Raw comment data:", JSON.stringify(data, null, 2));
     data?.forEach((comment: any, index: number) => {
       console.log(`Comment ${index}:`, {
         id: comment.id,
         user_id: comment.user_id,
         user: comment.user,
-        hasUser: !!comment.user
+        hasUser: !!comment.user,
       });
-      
+
       if (!comment.user) {
-        console.warn(`⚠️  Comment ${comment.id} has null user! user_id: ${comment.user_id}`);
+        console.warn(
+          `⚠️  Comment ${comment.id} has null user! user_id: ${comment.user_id}`
+        );
       }
     });
 
@@ -72,12 +76,9 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const user = await currentUser();
-    
+
     if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const userId = user.id;
@@ -105,13 +106,13 @@ export async function POST(request: Request) {
       // 사용자가 없으면 생성
       const { data: newUser, error: userError } = await supabaseWrite
         .from("users")
-        .insert({ 
+        .insert({
           clerk_user_id: userId,
           email: user.emailAddresses[0]?.emailAddress,
           username: user.username,
           first_name: user.firstName,
           last_name: user.lastName,
-          profile_image_url: user.imageUrl
+          profile_image_url: user.imageUrl,
         })
         .select("id")
         .single();
@@ -132,14 +133,16 @@ export async function POST(request: Request) {
         content,
         parent_comment_id: parent_comment_id || null,
       })
-      .select(`
+      .select(
+        `
         id,
         content,
         created_at,
         updated_at,
         parent_comment_id,
         user:users(id, username, first_name, last_name, profile_image_url, clerk_user_id)
-      `)
+      `
+      )
       .single();
 
     if (error) {
