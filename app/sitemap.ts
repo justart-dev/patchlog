@@ -2,8 +2,9 @@ import { MetadataRoute } from "next";
 
 // 패치 데이터를 가져오는 함수
 async function getAllPatches() {
-  // 상대 경로를 사용하여 같은 도메인의 API를 호출하도록 수정
-  const apiUrl = '/api/marvel-patch-logs';
+  // 정적 생성 시에는 절대 경로를 사용해야 함
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://patchlog.vercel.app';
+  const apiUrl = `${baseUrl}/api/marvel-patch-logs`;
   
   try {
     const res = await fetch(apiUrl, {

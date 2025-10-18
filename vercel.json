@@ -4,5 +4,7 @@
       "path": "/api/marvel-batch",
       "schedule": "0 9 * * *"
     }
-  ]
+  ],
+  "buildCommand": "pnpm dlx @vercel/allow-preview build",
+  "installCommand": "pnpm install"
 }
