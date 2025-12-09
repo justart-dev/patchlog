@@ -28,7 +28,7 @@
     "date-fns": "^4.1.0",
     "geist": "1.2.2",
     "mcp-framework": "^0.2.15",
-    "next": "canary",
+    "next": "15.5.7",
     "next-mdx-remote": "^4.4.1",
     "postcss": "^8.4.35",
     "react": "18.2.0",
