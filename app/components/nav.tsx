@@ -68,7 +68,7 @@ const navItems: NavItem[] = [
         />
       </svg>
     ),
-    href: "https://cloud.umami.is/share/HXB9yfYqqBBKHinQ",
+    href: "https://cloud.umami.is/share/X4DLIuA7E54r6Fi9",
     blank: true,
   },
 ];
