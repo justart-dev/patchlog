@@ -120,7 +120,7 @@ export default function RootLayout({
           <SpeedInsights />
           <Script
             src="https://cloud.umami.is/script.js"
-            data-website-id="281e61a4-5b43-473c-a852-bec5281dd36b"
+            data-website-id="83fbc50b-56e9-473d-be24-ea6801d81058"
             strategy="afterInteractive"
           />
         </body>

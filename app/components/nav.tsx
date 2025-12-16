@@ -68,7 +68,7 @@ const navItems: NavItem[] = [
         />
       </svg>
     ),
-    href: "https://cloud.umami.is/share/lWhHPRqno0dc18zn/patchlog.vercel.app",
+    href: "https://cloud.umami.is/share/HXB9yfYqqBBKHinQ",
     blank: true,
   },
 ];
