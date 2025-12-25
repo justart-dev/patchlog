@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['shared.akamai.steamstatic.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'shared.akamai.steamstatic.com',
+      },
+    ],
     unoptimized: true,
   },
   async redirects() {
