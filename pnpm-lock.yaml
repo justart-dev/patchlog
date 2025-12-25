@@ -105,6 +105,9 @@ importers:
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.21(postcss@8.5.6)
+      baseline-browser-mapping:
+        specifier: ^2.9.11
+        version: 2.9.11
       tailwindcss:
         specifier: 3.4.14
         version: 3.4.14
@@ -1027,6 +1030,10 @@ packages:
 
   base-64@0.1.0:
     resolution: {integrity: sha512-Y5gU45svrR5tI2Vt/X9GPd3L0HNIKzGu202EjxrXMpuc2V2CiKgemAbUUsqYmZJvPtCXoUKjNZwBJzsNScUbXA==}
+
+  baseline-browser-mapping@2.9.11:
+    resolution: {integrity: sha512-Sg0xJUNDU1sJNGdfGWhVHX0kkZ+HWcvmVymJbj6NSgZZmW/8S9Y2HQ5euytnIgakgxN6papOAWiwDo1ctFDcoQ==}
+    hasBin: true
 
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
@@ -3670,6 +3677,8 @@ snapshots:
   balanced-match@1.0.2: {}
 
   base-64@0.1.0: {}
+
+  baseline-browser-mapping@2.9.11: {}
 
   binary-extensions@2.3.0: {}
 
