@@ -6,7 +6,7 @@ import { ArticleStructuredData } from '../../components/StructuredData';
 import { replaceEnglishTitles } from '../../utils/textReplacer';
 
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function generateStaticParams() {
@@ -18,7 +18,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const patch = await getPatch(params.id);
+  const resolvedParams = await params;
+  const patch = await getPatch(resolvedParams.id);
   if (!patch) return {};
 
   const title = replaceEnglishTitles(patch.title);
@@ -46,12 +47,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       card: 'summary_large_image',
       title: `${title} | 패치로그`,
       description,
+      
     }
   };
 }
 
 export default async function PatchDetailPage({ params }: PageProps) {
-  const patch = await getPatch(params.id);
+  const resolvedParams = await params;
+  const patch = await getPatch(resolvedParams.id);
 
   if (!patch) {
     notFound();
