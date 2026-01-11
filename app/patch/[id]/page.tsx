@@ -23,18 +23,31 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!patch) return {};
 
   const title = replaceEnglishTitles(patch.title);
-  const description = patch.translated_ko 
+  const description = patch.translated_ko
     ? patch.translated_ko.replace(/<[^>]*>?/gm, '').substring(0, 160)
     : `${patch.app_name}의 최신 패치노트입니다.`;
-  
+
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://patchlog.co.kr';
+  const canonicalUrl = `${baseUrl}/patch/${resolvedParams.id}`;
+
   return {
-    title: `${title} | 패치로그`,
-    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    title: `${title} | 마블 라이벌즈 패치로그`,
+    description: `${description} 아이언맨, 토르, 스파이더맨, 헐크, 캡틴 아메리카 등 히어로의 스킬 변경, 맵 업데이트, 메타 변화를 상세히 확인하세요.`,
+    keywords: [
+      "마블 라이벌즈 패치", "Marvel Rivals patch", "히어로 밸런스", "스킬 버프", "스킬 너프",
+      "아이언맨", "토르", "스파이더맨", "헐크", "캡틴 아메리카",
+      "블랙위도우", "호크아이", "블랙팬서", "닥터스트레인지", "스칼렛위치",
+      "맵 업데이트", "메타 변화", "티어 리스트", "공략"
+    ],
     openGraph: {
-      title: `${title} | 패치로그`,
-      description,
+      title: `${title} | 마블 라이벌즈 패치로그`,
+      description: `${description} 히어로 스킬 변경, 맵 업데이트, 메타 변화 확인.`,
       type: 'article',
       publishedTime: patch.published_at,
+      siteName: "패치로그",
       images: [
         {
           url: `/api/og?title=${encodeURIComponent(title)}&date=${encodeURIComponent(patch.published_at)}`,
@@ -45,9 +58,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${title} | 패치로그`,
-      description,
-      
+      title: `${title} | 마블 라이벌즈 패치로그`,
+      description: `${description} 히어로 업데이트 확인.`,
     }
   };
 }
