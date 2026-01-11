@@ -34,8 +34,8 @@ interface PatchDetail {
 }
 
 interface PatchNavigation {
-  prev: { id: string; title: string } | null;
-  next: { id: string; title: string } | null;
+  newer: { id: string; title: string } | null;
+  older: { id: string; title: string } | null;
 }
 
 export default function PatchDetailClient({
@@ -151,10 +151,10 @@ export default function PatchDetailClient({
         <div className="mt-16 mb-8">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="w-full sm:w-1/2">
-              {navigation.prev ? (
+              {navigation.newer ? (
                 <button
                   onClick={() =>
-                    router.push(`/patch/${navigation.prev!.id}`)
+                    router.push(`/patch/${navigation.newer!.id}`)
                   }
                   className="group w-full flex items-center p-4 rounded-xl border border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 hover:shadow-sm transition-all duration-200 bg-white dark:bg-gray-800 h-20"
                 >
@@ -179,7 +179,7 @@ export default function PatchDetailClient({
                         최신 업데이트
                       </div>
                       <div className="text-sm font-medium text-slate-900 dark:text-white truncate">
-                        {replaceEnglishTitles(navigation.prev.title)}
+                        {replaceEnglishTitles(navigation.newer.title)}
                       </div>
                     </div>
                   </div>
@@ -207,7 +207,7 @@ export default function PatchDetailClient({
                         가장 최신 업데이트
                       </div>
                       <div className="text-sm font-medium text-slate-500 dark:text-gray-400 truncate">
-                        더 이상 새로운 업데이트가 없습니다
+                        더 이상 가져올 업데이트가 없습니다
                       </div>
                     </div>
                   </div>
@@ -216,10 +216,10 @@ export default function PatchDetailClient({
             </div>
 
             <div className="w-full sm:w-1/2">
-              {navigation.next ? (
+              {navigation.older ? (
                 <button
                   onClick={() =>
-                    router.push(`/patch/${navigation.next!.id}`)
+                    router.push(`/patch/${navigation.older!.id}`)
                   }
                   className="group w-full flex items-center p-4 rounded-xl border border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 hover:shadow-sm transition-all duration-200 bg-white dark:bg-gray-800 h-20"
                 >
@@ -229,7 +229,7 @@ export default function PatchDetailClient({
                         이전 업데이트
                       </div>
                       <div className="text-sm font-medium text-slate-900 dark:text-white truncate">
-                        {replaceEnglishTitles(navigation.next.title)}
+                        {replaceEnglishTitles(navigation.older.title)}
                       </div>
                     </div>
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 dark:bg-gray-700 group-hover:bg-slate-200 dark:group-hover:bg-gray-600 flex items-center justify-center transition-colors">

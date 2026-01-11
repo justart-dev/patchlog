@@ -50,8 +50,8 @@ export const getPatches = unstable_cache(
 );
 
 export async function getPatchNavigation(currentId: string, publishedAt: string) {
-  const [next, prev] = await Promise.all([
-    // Next (Newer)
+  const [newer, older] = await Promise.all([
+    // Newer patch (published_at is greater/more recent)
     supabase
       .from("steam_patch_logs")
       .select("id, title")
@@ -59,7 +59,7 @@ export async function getPatchNavigation(currentId: string, publishedAt: string)
       .order("published_at", { ascending: true })
       .limit(1)
       .single(),
-    // Prev (Older)
+    // Older patch (published_at is less/more past)
     supabase
       .from("steam_patch_logs")
       .select("id, title")
@@ -70,8 +70,8 @@ export async function getPatchNavigation(currentId: string, publishedAt: string)
   ]);
 
   return {
-    next: next.data, // Newer patch (in the UI logic, "next" usually means newer or older depending on list direction, but here I'll stick to variable names and map them in UI)
-    prev: prev.data  // Older patch
+    newer: newer.data, // More recent patch
+    older: older.data  // Older patch
   };
 }
 
