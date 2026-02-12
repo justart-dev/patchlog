@@ -53,13 +53,25 @@ export async function POST(request: Request) {
           console.log(`Skipping log ${log.id}: empty content`);
           continue;
         }
+
+        // YouTube 태그를 플레이스홀더로 치환하여 보존
+        const youtubeTags: string[] = [];
+        let contentToTranslate = log.content.replace(
+          /\[previewyoutube="([^"]+)"\]\[\/previewyoutube\]/g,
+          (match) => {
+            const placeholder = `__YOUTUBE_PLACEHOLDER_${youtubeTags.length}__`;
+            youtubeTags.push(match);
+            return placeholder;
+          }
+        );
+
         // skillMap을 프롬프트에 추가
         const skillMappings = Object.entries(skillMap)
           .map(([key, value]) => `        "${key}": "${value}"`)
           .join(",\n");
-        
-        const enhancedSystemPrompt = marvelPrompt.messages[0].content + 
-          `\n\nWhen translating skill names, use these exact mappings:\n{\n${skillMappings}\n}`;
+
+        const enhancedSystemPrompt = marvelPrompt.messages[0].content +
+          `\n\nWhen translating skill names, use these exact mappings:\n{\n${skillMappings}\n}\n\nIMPORTANT: Keep all placeholders like __YOUTUBE_PLACEHOLDER_N__ exactly as they are without translating them.`;
 
         // OpenAI API 호출하여 번역
         const requestBody = {
@@ -71,7 +83,7 @@ export async function POST(request: Request) {
             }, // enhanced system message
             {
               role: "user",
-              content: log.content,
+              content: contentToTranslate,
             },
           ],
         };
@@ -108,7 +120,13 @@ export async function POST(request: Request) {
 
         // ```html ``` 태그 제거 (ChatGPT가 코드블록으로 감쌀 경우)
         translatedContent = translatedContent.replace(/```html\n?/g, '').replace(/```\n?/g, '');
-        
+
+        // YouTube 플레이스홀더를 원래 태그로 복원
+        youtubeTags.forEach((tag, index) => {
+          const placeholder = `__YOUTUBE_PLACEHOLDER_${index}__`;
+          translatedContent = translatedContent.replace(placeholder, tag);
+        });
+
         // 후처리: 잘못 번역된 스킬명들을 올바르게 교체
         Object.entries(skillMap).forEach(([englishName, koreanName]) => {
           // 영어명이 그대로 남아있는 경우 한글로 교체
