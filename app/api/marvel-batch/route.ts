@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { BatchLogger } from "@/lib/batch-logger";
 
-export async function POST(request: Request) {
+// Vercel 서버리스 함수 타임아웃 확장 (번역 배치에 충분한 시간 확보)
+export const maxDuration = 60;
+
+async function runBatch(request: Request) {
   // Vercel Cron Job 검증 (공식 Authorization 헤더 방식)
   const authHeader = request.headers.get("authorization");
   const expectedAuth = `Bearer ${process.env.CRON_SECRET}`;
@@ -64,7 +67,6 @@ export async function POST(request: Request) {
 
     // 2단계: 번역 처리
     console.log("Step 2: Starting translation...");
-    await new Promise((resolve) => setTimeout(resolve, 5000)); // 5초 대기
 
     // 내부 API 로직을 직접 사용
     const { POST: translatePost } = await import(
@@ -86,6 +88,13 @@ export async function POST(request: Request) {
 
     if (!translateResponse.ok) {
       throw new Error(`Translation failed: ${translateResponse.status}`);
+    }
+
+    // 번역 대상이 있었는데 하나도 번역되지 않은 경우 경고 로그
+    if (translateResult.totalLogs > 0 && translateResult.translatedCount === 0) {
+      console.warn(
+        `Warning: ${translateResult.totalLogs} patches found but 0 translated. Check OpenAI API key and model configuration.`
+      );
     }
 
     // 배치 성공 로그
@@ -135,11 +144,11 @@ export async function POST(request: Request) {
   }
 }
 
-// GET 요청으로도 테스트 가능하게 (개발용)
-export async function GET() {
-  return NextResponse.json({
-    message: "Marvel Rivals Batch API",
-    status: "ready",
-    timestamp: new Date().toISOString(),
-  });
+// Vercel Cron은 GET 요청을 보내므로 GET에서도 배치 실행
+export async function GET(request: Request) {
+  return runBatch(request);
+}
+
+export async function POST(request: Request) {
+  return runBatch(request);
 }
