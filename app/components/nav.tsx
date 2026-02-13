@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ThemeToggle } from "./theme-toggle";
 
 interface NavItem {
@@ -75,6 +75,11 @@ const navItems: NavItem[] = [
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <nav className="w-full">
@@ -130,18 +135,24 @@ export function Navbar() {
         {/* Theme toggle and Auth buttons */}
         <div className="flex items-center space-x-3">
           <ThemeToggle />
-          <SignedOut>
-            <SignInButton mode="modal">
-              <button className="flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors whitespace-nowrap">
-                로그인
-              </button>
-            </SignInButton>
-          </SignedOut>
-          <SignedIn>
-            <div className="flex items-center">
-              <UserButton afterSignOutUrl="/" />
-            </div>
-          </SignedIn>
+          {mounted ? (
+            <>
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <button className="flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors whitespace-nowrap">
+                    로그인
+                  </button>
+                </SignInButton>
+              </SignedOut>
+              <SignedIn>
+                <div className="flex items-center">
+                  <UserButton afterSignOutUrl="/" />
+                </div>
+              </SignedIn>
+            </>
+          ) : (
+            <div className="h-8 w-16" aria-hidden="true" />
+          )}
         </div>
       </div>
 
