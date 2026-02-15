@@ -43,35 +43,32 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
   }, [patchLogs]);
 
   return (
-    <div className="grid gap-6 grid-cols-1">
+    <div className="grid gap-4 grid-cols-1">
       {formattedPatchLogs.map((log) => {
-
         return (
           <Link
             key={log.id}
             href={`/patch/${log.id}`}
-            className="group relative"
+            className="group block"
             style={{ animationDelay: log.animationDelay }}
           >
-            <div className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-xl overflow-hidden hover:shadow-sm transition-all duration-200">
-              <div className="flex">
-                {/* Image Section */}
-                <div className="relative w-28 md:w-36 flex-shrink-0 overflow-hidden bg-slate-50 dark:bg-gray-700">
+            <article className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500">
+              <div className="flex flex-col sm:flex-row">
+                <div className="relative w-full sm:w-32 md:w-40 lg:w-44 h-36 sm:h-auto flex-shrink-0 bg-gray-50 dark:bg-gray-800 border-b sm:border-b-0 sm:border-r border-gray-200 dark:border-gray-700">
                   {log.capsule_image ? (
-                    <div className="relative h-full">
+                    <div className="relative h-full w-full">
                       <Image
                         src={log.capsule_image}
                         alt={log.app_name}
-                        width={112}
-                        height={140}
-                        className="w-full h-full object-contain p-3 transition-transform duration-300 group-hover:scale-105"
-                        sizes="112px"
+                        fill
+                        className="object-contain p-3 transition-transform duration-300 group-hover:scale-[1.03]"
+                        sizes="(max-width: 640px) 100vw, 176px"
                         priority={false}
                       />
                     </div>
                   ) : (
                     <div className="h-full flex items-center justify-center">
-                      <div className="text-slate-300 dark:text-gray-500">
+                      <div className="text-gray-300 dark:text-gray-600">
                         <svg
                           className="w-8 h-8"
                           fill="none"
@@ -90,17 +87,15 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
                   )}
                 </div>
 
-                {/* Content Section */}
                 <div className="flex-1 p-5 md:p-6 flex flex-col min-w-0">
-                  {/* Header */}
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-slate-500 dark:text-gray-400 font-medium">
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
                       {log.app_name}
                     </span>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-1 h-1 bg-slate-300 dark:bg-gray-600 rounded-full" />
+                    <div className="flex items-center gap-2">
+                      <span className="h-1 w-1 rounded-full bg-gray-300 dark:bg-gray-600" />
                       <time
-                        className="text-xs text-slate-500 dark:text-gray-400 font-medium"
+                        className="text-xs text-gray-500 dark:text-gray-400"
                         title={log.formattedDate}
                       >
                         {log.timeAgo}
@@ -108,42 +103,25 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
                     </div>
                   </div>
 
-                  {/* Title */}
-                  <h2 className="text-base md:text-xl font-bold text-slate-900 dark:text-white line-clamp-2 leading-tight mb-3 md:mb-4">
+                  <h2 className="text-lg md:text-2xl font-black text-gray-900 dark:text-white line-clamp-2 leading-tight mb-3">
                     {replaceEnglishTitles(log.title)}
                   </h2>
 
-                  {/* Content Preview */}
                   {log.content && (
-                    <p className="text-sm text-slate-600 dark:text-gray-300 line-clamp-2 mb-4 leading-relaxed text-sm md:text-[15px]">
+                    <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed mb-4">
                       {log.content.replace(/<[^>]*>?/gm, "").substring(0, 120)}
                       ...
                     </p>
                   )}
 
-                  {/* Action */}
                   <div className="mt-auto">
-                    <div className="flex items-center text-sm font-medium text-indigo-600 dark:text-indigo-400">
-                      <span>패치 상세 보기</span>
-                      <svg
-                        className="w-4 h-4 ml-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17 8l4 4m0 0l-4 4m4-4H3"
-                        />
-                      </svg>
-                    </div>
+                    <time className="text-xs text-gray-500 dark:text-gray-400" title={log.formattedDate}>
+                      {log.formattedDate}
+                    </time>
                   </div>
                 </div>
               </div>
-
-            </div>
+            </article>
           </Link>
         );
       })}
