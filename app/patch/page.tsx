@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { PatchList, type PatchLog } from "../components/patchList";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -14,6 +14,7 @@ export default function PatchPage() {
   const [patchLogs, setPatchLogs] = useState<PatchLog[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const dayLabels = ["일", "월", "화", "수", "목", "금", "토"];
 
   useEffect(() => {
     const fetchPatchLogs = async () => {
@@ -43,12 +44,45 @@ export default function PatchPage() {
 
   const latestDate = useMemo(() => {
     if (!patchLogs || patchLogs.length === 0) return new Date();
-    
+
     return new Date(
       Math.max(
         ...patchLogs.map((log) => new Date(log.published_at).getTime())
       )
     );
+  }, [patchLogs]);
+
+  const updateStats = useMemo(() => {
+    if (!patchLogs || patchLogs.length === 0) {
+      return {
+        totalCount: 0,
+        recentCount: 0,
+        dayCounts: Array(7).fill(0),
+        topDayLabel: "-",
+        topDayCount: 0,
+      };
+    }
+
+    const recentLogs = patchLogs.slice(0, 30);
+    const dayCounts = Array(7).fill(0);
+
+    for (const log of recentLogs) {
+      const day = new Date(log.published_at).getDay();
+      dayCounts[day] += 1;
+    }
+
+    let topDayIndex = 0;
+    for (let i = 1; i < dayCounts.length; i += 1) {
+      if (dayCounts[i] > dayCounts[topDayIndex]) topDayIndex = i;
+    }
+
+    return {
+      totalCount: patchLogs.length,
+      recentCount: recentLogs.length,
+      dayCounts,
+      topDayLabel: dayLabels[topDayIndex],
+      topDayCount: dayCounts[topDayIndex],
+    };
   }, [patchLogs]);
 
   if (loading) {
@@ -77,300 +111,137 @@ export default function PatchPage() {
   }
 
   return (
-    <div className="relative">
-      {/* Header Section */}
-      <div className="relative">
-        <div className="max-w-6xl mx-auto px-4 py-12">
-          <div className="text-center space-y-4">
-            <h1 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
-              Marvel Rivals
-            </h1>
-            <p className="text-base md:text-lg text-slate-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-              패치 내역은 UTC 기준 09:00에 적용되며, 한국 시간으로는 오후
-              6시쯤에 업데이트됩니다.
-            </p>
-          </div>
-        </div>
-      </div>
+    <div className="max-w-6xl mx-auto px-4 py-8 md:py-12 space-y-10 md:space-y-12">
+      <section className="rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-6 sm:px-8 md:px-10 py-10 text-center">
+        <p className="inline-flex items-center px-3 py-1 rounded-full border border-gray-300 dark:border-gray-600 text-xs font-semibold text-gray-700 dark:text-gray-300 mb-5">
+          Patchlog Feed
+        </p>
+        <h1 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white mb-4 leading-tight">
+          Marvel Rivals 패치노트
+        </h1>
+        <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+          패치 내역은 UTC 기준 09:00에 적용되며, 한국 시간으로는 오후 6시쯤에 업데이트됩니다.
+        </p>
+      </section>
 
-      {/* Content Section */}
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        {patchLogs ? (
-          <div className="space-y-8">
-            {/* Update Insights Section */}
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-                  업데이트 인사이트
-                </h2>
-                <div className="relative">
-                  <div className="inline-flex items-center px-2 py-0.5 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-sm transform rotate-3 shadow-md border-2 border-yellow-500">
-                    NEW
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-bounce"></div>
-                </div>
-              </div>
+      {patchLogs ? (
+        <>
+          <section className="space-y-5">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white">업데이트 인사이트</h2>
+            </div>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
-                {/* Update Pattern Card */}
-                <div className="relative h-full flex flex-col bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-gray-700">
-                  {isLoaded && !isSignedIn && (
-                    <div className="absolute inset-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl flex items-center justify-center z-10">
-                      <div className="text-center p-6">
-                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                          <ChartBarIcon className="w-6 h-6 text-white" />
-                        </div>
-                        <h4 className="font-semibold text-slate-900 dark:text-white mb-2 text-sm">
-                          업데이트 패턴 분석
-                        </h4>
-                        <p className="text-xs text-slate-600 dark:text-gray-300 mb-3">
-                          로그인하고 상세한 업데이트 패턴을 확인하세요
-                        </p>
-                        <SignInButton mode="modal">
-                          <button className="px-4 py-2 bg-blue-600 text-white text-xs rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                            로그인하기
-                          </button>
-                        </SignInButton>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+              <article className="relative rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 p-5 sm:p-6">
+                {isLoaded && !isSignedIn ? (
+                  <div className="absolute inset-0 z-10 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm flex items-center justify-center">
+                    <div className="text-center px-6">
+                      <div className="mx-auto mb-3 inline-flex h-11 w-11 items-center justify-center rounded-full bg-gray-900 dark:bg-white">
+                        <ChartBarIcon className="w-5 h-5 text-white dark:text-gray-900" />
                       </div>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">업데이트 패턴 분석</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">로그인 후 상세 인사이트를 확인할 수 있습니다.</p>
+                      <SignInButton mode="modal">
+                        <button className="px-4 py-2 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-xs font-semibold">
+                          로그인
+                        </button>
+                      </SignInButton>
                     </div>
-                  )}
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
-                    업데이트 패턴
-                  </h3>
-
-                  <p className="text-slate-600 dark:text-gray-300 text-sm mb-4">
-                    최근 30일간의 업데이트 빈도입니다. 주로 업데이트가 많이
-                    이루어지는 요일을 확인하실 수 있습니다.
-                  </p>
-
-                  <div className="grid grid-cols-7 gap-1 sm:gap-2 lg:gap-3 xl:gap-4 mt-8">
-                    {["일", "월", "화", "수", "목", "금", "토"].map(
-                      (day, index) => {
-                        // Count updates for each day of the week (0-6, where 0 is Sunday)
-                        const dayCount = patchLogs?.filter((log) => {
-                          const dayOfWeek = new Date(log.published_at).getDay();
-                          return dayOfWeek === index;
-                        }).length || 0;
-
-                        // Calculate height based on count (responsive height)
-                        const maxHeight = 48;
-                        const height = Math.min(maxHeight, 8 + dayCount * 6);
-
-                        return (
-                          <div key={day} className="flex flex-col items-center">
-                            <div className="w-full flex justify-center items-end h-28 sm:h-32 lg:h-36 xl:h-40">
-                              <div
-                                className={`w-full sm:w-4/5 lg:w-5/6 ${
-                                  dayCount > 0
-                                    ? "bg-gradient-to-t from-blue-600 to-blue-500"
-                                    : "bg-slate-100 dark:bg-gray-700"
-                                }`}
-                                style={{ height: `${height}px` }}
-                              >
-                                <span className="sr-only">
-                                  {day}요일 {dayCount}회
-                                </span>
-                              </div>
-                            </div>
-                            <span className="text-xs text-slate-600 dark:text-gray-400 mt-2">
-                              {day}
-                            </span>
-                            <span className="text-xs font-medium text-blue-600 dark:text-blue-400">
-                              {dayCount > 0 ? `${dayCount}회` : "-"}
-                            </span>
-                          </div>
-                        );
-                      }
-                    )}
                   </div>
+                ) : null}
 
-                  <div className="mt-8 pt-4 border-t border-slate-100 dark:border-gray-700">
-                    <p className="text-xs text-slate-500 dark:text-gray-400">
-                      ※ 최근 {Math.min(patchLogs.length, 30)}개 패치 기준
-                    </p>
-                  </div>
-                </div>
-
-                {/* Recent Update Highlights Card */}
-                <div className="relative h-full flex flex-col bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-gray-700">
-                  {isLoaded && !isSignedIn && (
-                    <div className="absolute inset-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-xl flex items-center justify-center z-10">
-                      <div className="text-center p-6">
-                        <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                          <FireIcon className="w-6 h-6 text-white" />
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">업데이트 패턴</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-5">요일별 업데이트 빈도를 빠르게 확인할 수 있습니다.</p>
+                <div className="grid grid-cols-7 gap-2">
+                  {dayLabels.map((day, index) => {
+                    const dayCount = updateStats.dayCounts[index] ?? 0;
+                    const height = Math.min(56, 10 + dayCount * 8);
+                    return (
+                      <div key={day} className="flex flex-col items-center">
+                        <div className="h-24 w-full flex items-end justify-center">
+                          <div
+                            className={`w-4 rounded-t-sm ${dayCount > 0 ? "bg-gray-900 dark:bg-white" : "bg-gray-200 dark:bg-gray-700"}`}
+                            style={{ height: `${height}px` }}
+                          />
                         </div>
-                        <h4 className="font-semibold text-slate-900 dark:text-white mb-2 text-sm">
-                          주요 업데이트 하이라이트
-                        </h4>
-                        <p className="text-xs text-slate-600 dark:text-gray-300 mb-3">
-                          로그인하고 핵심 업데이트를 놓치지 마세요
-                        </p>
-                        <SignInButton mode="modal">
-                          <button className="px-4 py-2 bg-blue-600 text-white text-xs rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                            로그인하기
-                          </button>
-                        </SignInButton>
+                        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">{day}</p>
+                        <p className="text-[11px] font-semibold text-gray-700 dark:text-gray-300">{dayCount > 0 ? `${dayCount}회` : "-"}</p>
                       </div>
-                    </div>
-                  )}
-                  <div className="mb-6">
-                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-1">
-                      주요 업데이트 하이라이트
-                    </h3>
-                    <p className="text-slate-600 dark:text-gray-300 text-sm">
-                      최근 패치에서 주목할 만한 주요 변경사항들을 확인해보세요.
-                    </p>
-                  </div>
-
-                  <div className="flex-1 space-y-4">
-                    {patchLogs.slice(0, 3).map((log, index) => {
-                      const updateDate = new Date(log.published_at);
-
-                      return (
-                        <Link
-                          key={log.id}
-                          href={`/patch/${log.id}`}
-                          className="block bg-white dark:bg-gray-700 p-3 sm:p-4 lg:p-3 xl:p-4 rounded-lg border border-slate-100 dark:border-gray-600 hover:shadow-sm transition-all group hover:-translate-y-0.5 active:translate-y-0 hover:border-blue-200 dark:hover:border-blue-400 active:border-blue-300 dark:active:border-blue-500 min-h-[60px] sm:min-h-[64px] xl:h-[72px]"
-                        >
-                          <div className="flex items-start sm:items-center h-full">
-                            <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 xl:w-8 xl:h-8 rounded-md bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 flex items-center justify-center mr-3 mt-0.5 sm:mt-0">
-                              <span className="text-xs sm:text-sm xl:text-base font-medium">
-                                {index + 1}
-                              </span>
-                            </div>
-                            <div className="flex-1 min-w-0 flex flex-col justify-center">
-                              <h4 className="font-medium text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors text-sm sm:text-base leading-tight sm:leading-normal xl:truncate">
-                                {replaceEnglishTitles(log.title)}
-                              </h4>
-                              <div className="flex items-center mt-1">
-                                <span className="text-xs text-slate-500 dark:text-gray-400">
-                                  {updateDate.toLocaleDateString("ko-KR", {
-                                    year: "numeric",
-                                    month: "short",
-                                    day: "numeric",
-                                    weekday: "short",
-                                  })}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="flex-shrink-0 ml-2">
-                              <svg
-                                className="w-3 h-3 sm:w-3.5 sm:h-3.5 xl:w-4 xl:h-4 text-blue-400 group-hover:translate-x-0.5 transition-transform"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M14 5l7 7m0 0l-7 7m7-7H3"
-                                />
-                              </svg>
-                            </div>
-                          </div>
-                        </Link>
-                      );
-                    })}
-                  </div>
-
-                  <div className="mt-6 pt-4 border-t border-slate-100 dark:border-gray-700">
-                    <p className="text-xs text-slate-500 dark:text-gray-400">
-                      ※ 최근 패치 중 상위 3개
-                    </p>
-                  </div>
+                    );
+                  })}
                 </div>
-              </div>
-            </div>
+              </article>
 
-            <div className="mt-8 flex justify-center">
-              <button
-                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                className="text-sm text-blue-600 hover:text-blue-800 hover:underline flex items-center"
-              >
-                <svg
-                  className="w-3.5 h-3.5 mr-1"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 10l7-7m0 0l7 7m-7-7v18"
-                  />
-                </svg>
-                맨 위로
-              </button>
-            </div>
+              <article className="relative rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 p-5 sm:p-6">
+                {isLoaded && !isSignedIn ? (
+                  <div className="absolute inset-0 z-10 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm flex items-center justify-center">
+                    <div className="text-center px-6">
+                      <div className="mx-auto mb-3 inline-flex h-11 w-11 items-center justify-center rounded-full bg-gray-900 dark:bg-white">
+                        <FireIcon className="w-5 h-5 text-white dark:text-gray-900" />
+                      </div>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">주요 하이라이트</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">로그인 후 핵심 변경 내역을 확인할 수 있습니다.</p>
+                      <SignInButton mode="modal">
+                        <button className="px-4 py-2 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-xs font-semibold">
+                          로그인
+                        </button>
+                      </SignInButton>
+                    </div>
+                  </div>
+                ) : null}
 
-            <div className="flex items-center justify-between mt-12">
-              <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">
-                패치 노트
-              </h2>
-              <div className="flex items-center space-x-2 text-xs md:text-sm text-slate-500 dark:text-gray-400">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <span>
-                  마지막 업데이트: {latestDate.toLocaleDateString("ko-KR")}
-                </span>
-              </div>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">주요 업데이트</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-5">최근 패치 중 먼저 읽으면 좋은 항목입니다.</p>
+                <div className="space-y-3">
+                  {patchLogs.slice(0, 3).map((log, index) => (
+                    <Link
+                      key={log.id}
+                      href={`/patch/${log.id}`}
+                      className="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/70 dark:bg-gray-900/60 px-3 py-3 hover:border-gray-400 dark:hover:border-gray-500 transition-colors"
+                    >
+                      <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-xs font-bold">
+                        {index + 1}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{replaceEnglishTitles(log.title)}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {new Date(log.published_at).toLocaleDateString("ko-KR", { year: "numeric", month: "short", day: "numeric" })}
+                        </p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </article>
             </div>
+          </section>
 
+          <section className="space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white">전체 패치노트</h2>
+              <p className="inline-flex items-center px-3 py-1 rounded-full border border-gray-300 dark:border-gray-600 text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+                마지막 업데이트: {latestDate.toLocaleDateString("ko-KR")}
+              </p>
+            </div>
             <PatchList patchLogs={patchLogs} />
-          </div>
-        ) : (
-          <div className="text-center py-20">
-            <div className="relative">
-              <div className="mx-auto w-20 h-20 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center mb-6">
-                <svg
-                  className="w-10 h-10 text-slate-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <div className="absolute top-1 right-1/2 transform translate-x-8 w-3 h-3 bg-blue-500 rounded-full animate-bounce" />
-            </div>
+          </section>
 
-            <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-3">
-              패치 내역을 수집하고 있습니다
-            </h3>
-            <p className="text-slate-600 dark:text-gray-300 max-w-md mx-auto leading-relaxed mb-8">
-              매일 자동으로 Marvel Rivals의 최신 패치 노트를 수집하여 한글로
-              번역합니다. 곧 새로운 내용을 만나보실 수 있습니다.
-            </p>
-
-            <div className="inline-flex items-center space-x-2 px-6 py-3 bg-slate-100 dark:bg-gray-800 rounded-full text-sm text-slate-600 dark:text-gray-300">
-              <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse delay-75" />
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse delay-150" />
-              </div>
-              <span>업데이트 대기 중</span>
-            </div>
+          <div className="flex justify-center pt-2">
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+            >
+              맨 위로
+            </button>
           </div>
-        )}
-      </div>
+        </>
+      ) : (
+        <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-6 py-14 text-center">
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">패치 내역을 수집 중입니다</h3>
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
+            매일 자동으로 최신 패치노트를 확인해 업데이트합니다. 잠시 후 다시 확인해 주세요.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
