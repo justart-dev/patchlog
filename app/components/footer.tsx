@@ -32,7 +32,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="inline-flex px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-800 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
             >
-              통계
+              사이트 통계
             </Link>
           </div>
         </div>

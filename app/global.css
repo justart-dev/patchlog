@@ -44,12 +44,12 @@ body {
   color: rgb(229, 231, 235) !important;
 }
 
-/* 컨텐츠 영역의 일반 링크만 파란색 (버튼과 중요한 UI 요소는 제외) */
-.dark div:not(.text-center) a:not(.group):not([class*="bg-"]) {
+/* 메인 컨텐츠 영역의 일반 링크만 파란색 (헤더/푸터 네비 제외) */
+.dark main div:not(.text-center) a:not(.group):not([class*="bg-"]) {
   color: rgb(96, 165, 250) !important;
 }
 
-.dark div:not(.text-center) a:not(.group):not([class*="bg-"]):hover {
+.dark main div:not(.text-center) a:not(.group):not([class*="bg-"]):hover {
   color: rgb(147, 197, 253) !important;
 }
 
