@@ -112,16 +112,16 @@ export default function RootLayout({
         <body className="antialiased flex flex-col min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white">
           <ThemeProvider>
             <WebSiteStructuredData />
-            <div className="w-full bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
-              <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4">
+            <div className="w-full bg-white dark:bg-gray-900">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
                 <Navbar />
               </div>
             </div>
             <main className="flex-grow">
               <div className="max-w-7xl mx-auto px-4 py-8">{children}</div>
             </main>
-            <div className="w-full bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 mt-auto">
-              <div className="max-w-7xl mx-auto px-6 sm:px-8 py-4">
+            <div className="w-full bg-gradient-to-t from-gray-50 to-white dark:from-gray-900 dark:to-gray-900 border-t border-gray-200 dark:border-gray-800 mt-auto">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
                 <Footer />
               </div>
             </div>
