@@ -199,7 +199,7 @@ export default function PatchPage() {
                       href={`/patch/${log.id}`}
                       className="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/70 dark:bg-gray-900/60 px-3 py-3 hover:border-gray-400 dark:hover:border-gray-500 transition-colors"
                     >
-                      <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-xs font-bold">
+                      <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-xs font-bold">
                         {index + 1}
                       </span>
                       <div className="min-w-0">
