@@ -15,8 +15,8 @@ export function ThemeToggle() {
   if (!mounted) {
     // 서버사이드에서는 기본 상태로 렌더링
     return (
-      <div className="flex items-center space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
-        <div className="p-2 rounded-md bg-white dark:bg-gray-700 shadow-sm">
+      <div className="flex items-center space-x-1 rounded-lg p-0.5">
+        <div className="p-2 rounded-md bg-gray-100 dark:bg-gray-800">
           <div className="h-4 w-4" />
         </div>
         <div className="p-2 rounded-md">
@@ -30,13 +30,13 @@ export function ThemeToggle() {
   }
 
   return (
-    <div className="flex items-center space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+    <div className="flex items-center space-x-1 rounded-lg p-0.5">
       <button
         onClick={() => setTheme('light')}
         className={`p-2 rounded-md ${
           theme === 'light'
-            ? 'bg-white dark:bg-gray-700 shadow-sm'
-            : 'hover:bg-gray-200 dark:hover:bg-gray-700'
+            ? 'bg-gray-100 dark:bg-gray-800'
+            : 'hover:bg-gray-100 dark:hover:bg-gray-800'
         }`}
         title="라이트 모드"
       >
@@ -46,8 +46,8 @@ export function ThemeToggle() {
         onClick={() => setTheme('dark')}
         className={`p-2 rounded-md ${
           theme === 'dark'
-            ? 'bg-white dark:bg-gray-700 shadow-sm'
-            : 'hover:bg-gray-200 dark:hover:bg-gray-700'
+            ? 'bg-gray-100 dark:bg-gray-800'
+            : 'hover:bg-gray-100 dark:hover:bg-gray-800'
         }`}
         title="다크 모드"
       >
@@ -57,8 +57,8 @@ export function ThemeToggle() {
         onClick={() => setTheme('system')}
         className={`p-2 rounded-md ${
           theme === 'system'
-            ? 'bg-white dark:bg-gray-700 shadow-sm'
-            : 'hover:bg-gray-200 dark:hover:bg-gray-700'
+            ? 'bg-gray-100 dark:bg-gray-800'
+            : 'hover:bg-gray-100 dark:hover:bg-gray-800'
         }`}
         title="시스템 설정"
       >

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -210,7 +211,7 @@ export default function Page() {
       {/* ==================== 1. HERO SECTION ==================== */}
       <section className="pt-12 pb-32 px-4 relative">
         <div className={`max-w-5xl mx-auto text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h1 className="text-6xl md:text-8xl font-black text-gray-900 dark:text-white mb-6 leading-tight">
+          <h1 className="text-[2.75rem] md:text-8xl font-black text-gray-900 dark:text-white mb-6 leading-tight">
             게임 <span className="text-hero-blue-500">패치노트</span>를<br />
             한글로 자동 번역
           </h1>
@@ -324,9 +325,12 @@ export default function Page() {
                 <span className="font-semibold text-gray-900 dark:text-white">{activeCard.title}</span>에서 생기는 문제를
                 줄이기 위해, 패치노트를 자동으로 수집하고 맥락 중심으로 번역합니다.
               </p>
+              <div className="h-px bg-gray-200/80 dark:bg-gray-700/80 mb-6" />
 
-              <div className="rounded-2xl border border-white/70 dark:border-gray-700/70 bg-white/70 dark:bg-gray-900/50 p-5 mb-5">
-                <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">현재 선택된 문제</div>
+              <div className="rounded-2xl bg-white/80 dark:bg-gray-900/60 py-5 mb-5">
+                <div className="inline-flex items-center px-2.5 py-1 rounded-full border border-hero-blue-300/80 dark:border-hero-blue-600/70 text-xs font-semibold text-hero-blue-700 dark:text-hero-blue-300 mb-3">
+                  현재 선택된 문제
+                </div>
                 <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed">{activeCard.painPoint}</p>
               </div>
 
@@ -356,7 +360,28 @@ export default function Page() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10 md:items-start">
+          <div className="md:hidden space-y-4">
+            {howItWorksSteps.map((step) => (
+              <div
+                key={`mobile-${step.id}`}
+                className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 p-4"
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold tabular-nums bg-gray-900 text-white dark:bg-white dark:text-gray-900">
+                    {String(step.id).padStart(2, "0")}
+                  </span>
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white leading-tight">
+                    {step.trackTitle}
+                  </p>
+                </div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 whitespace-pre-line leading-6">
+                  {step.trackDescription}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="hidden md:grid md:grid-cols-12 gap-8 lg:gap-10 md:items-start">
             <div className="md:col-span-5 md:self-start md:sticky md:top-56 md:h-[430px]">
               <div className="relative h-[220px] sm:h-[260px] md:h-full">
                 {howItWorksSteps.map((step, index) => {
@@ -416,7 +441,6 @@ export default function Page() {
             </div>
 
             <div className="md:col-span-7 relative md:min-h-[380vh]">
-              <div className="hidden md:block absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-gray-300 dark:via-gray-600 to-transparent" />
               {howItWorksSteps.map((step, index) => {
                 const currentHowStep = isHowInteractiveReady ? activeHowStep : 0;
                 const isActive = index === currentHowStep;
@@ -428,10 +452,12 @@ export default function Page() {
                       howTrackRefs.current[index] = node;
                     }}
                     data-step-index={index}
-                    className="h-[44vh] sm:h-[50vh] md:h-[66vh] flex items-center"
+                    className={`h-[48vh] sm:h-[54vh] md:h-[72vh] flex items-center ${
+                      index === 3 ? "mt-28 md:mt-44" : ""
+                    }`}
                   >
                     <div
-                      className={`w-full md:ml-10 rounded-2xl border px-5 py-4 transition-all duration-300 ${
+                      className={`w-full rounded-2xl border px-5 py-4 transition-all duration-300 ${
                         isActive
                           ? "border-gray-900 dark:border-gray-200 bg-white dark:bg-gray-800/95 shadow-md"
                           : "border-gray-200 dark:border-gray-700 bg-white/75 dark:bg-gray-800/60 opacity-50 blur-[1px]"
@@ -445,15 +471,15 @@ export default function Page() {
                         }`}>
                           {String(step.id).padStart(2, "0")}
                         </span>
-                        <p className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white leading-tight">{step.trackTitle}</p>
+                        <p className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white leading-tight">{step.trackTitle}</p>
                       </div>
-                      <p className="text-[13px] sm:text-sm text-gray-600 dark:text-gray-400 whitespace-pre-line leading-7">
+                      <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 whitespace-pre-line leading-7">
                         {step.trackDescription}
                       </p>
                       {"examples" in step && step.examples.length > 0 ? (
                         step.id === 4 ? (
                           <div className="mt-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900/40 p-3 sm:p-4">
-                            <p className="text-[11px] font-semibold tracking-wide text-gray-500 dark:text-gray-400 uppercase mb-3">
+                            <p className="text-xs font-semibold tracking-wide text-gray-500 dark:text-gray-400 uppercase mb-3">
                               Rendering Rules
                             </p>
                             <div className="space-y-3">
@@ -461,11 +487,11 @@ export default function Page() {
                                 <div key={example.label} className="grid grid-cols-[10px_1fr] gap-2.5 items-start">
                                   <span className="mt-1.5 w-2.5 h-2.5 rounded-sm bg-gray-900 dark:bg-gray-200" />
                                   <div>
-                                    <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 mb-1">{example.label}</p>
-                                    <p className="text-[12px] text-gray-500 dark:text-gray-400 leading-relaxed">
+                                    <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-1">{example.label}</p>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
                                       <span className="font-medium">입력:</span> {example.source}
                                     </p>
-                                    <p className="text-[12px] text-gray-700 dark:text-gray-300 leading-relaxed mt-0.5">
+                                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mt-0.5">
                                       <span className="font-medium">출력:</span> {example.result}
                                     </p>
                                   </div>
@@ -480,13 +506,13 @@ export default function Page() {
                                 key={example.label}
                                 className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-900/40 p-3"
                               >
-                                <p className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                   {example.label}
                                 </p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
                                   <span className="font-medium text-gray-600 dark:text-gray-300">원문:</span> {example.source}
                                 </p>
-                                <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed mt-1">
+                                <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mt-1">
                                   <span className="font-medium">결과:</span> {example.result}
                                 </p>
                               </div>
@@ -495,7 +521,7 @@ export default function Page() {
                         )
                       ) : null}
                       {step.id === 4 ? (
-                        <p className="mt-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                        <p className="mt-4 text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed">
                           사용자는 긴 원문을 전부 읽지 않아도 버프·너프와 체감 변화 포인트를 빠르게 스캔할 수 있습니다.
                         </p>
                       ) : null}
@@ -516,32 +542,48 @@ export default function Page() {
       </section>
 
       {/* ==================== 4. FINAL CTA ==================== */}
-      <section className="py-32 px-4">
+      <section className="py-28 px-4">
         <div className="max-w-5xl mx-auto">
-          <div className="relative overflow-hidden rounded-[2rem] border border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white via-sky-50/70 to-blue-100/60 dark:from-gray-900 dark:via-gray-900 dark:to-hero-blue-950/30 px-6 sm:px-10 py-14 sm:py-16 text-center shadow-xl">
-            <div className="absolute -top-16 -right-16 w-44 h-44 rounded-full bg-hero-blue-200/50 dark:bg-hero-blue-500/20 blur-3xl" />
-            <div className="absolute -bottom-16 -left-16 w-44 h-44 rounded-full bg-cyan-200/40 dark:bg-cyan-500/15 blur-3xl" />
+          <div className="rounded-[2rem] border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-6 sm:px-8 md:px-10 py-9 sm:py-11 shadow-lg">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-stretch">
+              <div className="md:col-span-7">
+                <p className="inline-flex items-center px-3 py-1 rounded-full border border-gray-300 dark:border-gray-600 text-xs font-semibold text-gray-700 dark:text-gray-300 mb-4">
+                  Daily Patchlog
+                </p>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 dark:text-white leading-tight mb-10">
+                  패치노트 확인, 여기서 끝
+                </h2>
+                <div className="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed mb-8 max-w-2xl space-y-3">
+                  <p>
+                    변경사항을 한국어로 읽기 쉽게 정리해 제공합니다.
+                  </p>
+                  <p className="md:whitespace-nowrap">
+                    번역보다 중요한 건 맥락! 단순 직역이 아닌 게임 흐름에 맞춘 설명으로 이해를 돕습니다.
+                  </p>
+                </div>
+                <Link
+                  href="/patch"
+                  className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-gray-900 hover:bg-black dark:bg-white dark:hover:bg-gray-100 text-white dark:text-gray-900 rounded-xl font-semibold text-sm sm:text-base transition-colors duration-200"
+                >
+                  <span>최신 패치노트 보기</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </Link>
+              </div>
 
-            <p className="relative inline-flex items-center px-4 py-1.5 rounded-full border border-gray-300 dark:border-gray-600 text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 mb-6">
-              Ready to Explore
-            </p>
-            <h2 className="relative text-4xl sm:text-5xl md:text-6xl font-black text-gray-900 dark:text-white mb-5 leading-tight">
-              더 이상 <span className="text-hero-blue-500">영어</span>로<br />
-              고민하지 마세요
-            </h2>
-            <p className="relative text-base sm:text-lg text-gray-600 dark:text-gray-400 mb-10">
-              핵심 변경점만 빠르게 읽고, 바로 게임에 적용하세요.
-            </p>
-
-            <Link
-              href="/patch"
-              className="relative inline-flex items-center gap-3 px-10 py-5 bg-hero-blue-500 hover:bg-hero-blue-600 text-white rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl"
-            >
-              <span>패치노트 보러가기</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </Link>
+              <aside className="md:col-span-5 rounded-2xl overflow-hidden min-h-[280px] md:min-h-[350px]">
+                <div className="relative w-full h-full min-h-[280px] md:min-h-[350px]">
+                  <Image
+                    src="/images/jeff.webp"
+                    alt="오늘 확인할 내용 캐릭터 이미지"
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                  />
+                </div>
+              </aside>
+            </div>
           </div>
         </div>
       </section>
