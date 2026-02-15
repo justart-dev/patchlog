@@ -116,7 +116,7 @@ export default function PatchPage() {
         <p className="inline-flex items-center px-3 py-1 rounded-full border border-gray-300 dark:border-gray-600 text-xs font-semibold text-gray-700 dark:text-gray-300 mb-5">
           Patchlog Feed
         </p>
-        <h1 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white mb-4 leading-tight">
+        <h1 className="text-[1.75rem] md:text-5xl font-black text-gray-900 dark:text-white mb-4 leading-tight">
           Marvel Rivals 패치노트
         </h1>
         <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
