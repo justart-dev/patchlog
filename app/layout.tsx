@@ -108,6 +108,12 @@ export default function RootLayout({
               `,
             }}
           />
+          <Script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6198824361218150"
+            crossOrigin="anonymous"
+            strategy="afterInteractive"
+          />
         </head>
         <body className="antialiased flex flex-col min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white">
           <ThemeProvider>
