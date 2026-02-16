@@ -47,7 +47,7 @@ export default function PatchDetailClient({
 
   return (
     <section className="py-6 md:py-10">
-      <div className="max-w-5xl mx-auto px-4 space-y-7 md:space-y-8">
+      <div className="max-w-5xl mx-auto px-4">
         <header className="rounded-3xl bg-white dark:bg-gray-900 p-5 sm:p-6 md:p-7">
           <div className="flex flex-wrap items-center gap-2 mb-5">
             <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300">
@@ -68,8 +68,8 @@ export default function PatchDetailClient({
           <div className="mt-3 h-px bg-gray-200 dark:bg-gray-700" />
         </header>
 
-        <article className="rounded-3xl bg-white dark:bg-gray-900 p-6 sm:p-8">
-          <div className="max-w-none min-h-60">
+        <article className="rounded-3xl bg-white dark:bg-gray-900 p-6 sm:p-8 md:p-10">
+          <div className="max-w-none min-h-60 prose-lg">
             {patchDetail.translated_ko ? (
               <div
                 dangerouslySetInnerHTML={{
@@ -98,7 +98,7 @@ export default function PatchDetailClient({
           </div>
         </article>
 
-        <div className="pt-2">
+        <div className="mt-7 md:mt-8 pt-2">
           <div className="h-px bg-gray-200 dark:bg-gray-700 mb-5" />
           <div className="flex flex-wrap items-center justify-center gap-2">
             <button
@@ -116,7 +116,7 @@ export default function PatchDetailClient({
           </div>
         </div>
 
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <section className="mt-7 md:mt-8 grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>
             {navigation.newer ? (
               <button
@@ -174,7 +174,7 @@ export default function PatchDetailClient({
           </div>
         </section>
 
-        <section id="comments" className="rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-5 sm:p-6">
+        <section id="comments" className="mt-7 md:mt-8 rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-5 sm:p-6">
           <div className="mb-4">
             <h2 className="text-lg sm:text-xl font-black text-gray-900 dark:text-white">댓글</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">패치 내용에 대한 의견을 남겨보세요.</p>
