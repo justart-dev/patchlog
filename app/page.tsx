@@ -281,11 +281,11 @@ export default function Page() {
                     aria-pressed={isActive}
                   >
                     {index === 0 ? (
-                      <div className="absolute -right-5 -bottom-5 w-[216px] h-[216px] opacity-100 pointer-events-none transition-transform duration-300 group-hover:scale-[1.2]">
+                      <div className="absolute -right-5 -bottom-5 w-[216px] h-[216px] opacity-20 sm:opacity-100 -z-0 sm:z-0 pointer-events-none transition-transform duration-300 group-hover:scale-[1.2]">
                         <Image src="/images/spiderman.webp" alt="" fill className="object-contain" aria-hidden="true" />
                       </div>
                     ) : (
-                      <div className="absolute -right-5 -bottom-5 w-[216px] h-[216px] opacity-100 pointer-events-none transition-transform duration-300 group-hover:scale-[1.2]">
+                      <div className="absolute -right-5 -bottom-5 w-[216px] h-[216px] opacity-20 sm:opacity-100 -z-0 sm:z-0 pointer-events-none transition-transform duration-300 group-hover:scale-[1.2]">
                         <Image src="/images/ironman.webp" alt="" fill className="object-contain" aria-hidden="true" />
                       </div>
                     )}
