@@ -367,7 +367,7 @@ export default function Page() {
                 className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 p-4"
               >
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold tabular-nums bg-gray-900 text-white dark:bg-white dark:text-gray-900">
+                  <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold tabular-nums bg-gray-900 text-white dark:bg-white dark:text-gray-900">
                     {String(step.id).padStart(2, "0")}
                   </span>
                   <p className="text-sm font-semibold text-gray-900 dark:text-white leading-tight">
