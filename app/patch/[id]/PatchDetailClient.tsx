@@ -174,11 +174,7 @@ export default function PatchDetailClient({
           </div>
         </section>
 
-        <section id="comments" className="mt-7 md:mt-8 rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-5 sm:p-6">
-          <div className="mb-4">
-            <h2 className="text-lg sm:text-xl font-black text-gray-900 dark:text-white">댓글</h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400">패치 내용에 대한 의견을 남겨보세요.</p>
-          </div>
+        <section id="comments" className="mt-7 md:mt-8 rounded-3xl bg-white dark:bg-gray-900 p-5 sm:p-6">
           <ErrorBoundary
             fallback={
               <div className="text-center py-8 text-gray-500 dark:text-gray-400">

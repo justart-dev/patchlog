@@ -265,11 +265,6 @@ export default function Page() {
               <div className="grid grid-cols-1 gap-4 flex-1">
               {problemCards.map((problem, index) => {
                 const isActive = activeProblem === index;
-                const colorClasses =
-                  problem.color === "amber"
-                    ? "border-amber-300/80 bg-amber-50/80 dark:border-amber-700/40 dark:bg-amber-900/20"
-                    : "border-rose-300/80 bg-rose-50/80 dark:border-rose-700/40 dark:bg-rose-900/20";
-
                 return (
                   <button
                     key={problem.title}
@@ -278,7 +273,7 @@ export default function Page() {
                     onMouseEnter={() => setActiveProblem(index)}
                     className={`w-full min-h-[190px] text-left rounded-3xl border p-6 md:p-7 transition-all duration-300 flex flex-col ${
                       isActive
-                        ? `${colorClasses} shadow-lg -translate-y-1`
+                        ? "border-gray-900 dark:border-gray-200 shadow-lg -translate-y-1 bg-white dark:bg-gray-800/80"
                         : "border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-800/80 hover:-translate-y-0.5 hover:shadow-md"
                     }`}
                     aria-pressed={isActive}
