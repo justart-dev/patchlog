@@ -44,6 +44,59 @@ body {
   color: rgb(229, 231, 235) !important;
 }
 
+/* 패치노트 본문 다크모드 스타일 */
+.dark article h1,
+.dark article h2,
+.dark article h3 {
+  color: rgb(243, 244, 246) !important;
+}
+
+.dark article p,
+.dark article li {
+  color: rgb(209, 213, 219) !important;
+}
+
+.dark article a {
+  color: rgb(96, 165, 250) !important;
+  border-bottom-color: rgba(96, 165, 250, 0.4) !important;
+}
+
+.dark article code {
+  background-color: rgb(55, 65, 81) !important;
+  color: rgb(229, 231, 235) !important;
+}
+
+.dark article pre {
+  background-color: rgb(31, 41, 55) !important;
+  color: rgb(209, 213, 219) !important;
+  border-color: rgb(75, 85, 99) !important;
+}
+
+.dark article blockquote {
+  background: linear-gradient(to right, rgba(30, 58, 138, 0.3), rgba(31, 41, 55, 0.5)) !important;
+  border-left-color: rgb(59, 130, 246) !important;
+  color: rgb(209, 213, 219) !important;
+}
+
+.dark article table {
+  border-color: rgb(75, 85, 99) !important;
+}
+
+.dark article th {
+  background-color: rgb(31, 41, 55) !important;
+  color: rgb(243, 244, 246) !important;
+  border-bottom-color: rgb(75, 85, 99) !important;
+}
+
+.dark article td {
+  color: rgb(209, 213, 219) !important;
+  border-bottom-color: rgb(55, 65, 81) !important;
+}
+
+.dark article hr {
+  border-top-color: rgb(75, 85, 99) !important;
+}
+
 /* 메인 컨텐츠 영역의 일반 링크만 파란색 (헤더/푸터 네비 제외) */
 .dark main div:not(.text-center) a:not(.group):not([class*="bg-"]) {
   color: rgb(96, 165, 250) !important;

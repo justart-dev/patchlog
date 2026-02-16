@@ -217,7 +217,7 @@ export default function PatchPage() {
 
           <section className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h2 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white">전체 패치노트</h2>
+              <h2 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white">패치노트</h2>
               <p className="inline-flex items-center px-3 py-1 rounded-full border border-gray-300 dark:border-gray-600 text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                 마지막 업데이트: {latestDate.toLocaleDateString("ko-KR")}
               </p>
