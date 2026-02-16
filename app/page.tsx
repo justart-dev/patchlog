@@ -17,7 +17,6 @@ export default function Page() {
       label: "Problem 01",
       title: "영어 패치노트",
       summary: "변경점을 빠르게 읽기 어려워 업데이트 의미를 놓치기 쉽습니다.",
-      icon: "🌍",
       color: "amber",
       painPoint: "읽는 데 시간이 오래 걸리고 핵심 변화가 눈에 잘 안 들어옵니다.",
       solution: [
@@ -30,7 +29,6 @@ export default function Page() {
       label: "Problem 02",
       title: "일반 번역기",
       summary: "직역 위주라 게임 용어와 밸런스 맥락이 깨지는 경우가 많습니다.",
-      icon: "🧩",
       color: "rose",
       painPoint: "기계적인 번역은 실제 플레이에 필요한 정보를 놓치게 만듭니다.",
       solution: [
@@ -59,9 +57,7 @@ export default function Page() {
       trackTitle: "원문 수집 및 정리",
       trackDescription: `패치노트 원문을 최대한 보존하며, 필요한 데이터를 DB에 저장합니다.
 
-      번역 전 준비 단계 입니다.
-
-      같은 글은 다시 저장하지 않고, 새 글만 다음 번역 대기 상태로로 만듭니다.
+      번역 전 준비 단계 입니다. 같은 글은 다시 저장하지 않고, 새 글만 번역 대기 상태로로 만듭니다.
 
       `,
       highlight: false,
@@ -74,11 +70,9 @@ export default function Page() {
       trackTitle: "맥락 기반 번역 처리",
       trackDescription: `최근 7일 데이터 중 번역 대기 상태에 있던 패치 항목만 번역 대상으로 잡습니다.
 
-      내부의 커스텀된 프롬프트를 기반으로 일반 번역이 아닌 한국 사용자의 입맛에 맞게 현지화 하였습니다.
+      내부의 커스텀된 프롬프트를 기반으로 일반 번역이 아닌 한국 사용자의 입맛에 맞게 현지화 하였습니다. 번역 이후, 화면에 바로 랜더링 할 수 있게 후처리 이후에 DB에 저장합니다.
 
-      번역 이후, 화면에 바로 랜더링 할 수 있게 후처리 이후에 DB에 저장합니다.
-
-      오래된 GPT-4o 모델에 비해 가격은 낮고 더 안정적인 GPT-5-mini로 모델을 변경하여 서비스의 지속성을 강화했습니다.
+      오래된 GPT-4o 모델에 비해 가격은 낮고, 더 안정적인 GPT-5-mini로 모델을 변경하여 서비스의 지속성을 강화했습니다.
 `,
       highlight: true,
       tags: ["✓ 한국시간", "✓ 게임 용어 매핑", "✓ 커뮤니티 톤"],
@@ -271,18 +265,24 @@ export default function Page() {
                     type="button"
                     onClick={() => setActiveProblem(index)}
                     onMouseEnter={() => setActiveProblem(index)}
-                    className={`w-full min-h-[190px] text-left rounded-3xl border p-6 md:p-7 transition-all duration-300 flex flex-col ${
+                    className={`group relative w-full min-h-[190px] text-left rounded-3xl border p-6 md:p-7 transition-all duration-300 flex flex-col overflow-hidden ${
                       isActive
                         ? "border-gray-900 dark:border-gray-200 shadow-lg -translate-y-1 bg-white dark:bg-gray-800/80"
                         : "border-gray-200 dark:border-gray-700 bg-white/90 dark:bg-gray-800/80 hover:-translate-y-0.5 hover:shadow-md"
                     }`}
                     aria-pressed={isActive}
                   >
-                    <div className="flex items-start justify-between gap-4 mb-4">
-                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold border-gray-300/90 dark:border-gray-600/80 text-gray-700 dark:text-gray-300">
-                        {problem.label}
+                    {index === 0 ? (
+                      <div className="absolute -right-5 -bottom-5 w-[216px] h-[216px] opacity-100 pointer-events-none transition-transform duration-300 group-hover:scale-[1.2]">
+                        <Image src="/images/spiderman.webp" alt="" fill className="object-contain" aria-hidden="true" />
                       </div>
-                      <span className="text-2xl" aria-hidden="true">{problem.icon}</span>
+                    ) : (
+                      <div className="absolute -right-5 -bottom-5 w-[216px] h-[216px] opacity-100 pointer-events-none transition-transform duration-300 group-hover:scale-[1.2]">
+                        <Image src="/images/ironman.webp" alt="" fill className="object-contain" aria-hidden="true" />
+                      </div>
+                    )}
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold border-gray-300/90 dark:border-gray-600/80 text-gray-700 dark:text-gray-300 mb-4 self-start">
+                      {problem.label}
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{problem.title}</h3>
                     <p className="text-gray-700 dark:text-gray-300 leading-relaxed flex-1">{problem.summary}</p>
