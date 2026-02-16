@@ -147,7 +147,7 @@ export function addStylesToHtml(html: string): string {
   // 새로운 효과 형광펜 하이라이트 (더 세련된 스타일)
   html = html.replace(
     /새로운 효과[:：]\s*/gi,
-    '<span style="display: inline-flex; align-items: center; background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); color: #166534; padding: 0.25rem 0.625rem; border-radius: 0.5rem; font-weight: 600; font-size: 0.9375rem; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);">✨ 새로운 효과</span>: '
+    '<span style="display: inline-flex; align-items: center; background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); color: #166534; padding: 0.2rem 0.5rem; border-radius: 0.25rem; font-weight: 600; font-size: 0.875rem; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);">새로운 효과</span>: '
   );
 
   // 수치 변경사항 하이라이트 (증가는 파란색, 감소는 빨간색) - 더 세련된 스타일
@@ -161,7 +161,7 @@ export function addStylesToHtml(html: string): string {
       const color = isIncrease ? '#2563eb' : '#dc2626';
       const bgColor = isIncrease ? '#dbeafe' : '#fee2e2';
       const icon = isIncrease ? '↑' : '↓';
-      return `${oldValue}에서 <span style="display: inline-flex; align-items: center; gap: 0.25rem; color: ${color}; background-color: ${bgColor}; padding: 0.15rem 0.5rem; border-radius: 0.375rem; font-weight: 700; font-size: 0.9375rem;">${icon} ${newValue}</span>로`;
+      return `${oldValue}에서 <span style="display: inline-flex; align-items: center; gap: 0.2rem; color: ${color}; background-color: ${bgColor}; padding: 0.125rem 0.4rem; border-radius: 0.25rem; font-weight: 700; font-size: 0.875rem;">${newValue} ${icon}</span>로`;
     }
   );
 
@@ -175,7 +175,7 @@ export function addStylesToHtml(html: string): string {
       const color = isIncrease ? '#2563eb' : '#dc2626';
       const bgColor = isIncrease ? '#dbeafe' : '#fee2e2';
       const icon = isIncrease ? '↑' : '↓';
-      return `${oldValue}에서 <span style="display: inline-flex; align-items: center; gap: 0.25rem; color: ${color}; background-color: ${bgColor}; padding: 0.15rem 0.5rem; border-radius: 0.375rem; font-weight: 700; font-size: 0.9375rem;">${icon} ${newValue}</span>으로`;
+      return `${oldValue}에서 <span style="display: inline-flex; align-items: center; gap: 0.2rem; color: ${color}; background-color: ${bgColor}; padding: 0.125rem 0.4rem; border-radius: 0.25rem; font-weight: 700; font-size: 0.875rem;">${newValue} ${icon}</span>으로`;
     }
   );
 
@@ -189,7 +189,7 @@ export function addStylesToHtml(html: string): string {
       const color = isIncrease ? '#2563eb' : '#dc2626';
       const bgColor = isIncrease ? '#dbeafe' : '#fee2e2';
       const icon = isIncrease ? '↑' : '↓';
-      return `${oldValue}를 <span style="display: inline-flex; align-items: center; gap: 0.25rem; color: ${color}; background-color: ${bgColor}; padding: 0.15rem 0.5rem; border-radius: 0.375rem; font-weight: 700; font-size: 0.9375rem;">${icon} ${newValue}</span>로`;
+      return `${oldValue}를 <span style="display: inline-flex; align-items: center; gap: 0.2rem; color: ${color}; background-color: ${bgColor}; padding: 0.125rem 0.4rem; border-radius: 0.25rem; font-weight: 700; font-size: 0.875rem;">${newValue} ${icon}</span>로`;
     }
   );
 
