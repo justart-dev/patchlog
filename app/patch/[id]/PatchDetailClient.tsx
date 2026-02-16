@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { addStylesToHtml } from "../../utils/htmlUtils";
 import {
   wrapSkillsWithUnderline,
@@ -44,6 +45,10 @@ export default function PatchDetailClient({
   navigation: PatchNavigation;
 }) {
   const router = useRouter();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
 
   return (
     <section className="py-6 md:py-10">
@@ -95,26 +100,27 @@ export default function PatchDetailClient({
                 </p>
               </div>
             )}
+            <div className="mt-10 pt-6">
+              <div className="flex flex-wrap items-center justify-center gap-2">
+              <button
+                onClick={() => router.push("/patch")}
+                className="inline-flex items-center px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                목록으로
+              </button>
+              <button
+                onClick={() => window.open(patchDetail.url, "_blank")}
+                className="inline-flex items-center px-4 py-2 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-semibold hover:bg-black dark:hover:bg-gray-100 transition-colors"
+              >
+                원문 보러 가기
+              </button>
+              </div>
+              {patchDetail.translated_ko ? (
+                <div className="mt-6 h-px bg-gray-200 dark:bg-gray-700" />
+              ) : null}
+            </div>
           </div>
         </article>
-
-        <div className="mt-7 md:mt-8 pt-2">
-          <div className="h-px bg-gray-200 dark:bg-gray-700 mb-5" />
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            <button
-              onClick={() => router.push("/patch")}
-              className="inline-flex items-center px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            >
-              목록으로
-            </button>
-            <button
-              onClick={() => window.open(patchDetail.url, "_blank")}
-              className="inline-flex items-center px-4 py-2 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-semibold hover:bg-black dark:hover:bg-gray-100 transition-colors"
-            >
-              원문 보러 가기
-            </button>
-          </div>
-        </div>
 
         <section className="mt-7 md:mt-8 grid grid-cols-1 md:grid-cols-2 gap-3">
           <div>

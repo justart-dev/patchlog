@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function Page() {
+  const router = useRouter();
   const [patchCount, setPatchCount] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [activeProblem, setActiveProblem] = useState(0);
@@ -214,6 +216,12 @@ export default function Page() {
           </p>
           <Link
             href="/patch"
+            scroll={true}
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: "auto" });
+              router.push("/patch", { scroll: true });
+            }}
             className="inline-flex items-center gap-3 px-10 py-5 bg-hero-blue-500 hover:bg-hero-blue-600 text-white rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
             <span>패치노트 보러가기</span>
@@ -558,6 +566,12 @@ export default function Page() {
                 </div>
                 <Link
                   href="/patch"
+                  scroll={true}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: "auto" });
+                    router.push("/patch", { scroll: true });
+                  }}
                   className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-gray-900 hover:bg-black dark:bg-white dark:hover:bg-gray-100 text-white dark:text-gray-900 rounded-xl font-semibold text-sm sm:text-base transition-colors duration-200"
                 >
                   <span>최신 패치노트 보기</span>

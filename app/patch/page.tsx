@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { PatchList, type PatchLog } from "../components/patchList";
-import LoadingSpinner from "../components/LoadingSpinner";
 import StatusDisplay from "../components/StatusDisplay";
 import { useUser, SignInButton } from "@clerk/nextjs";
 import { ChartBarIcon, FireIcon } from "@heroicons/react/24/outline";
@@ -15,6 +14,10 @@ export default function PatchPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const dayLabels = ["일", "월", "화", "수", "목", "금", "토"];
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
 
   useEffect(() => {
     const fetchPatchLogs = async () => {
@@ -87,10 +90,54 @@ export default function PatchPage() {
 
   if (loading) {
     return (
-      <LoadingSpinner
-        message="패치 목록을 불러오는 중..."
-        className="min-h-screen"
-      />
+      <div className="max-w-6xl mx-auto px-4 py-8 md:py-12 space-y-10 md:space-y-12 animate-pulse">
+        <section className="rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-6 sm:px-8 md:px-10 py-10 text-center">
+          <div className="h-6 w-32 mx-auto rounded bg-gray-200 dark:bg-gray-700 mb-5" />
+          <div className="h-11 max-w-xl mx-auto rounded bg-gray-200 dark:bg-gray-700 mb-4" />
+          <div className="h-5 max-w-2xl mx-auto rounded bg-gray-200 dark:bg-gray-700" />
+        </section>
+
+        <section className="space-y-5">
+          <div className="h-8 w-44 rounded bg-gray-200 dark:bg-gray-700" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+            <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 p-5 sm:p-6 space-y-3">
+              <div className="h-5 w-36 rounded bg-gray-200 dark:bg-gray-700" />
+              <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
+              <div className="h-4 w-4/5 rounded bg-gray-200 dark:bg-gray-700" />
+              <div className="h-32 rounded-xl bg-gray-100 dark:bg-gray-700/60" />
+            </div>
+            <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 p-5 sm:p-6 space-y-3">
+              <div className="h-5 w-28 rounded bg-gray-200 dark:bg-gray-700" />
+              <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
+              <div className="h-4 w-3/4 rounded bg-gray-200 dark:bg-gray-700" />
+              <div className="space-y-2">
+                <div className="h-12 rounded-xl bg-gray-100 dark:bg-gray-700/60" />
+                <div className="h-12 rounded-xl bg-gray-100 dark:bg-gray-700/60" />
+                <div className="h-12 rounded-xl bg-gray-100 dark:bg-gray-700/60" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="space-y-4">
+          <div className="flex items-center justify-between gap-3">
+            <div className="h-8 w-40 rounded bg-gray-200 dark:bg-gray-700" />
+            <div className="h-7 w-44 rounded-full bg-gray-200 dark:bg-gray-700" />
+          </div>
+          <div className="space-y-4">
+            {[...Array(4)].map((_, index) => (
+              <article
+                key={index}
+                className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-5"
+              >
+                <div className="h-6 w-3/4 rounded bg-gray-200 dark:bg-gray-700 mb-3" />
+                <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700 mb-2" />
+                <div className="h-4 w-5/6 rounded bg-gray-200 dark:bg-gray-700" />
+              </article>
+            ))}
+          </div>
+        </section>
+      </div>
     );
   }
 
