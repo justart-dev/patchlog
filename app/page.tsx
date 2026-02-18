@@ -207,12 +207,12 @@ export default function Page() {
       {/* ==================== 1. HERO SECTION ==================== */}
       <section className="pt-12 pb-32 px-4 relative">
         <div className={`max-w-5xl mx-auto text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          <h1 className="text-[2.75rem] md:text-8xl font-black text-gray-900 dark:text-white mb-6 leading-tight">
-            게임 <span className="text-hero-blue-500">패치노트</span>를<br />
-            한글로 자동 번역
+          <h1 className="text-4xl md:text-7xl font-extrabold text-gray-900 dark:text-white mb-8 leading-[1.15] tracking-tight">
+            영어 패치노트,<br />
+            <span className="text-hero-blue-500">한글로 바로</span> 읽으세요
           </h1>
-          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
-            최신 AI 기술로 스팀 게임 패치노트를 한글 번역하는 플랫폼
+          <p className="text-lg md:text-xl text-gray-500 dark:text-gray-400 mb-12 max-w-xl mx-auto leading-relaxed">
+            AI가 스팀 게임 업데이트 소식을 자연스러운 한글로 전달해드려요
           </p>
           <Link
             href="/patch"
@@ -224,7 +224,7 @@ export default function Page() {
             }}
             className="inline-flex items-center gap-3 px-10 py-5 bg-hero-blue-500 hover:bg-hero-blue-600 text-white rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
-            <span>패치노트 보러가기</span>
+            <span>지금 확인해보기</span>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
