@@ -4,6 +4,7 @@ import { getPatch, getPatchNavigation, getAllPatchIds } from '../../../lib/patch
 import PatchDetailClient from './PatchDetailClient';
 import { ArticleStructuredData } from '../../components/StructuredData';
 import { replaceEnglishTitles } from '../../utils/textReplacer';
+import { getSkillMap } from '../../utils/skillMapService';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -73,6 +74,7 @@ export default async function PatchDetailPage({ params }: PageProps) {
   }
 
   const navigation = await getPatchNavigation(patch.id, patch.published_at);
+  const skillMap = await getSkillMap();
 
   // Match the interface expected by PatchDetailClient
   const patchDetail = {
@@ -88,7 +90,7 @@ export default async function PatchDetailPage({ params }: PageProps) {
         publishedAt={patch.published_at} 
         url={`https://patchlog.co.kr/patch/${patch.id}`} 
       />
-      <PatchDetailClient patchDetail={patchDetail} navigation={navigation} />
+      <PatchDetailClient patchDetail={patchDetail} navigation={navigation} skillMap={skillMap} />
     </>
   );
 }

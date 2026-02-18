@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import marvelPrompt from "../../utils/marvel.json";
-import { skillMap } from "../../utils/marvelGlossary";
+import { getSkillMap } from "../../utils/skillMapService";
 
 const supabaseUrl = process.env.SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -17,6 +17,8 @@ interface PatchLog {
 
 export async function POST(request: Request) {
   try {
+    const skillMap = await getSkillMap();
+
     // 최근 7일 이내 & translated_ko가 null인 레코드들만 가져오기  
     const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
     console.log("Fetching patch logs from last 7 days with null translated_ko...");
