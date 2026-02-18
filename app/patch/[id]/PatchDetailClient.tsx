@@ -8,7 +8,6 @@ import {
   replaceEnglishTitles,
   convertYouTubePreviewTags,
 } from "../../utils/textReplacer";
-import { skillMap } from "../../utils/marvelGlossary";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import dynamic from "next/dynamic";
 
@@ -40,9 +39,11 @@ interface PatchNavigation {
 export default function PatchDetailClient({
   patchDetail,
   navigation,
+  skillMap,
 }: {
   patchDetail: PatchDetail;
   navigation: PatchNavigation;
+  skillMap: Record<string, string>;
 }) {
   const router = useRouter();
 

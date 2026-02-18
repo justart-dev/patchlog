@@ -1,125 +1,28 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
-interface ParsedSkill {
-  englishName: string;
-  koreanName: string;
-  type: string;
-  key?: string;
-}
+import {
+  ParsedSkill,
+  formatSkillOutput,
+  parseSkillData,
+  toSkillMapRecord,
+} from "../utils/skillParser";
 
 export default function AdminPage() {
   const [skillData, setSkillData] = useState("");
   const [parsedSkills, setParsedSkills] = useState<ParsedSkill[]>([]);
   const [activeTab, setActiveTab] = useState<"input" | "result">("input");
+  const [syncMessage, setSyncMessage] = useState("");
+  const [syncing, setSyncing] = useState(false);
 
   // 실시간 변환
   useEffect(() => {
     if (skillData.trim()) {
-      parseSkillData(skillData);
+      setParsedSkills(parseSkillData(skillData));
     } else {
       setParsedSkills([]);
     }
   }, [skillData]);
-
-  const parseSkillData = (data: string) => {
-    const lines = data.split("\n").filter((line) => line.trim());
-    const parsed: ParsedSkill[] = [];
-    
-    // 현재 섹션 추적
-    let currentSection = "";
-
-    lines.forEach((line) => {
-      // 섹션 헤더 체크
-      if (line.includes("협공 스킬") || line.includes("비활성화된 협공")) {
-        currentSection = "협공 스킬";
-        return;
-      } else if (line.includes("일반 공격")) {
-        currentSection = "일반 공격";
-        return;
-      } else if (line.includes("스킬") && !line.includes("협공")) {
-        currentSection = "스킬";
-        return;
-      } else if (line.includes("능력 정보")) {
-        currentSection = "";
-        return;
-      }
-
-      // 패턴: 한글명(영어명) 또는 키 - 한글명(영어명)
-      const match = line.match(/(?:([^-]+)\s*-\s*)?(.+?)\((.+?)\)/);
-
-      if (match) {
-        const [, keyPart, koreanName, englishName] = match;
-
-        let type = "기타";
-        let key = "";
-
-        // 협공 스킬 섹션 체크 (우선순위 높음)
-        const isTeamUpSection = currentSection === "협공 스킬" || 
-                               line.includes("협공") || 
-                               /3\.\d+\.\s*협공/.test(line) ||
-                               line.includes("비활성화된 협공");
-
-        if (keyPart) {
-          const keyMatch = keyPart.trim();
-          if (isTeamUpSection || keyMatch.includes("C") || keyMatch.includes("Z") || keyMatch.includes("X")) {
-            type = "협공 스킬";
-            if (keyMatch.includes("C")) key = "C";
-            else if (keyMatch.includes("Z")) key = "Z";
-            else if (keyMatch.includes("X")) key = "X";
-            else if (keyMatch.includes("패시브")) key = "패시브";
-          } else if (keyMatch.includes("패시브")) {
-            type = "패시브";
-          } else if (
-            keyMatch.includes("좌클릭") ||
-            keyMatch.includes("우클릭")
-          ) {
-            type = "일반 공격";
-            key = keyMatch.includes("좌클릭") ? "좌클릭" : "우클릭";
-          } else if (
-            keyMatch.includes("Shift") ||
-            keyMatch.includes("E") ||
-            keyMatch.includes("Q") ||
-            keyMatch.includes("F")
-          ) {
-            type = "스킬";
-            if (keyMatch.includes("Shift")) key = "Shift";
-            else if (keyMatch.includes("E")) key = "E";
-            else if (keyMatch.includes("Q")) key = "Q";
-            else if (keyMatch.includes("F")) key = "F";
-          }
-        } else if (isTeamUpSection) {
-          type = "협공 스킬";
-        } else if (line.includes("패시브")) {
-          type = "패시브";
-        }
-
-        parsed.push({
-          englishName: englishName.trim(),
-          koreanName: koreanName.trim(),
-          type,
-          key,
-        });
-      }
-    });
-
-    setParsedSkills(parsed);
-  };
-
-  const formatSkillOutput = (skill: ParsedSkill) => {
-    let keyInfo = "";
-
-    if (skill.type === "패시브") {
-      keyInfo = "패시브";
-    } else if (skill.key) {
-      keyInfo = skill.key;
-    }
-
-    return `${skill.englishName} → ${skill.koreanName}${
-      keyInfo ? `(${keyInfo})` : ""
-    }`;
-  };
 
   const getSkillsByCategory = () => {
     const categories = ["패시브", "일반 공격", "스킬", "협공 스킬", "기타"];
@@ -132,14 +35,7 @@ export default function AdminPage() {
   };
 
   const exportAsJSON = () => {
-    const skillMap = Object.fromEntries(
-      parsedSkills.map((skill) => [
-        skill.englishName,
-        `${skill.koreanName}(${
-          skill.key || (skill.type === "패시브" ? "패시브" : skill.type)
-        })`,
-      ])
-    );
+    const skillMap = toSkillMapRecord(parsedSkills);
     const formattedOutput = Object.entries(skillMap)
       .map(([key, value]) => `"${key}": "${value}",`)
       .join("\n");
@@ -153,6 +49,43 @@ export default function AdminPage() {
       .join("\n");
     navigator.clipboard.writeText(promptData);
     alert("프롬프트용 데이터가 클립보드에 복사되었습니다!");
+  };
+
+  const syncToSkillMapTable = async (useRemoteSource = false) => {
+    setSyncing(true);
+    setSyncMessage("");
+    try {
+      const payload = useRemoteSource
+        ? {}
+        : {
+            rawText: skillData,
+            sourceLabel: "admin-manual",
+          };
+
+      const response = await fetch("/api/marvel-skillmap-sync", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        setSyncMessage(`동기화 실패: ${result.error || "unknown error"}`);
+        return;
+      }
+
+      setSyncMessage(
+        `동기화 완료: ${result.parsedCount}개 파싱 / ${result.upsertedCount}개 저장`
+      );
+    } catch (error) {
+      setSyncMessage(
+        `동기화 실패: ${error instanceof Error ? error.message : "unknown error"}`
+      );
+    } finally {
+      setSyncing(false);
+    }
   };
 
   return (
@@ -228,6 +161,25 @@ export default function AdminPage() {
               <div className="text-sm text-gray-600">
                 입력하는 대로 실시간으로 변환됩니다.
               </div>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <button
+                  onClick={() => syncToSkillMapTable(false)}
+                  disabled={syncing || !skillData.trim()}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 transition-colors text-sm"
+                >
+                  {syncing ? "동기화 중..." : "입력 데이터 DB 동기화"}
+                </button>
+                <button
+                  onClick={() => syncToSkillMapTable(true)}
+                  disabled={syncing}
+                  className="px-4 py-2 bg-slate-700 text-white rounded-md hover:bg-slate-800 disabled:bg-gray-400 transition-colors text-sm"
+                >
+                  {syncing ? "동기화 중..." : "나무위키 원본 자동 동기화"}
+                </button>
+              </div>
+              {syncMessage ? (
+                <p className="mt-3 text-sm text-gray-700">{syncMessage}</p>
+              ) : null}
             </div>
           )}
 

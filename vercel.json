@@ -1,6 +1,10 @@
 {
   "crons": [
     {
+      "path": "/api/marvel-skillmap-cron",
+      "schedule": "50 8 * * *"
+    },
+    {
       "path": "/api/marvel-batch",
       "schedule": "0 9 * * *"
     }
