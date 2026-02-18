@@ -65,7 +65,7 @@ export async function POST(request: Request) {
     const requestBody = {
       ...marvelPrompt,
       model: TEST_MODEL,
-      reasoning: { effort: "none" },
+      reasoning_effort: "none",
       messages: [
         {
           ...marvelPrompt.messages[0],
