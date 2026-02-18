@@ -199,7 +199,7 @@ export default function Page() {
             <span className="text-hero-blue-500">한글로 바로</span> 읽으세요
           </h1>
           <p className="text-lg md:text-xl text-gray-500 dark:text-gray-400 mb-12 max-w-xl mx-auto leading-relaxed">
-            AI가 스팀 게임 업데이트 소식을 자연스러운 한글로 전달해드려요
+            스팀 게임 업데이트 소식을 자연스러운 한글로 전달해드려요.
           </p>
           <Link
             href="/patch"
@@ -245,7 +245,7 @@ export default function Page() {
               Problem & Solution
             </span>
             <h2 className="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4 leading-tight">
-              왜 Patchlog를 만들었나요?
+              Patchlog가 무엇인가요?
             </h2>
           </div>
 
@@ -309,11 +309,10 @@ export default function Page() {
                 Solution
               </div>
               <h3 className="text-3xl font-black text-gray-900 dark:text-white mb-4">
-                이렇게 해결했어요
+                이렇게 해결했어요!
               </h3>
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
-                <span className="font-semibold text-gray-900 dark:text-white">{activeCard.title}</span>에서 생기는 문제를
-                줄이기 위해, 패치노트를 자동으로 수집하고 맥락 중심으로 번역합니다.
+                패치노트를 자동으로 수집하고, 맥락 중심으로 번역해드려요.
               </p>
               <div className="h-px bg-gray-200/80 dark:bg-gray-700/80 mb-6" />
 

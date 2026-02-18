@@ -175,7 +175,7 @@ export default function PatchPage() {
         <>
           <section className="space-y-5">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white">업데이트 인사이트</h2>
+              <h2 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white">패치 요약</h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
@@ -220,25 +220,8 @@ export default function PatchPage() {
               </article>
 
               <article className="relative rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 p-5 sm:p-6">
-                {isLoaded && !isSignedIn ? (
-                  <div className="absolute inset-0 z-10 rounded-2xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm flex items-center justify-center">
-                    <div className="text-center px-6">
-                      <div className="mx-auto mb-3 inline-flex h-11 w-11 items-center justify-center rounded-full bg-gray-900 dark:bg-white">
-                        <FireIcon className="w-5 h-5 text-white dark:text-gray-900" />
-                      </div>
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">주요 하이라이트</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">로그인 후 핵심 변경 내역을 확인할 수 있습니다.</p>
-                      <SignInButton mode="modal">
-                        <button className="px-4 py-2 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-xs font-semibold">
-                          로그인
-                        </button>
-                      </SignInButton>
-                    </div>
-                  </div>
-                ) : null}
-
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">주요 업데이트</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-5">최근 패치 중 먼저 읽으면 좋은 항목입니다.</p>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">먼저 읽어볼 패치</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-5">가장 최근에 업데이트된 소식이에요</p>
                 <div className="space-y-3">
                   {patchLogs.slice(0, 3).map((log, index) => (
                     <Link
@@ -264,7 +247,7 @@ export default function PatchPage() {
 
           <section className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h2 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white">패치노트</h2>
+              <h2 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white">패치 노트</h2>
               <p className="inline-flex items-center px-3 py-1 rounded-full border border-gray-300 dark:border-gray-600 text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                 마지막 업데이트: {latestDate.toLocaleDateString("ko-KR")}
               </p>
