@@ -3,6 +3,7 @@ import { parseSkillData } from "../../utils/skillParser";
 import { getSkillMap, upsertSkillMap } from "../../utils/skillMapService";
 
 export const runtime = "nodejs";
+export const maxDuration = 60;
 
 const DEFAULT_NAMU_URL =
   "https://namu.wiki/w/%EB%A7%88%EB%B8%94%20%EB%9D%BC%EC%9D%B4%EB%B2%8C%EC%A6%88/%EC%98%81%EC%9B%85";
@@ -29,7 +30,45 @@ function stripHtmlToText(html: string): string {
   );
 }
 
+async function fetchSourceTextWithPlaywright(sourceUrl: string): Promise<string> {
+  const { chromium } = await import("@playwright/test");
+  const browser = await chromium.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
+
+  try {
+    const page = await browser.newPage();
+    await page.goto(sourceUrl, { waitUntil: "domcontentloaded", timeout: 120000 });
+    await page.waitForTimeout(3000);
+
+    // 나무위키 SPA 렌더링 완료 대기 (실패해도 계속 진행)
+    try {
+      await page.waitForFunction(
+        () => {
+          const text = document.body?.innerText || "";
+          return text.includes("능력 정보") || text.includes("패시브") || text.includes("협공 스킬");
+        },
+        { timeout: 15000 }
+      );
+    } catch {
+      // no-op
+    }
+
+    const text = await page.evaluate(() => document.body?.innerText || "");
+    return text;
+  } finally {
+    await browser.close();
+  }
+}
+
 async function fetchSourceText(sourceUrl: string): Promise<string> {
+  try {
+    return await fetchSourceTextWithPlaywright(sourceUrl);
+  } catch (playwrightError) {
+    console.warn("[skill-map-sync] playwright fetch failed, fallback to HTTP fetch:", playwrightError);
+  }
+
   const response = await fetch(sourceUrl, {
     headers: {
       "User-Agent":

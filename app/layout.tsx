@@ -94,20 +94,18 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <head>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                try {
-                  const theme = localStorage.getItem('patchlog-ui-theme') || 'system';
-                  let actualTheme = theme;
-                  if (theme === 'system') {
-                    actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                  }
-                  document.documentElement.classList.add(actualTheme);
-                } catch (e) {}
-              `,
-            }}
-          />
+          <Script id="theme-init" strategy="beforeInteractive">
+            {`
+              try {
+                const theme = localStorage.getItem('patchlog-ui-theme') || 'system';
+                const actualTheme =
+                  theme === 'system'
+                    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+                    : theme;
+                document.documentElement.classList.add(actualTheme);
+              } catch (e) {}
+            `}
+          </Script>
           <script
             async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6198824361218150"
