@@ -12,6 +12,7 @@ export default function Page() {
   const [activeProblem, setActiveProblem] = useState(0);
   const [activeHowStep, setActiveHowStep] = useState(0);
   const [isHowInteractiveReady, setIsHowInteractiveReady] = useState(false);
+  const [openHowStep, setOpenHowStep] = useState<number | null>(null);
   const howTrackRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const problemCards = [
@@ -46,9 +47,7 @@ export default function Page() {
       title: "Steam API 모니터링",
       description: "Steam API를 통해 최신 패치 후보를 가져옵니다.",
       trackTitle: "신규 공지 확인",
-      trackDescription: `매일 정해진 시간에 Steam API를 통해 각 AppID 기준으로 Steam 뉴스 API를 호출합니다.
-
-응답 목록에서 공지 타입과 게시 정보를 확인해 패치노트 성격의 항목만 1차 후보로 분류합니다.`,
+      trackDescription: `매일 자동으로 Steam에서 새로운 패치노트가 올라왔는지 확인합니다.`,
       highlight: false,
       tags: [] as string[],
     },
@@ -57,11 +56,7 @@ export default function Page() {
       title: "새 패치노트 감지",
       description: "이미 저장된 글은 제외하고, 새로 올라온 패치노트만 가져옵니다.",
       trackTitle: "원문 수집 및 정리",
-      trackDescription: `패치노트 원문을 최대한 보존하며, 필요한 데이터를 DB에 저장합니다.
-
-      번역 전 준비 단계 입니다. 같은 글은 다시 저장하지 않고, 새 글만 번역 대기 상태로로 만듭니다.
-
-      `,
+      trackDescription: `새로 올라온 패치노트만 골라 원문을 수집하고, 번역 준비를 합니다.`,
       highlight: false,
       tags: [] as string[],
     },
@@ -70,12 +65,7 @@ export default function Page() {
       title: "GPT-5-mini 번역",
       description: "번역 할 데이터만 골라 커스텀 프롬프트로 번역하고, 게임 용어 규칙을 반영합니다.",
       trackTitle: "맥락 기반 번역 처리",
-      trackDescription: `최근 7일 데이터 중 번역 대기 상태에 있던 패치 항목만 번역 대상으로 잡습니다.
-
-      내부의 커스텀된 프롬프트를 기반으로 일반 번역이 아닌 한국 사용자의 입맛에 맞게 현지화 하였습니다. 번역 이후, 화면에 바로 랜더링 할 수 있게 후처리 이후에 DB에 저장합니다.
-
-      오래된 GPT-4o 모델에 비해 가격은 낮고, 더 안정적인 GPT-5-mini로 모델을 변경하여 서비스의 지속성을 강화했습니다.
-`,
+      trackDescription: `게임 용어와 한국어 표현에 맞춘 커스텀 프롬프트로 자연스럽게 번역합니다.`,
       highlight: true,
       tags: ["✓ 한국시간", "✓ 게임 용어 매핑", "✓ 커뮤니티 톤"],
       examples: [
@@ -96,7 +86,7 @@ export default function Page() {
       title: "렌더링 커스터마이징",
       description: "번역 결과를 화면에서 읽기 쉬운 형태로 가공해 핵심 변화가 먼저 보이게 합니다.",
       trackTitle: "가독성 후처리",
-      trackDescription: `문단 구조를 정리하고 핵심 수치/효과 키워드를 강조하는 렌더링 규칙을 적용합니다.`,
+      trackDescription: `버프/너프 수치, 스킬명 등 핵심 정보를 한눈에 볼 수 있게 강조 처리합니다.`,
       highlight: false,
       tags: [] as string[],
       examples: [
@@ -122,10 +112,7 @@ export default function Page() {
       title: "웹사이트 자동 배포",
       description: "처리 완료된 콘텐츠를 사이트에 반영하고, 사용자가 바로 최신 내역을 확인할 수 있게 합니다.",
       trackTitle: "자동 반영 및 공개",
-      trackDescription: `번역/후처리 완료 데이터는 DB에 반영된 직후 목록과 상세 페이지에서 조회됩니다.
-
-      동시에 배치 실행 로그에 성공/실패/처리 건수를 남겨 운영 중 문제를 빠르게 추적할 수 있게 합니다.
-      `,
+      trackDescription: `번역이 끝나면 사이트에 바로 반영되어, 항상 최신 패치노트를 확인할 수 있어요.`,
       highlight: false,
       tags: [] as string[],
     },
@@ -363,25 +350,38 @@ export default function Page() {
             </h2>
           </div>
 
-          <div className="md:hidden space-y-4">
-            {howItWorksSteps.map((step) => (
-              <div
-                key={`mobile-${step.id}`}
-                className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 p-4"
-              >
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold tabular-nums bg-gray-900 text-white dark:bg-white dark:text-gray-900">
-                    {String(step.id).padStart(2, "0")}
-                  </span>
-                  <p className="text-sm font-semibold text-gray-900 dark:text-white leading-tight">
-                    {step.trackTitle}
-                  </p>
-                </div>
-                <p className="text-xs text-gray-600 dark:text-gray-400 whitespace-pre-line leading-6">
-                  {step.trackDescription}
-                </p>
-              </div>
-            ))}
+          <div className="md:hidden space-y-3">
+            {howItWorksSteps.map((step) => {
+              const isOpen = openHowStep === step.id;
+              return (
+                <button
+                  key={`mobile-${step.id}`}
+                  type="button"
+                  onClick={() => setOpenHowStep(isOpen ? null : step.id)}
+                  className="w-full rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/90 p-4 text-left transition-all duration-200"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold tabular-nums bg-gray-900 text-white dark:bg-white dark:text-gray-900">
+                      {String(step.id).padStart(2, "0")}
+                    </span>
+                    <p className="flex-1 text-sm font-semibold text-gray-900 dark:text-white leading-tight">
+                      {step.trackTitle}
+                    </p>
+                    <svg
+                      className={`w-4 h-4 shrink-0 text-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                      fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                  <div className={`overflow-hidden transition-all duration-200 ${isOpen ? "max-h-40 mt-3" : "max-h-0"}`}>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 leading-6">
+                      {step.trackDescription}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
           </div>
 
           <div className="hidden md:grid md:grid-cols-12 gap-8 lg:gap-10 md:items-start">

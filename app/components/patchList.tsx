@@ -44,7 +44,12 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
 
   return (
     <div className="grid gap-4 grid-cols-1">
-      {formattedPatchLogs.map((log) => {
+      {formattedPatchLogs.map((log, index) => {
+        const isFirst = index === 0;
+        const headerImage = log.capsule_image
+          ? `https://cdn.akamai.steamstatic.com/steam/apps/${log.capsule_image.match(/\/apps\/(\d+)\//)?.[1]}/header.jpg`
+          : null;
+
         return (
           <Link
             key={log.id}
@@ -54,18 +59,31 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
           >
             <article className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden transition-all duration-200 hover:border-gray-400 dark:hover:border-gray-500">
               <div className="flex flex-col sm:flex-row">
-                <div className="relative w-full sm:w-32 md:w-40 lg:w-44 h-36 sm:h-auto flex-shrink-0 bg-gray-50 dark:bg-gray-800 border-b sm:border-b-0 sm:border-r border-gray-200 dark:border-gray-700">
+                <div className="relative w-full sm:w-32 md:w-40 lg:w-44 py-5 sm:py-0 sm:h-auto flex-shrink-0 border-b sm:border-b-0 sm:border-r border-gray-200 dark:border-gray-700 overflow-hidden">
                   {log.capsule_image ? (
-                    <div className="relative h-full w-full">
-                      <Image
-                        src={log.capsule_image}
-                        alt={log.app_name}
-                        fill
-                        className="object-contain p-3 transition-transform duration-300 group-hover:scale-[1.03]"
-                        sizes="(max-width: 640px) 100vw, 176px"
-                        priority={false}
-                      />
-                    </div>
+                    isFirst && headerImage ? (
+                      <div className="relative h-full w-full flex items-center justify-center px-3">
+                        <Image
+                          src={headerImage}
+                          alt={log.app_name}
+                          width={460}
+                          height={215}
+                          className="max-w-[200px] sm:max-w-full h-auto object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+                          priority
+                        />
+                      </div>
+                    ) : (
+                      <div className="relative h-full w-full flex items-center justify-center px-3">
+                        <Image
+                          src={log.capsule_image}
+                          alt={log.app_name}
+                          width={231}
+                          height={87}
+                          className="max-w-[200px] sm:max-w-full h-auto object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+                          priority={false}
+                        />
+                      </div>
+                    )
                   ) : (
                     <div className="h-full flex items-center justify-center">
                       <div className="text-gray-300 dark:text-gray-600">
