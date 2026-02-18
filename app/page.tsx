@@ -209,7 +209,7 @@ export default function Page() {
               window.scrollTo({ top: 0, behavior: "auto" });
               router.push("/patch", { scroll: true });
             }}
-            className="inline-flex items-center gap-3 px-10 py-5 bg-hero-blue-500 hover:bg-hero-blue-600 text-white rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+            className="inline-flex items-center gap-2.5 px-7 py-3.5 bg-hero-blue-500 hover:bg-hero-blue-600 text-white rounded-xl font-bold text-base transition-all duration-300 hover:scale-105 hover:shadow-xl"
           >
             <span>지금 확인해보기</span>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -349,7 +349,7 @@ export default function Page() {
             </h2>
           </div>
 
-          <div className="md:hidden space-y-3">
+          <div className="md:hidden flex flex-col gap-4">
             {howItWorksSteps.map((step) => {
               const isOpen = openHowStep === step.id;
               return (
