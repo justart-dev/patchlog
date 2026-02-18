@@ -85,6 +85,7 @@ export async function POST(request: Request) {
         // OpenAI API 호출하여 번역
         const requestBody = {
           ...marvelPrompt,
+          reasoning_effort: "minimal",
           messages: [
             {
               ...marvelPrompt.messages[0],
