@@ -8,6 +8,20 @@ export const maxDuration = 60;
 const DEFAULT_NAMU_URL =
   "https://namu.wiki/w/%EB%A7%88%EB%B8%94%20%EB%9D%BC%EC%9D%B4%EB%B2%8C%EC%A6%88/%EC%98%81%EC%9B%85";
 
+const ALLOWED_HOSTS = ["namu.wiki"];
+
+function isAllowedUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return ALLOWED_HOSTS.some(
+      (host) =>
+        parsed.hostname === host || parsed.hostname.endsWith("." + host)
+    );
+  } catch {
+    return false;
+  }
+}
+
 function decodeHtmlEntities(input: string): string {
   return input
     .replace(/&nbsp;/g, " ")
@@ -110,7 +124,11 @@ export async function POST(request: Request) {
       sourceLabel?: string;
     };
 
-    const sourceUrl = body.sourceUrl || DEFAULT_NAMU_URL;
+    const rawSourceUrl = body.sourceUrl || DEFAULT_NAMU_URL;
+    if (!isAllowedUrl(rawSourceUrl)) {
+      return NextResponse.json({ error: "Invalid sourceUrl" }, { status: 400 });
+    }
+    const sourceUrl = rawSourceUrl;
     const sourceLabel = body.sourceLabel || sourceUrl;
     const rawText = body.rawText?.trim() || (await fetchSourceText(sourceUrl));
 

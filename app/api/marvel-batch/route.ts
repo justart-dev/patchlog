@@ -19,12 +19,10 @@ async function runBatch(request: Request) {
     : `${protocol}://${host}`;
 
   // 배치 실행 시작 로그 (인증 체크 전에 로그 생성)
-  const allHeaders = Object.fromEntries(request.headers.entries());
   const logId = await BatchLogger.logStart("marvel-rivals-batch", {
     userAgent: request.headers.get("user-agent"),
     isVercelCron,
     authHeader: authHeader ? "provided" : "missing",
-    allHeaders: allHeaders,
   });
 
   // Vercel Cron 인증 확인
