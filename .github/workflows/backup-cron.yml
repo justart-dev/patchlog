@@ -4,8 +4,6 @@ on:
   schedule:
     # 매일 UTC 09:00 (한국시간 18:00) - Vercel 크론과 동일한 시간
     - cron: '0 9 * * *'
-    # 매일 UTC 09:30 (한국시간 18:30) - 백업용 (30분 후)
-    - cron: '30 9 * * *'
   workflow_dispatch: # 수동 실행 가능
 
 jobs:
