@@ -121,7 +121,7 @@ export default function RootLayout({
               </div>
             </div>
             <main className="flex-grow">
-              <div className="max-w-7xl mx-auto px-4 py-8">{children}</div>
+              {children}
             </main>
             <div className="w-full bg-gradient-to-t from-gray-50 to-white dark:from-gray-900 dark:to-gray-900 border-t border-gray-200 dark:border-gray-800 mt-auto">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
