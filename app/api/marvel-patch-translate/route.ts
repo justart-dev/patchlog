@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import marvelPrompt from "../../utils/marvel.json";
 import { getSkillMap } from "../../utils/skillMapService";
+import { heroMap } from "../../utils/heroMap";
 
 const supabaseUrl = process.env.SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -13,6 +14,10 @@ interface PatchLog {
   id: string;
   content: string;
   translated_ko?: string;
+}
+
+function escapeRegex(str: string) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 export async function POST(request: Request) {
@@ -80,9 +85,12 @@ export async function POST(request: Request) {
         const skillMappings = Object.entries(skillMap)
           .map(([key, value]) => `        "${key}": "${value}"`)
           .join(",\n");
+        const heroMappings = Object.entries(heroMap)
+          .map(([key, value]) => `        "${key}": "${value}"`)
+          .join(",\n");
 
         const enhancedSystemPrompt = marvelPrompt.messages[0].content +
-          `\n\nWhen translating skill names, use these exact mappings:\n{\n${skillMappings}\n}\n\nIMPORTANT: Keep all placeholders like __YOUTUBE_PLACEHOLDER_N__ exactly as they are without translating them.`;
+          `\n\nWhen translating skill names, use these exact mappings:\n{\n${skillMappings}\n}\n\nWhen translating hero names, use these exact mappings:\n{\n${heroMappings}\n}\n\nIMPORTANT: Keep all placeholders like __YOUTUBE_PLACEHOLDER_N__ exactly as they are without translating them.`;
 
         // OpenAI API 호출하여 번역
         const requestBody = {
@@ -157,6 +165,13 @@ export async function POST(request: Request) {
             const nameOnlyPattern = new RegExp(`${nameOnly}(?!\\([^)]*\\))`, 'g');
             translatedContent = translatedContent.replace(nameOnlyPattern, koreanName);
           }
+        });
+
+        // 후처리: 캐릭터명이 영어로 남아있으면 한글명으로 강제 치환
+        Object.entries(heroMap).forEach(([englishName, koreanName]) => {
+          // 단어 경계를 기준으로 치환해 일반 문장 부작용을 줄임
+          const heroPattern = new RegExp(`\\b${escapeRegex(englishName)}\\b`, "gi");
+          translatedContent = translatedContent.replace(heroPattern, koreanName);
         });
 
         // DB에 번역 결과 업데이트
