@@ -7,6 +7,7 @@ import StatusDisplay from "../components/StatusDisplay";
 import { useUser, SignInButton } from "@clerk/nextjs";
 import { ChartBarIcon } from "@heroicons/react/24/outline";
 import { replaceEnglishTitles } from "../utils/textReplacer";
+import { formatDateKST, getKSTDayOfWeek } from "../utils/dateFormatter";
 
 export default function PatchPage() {
   const { isSignedIn, isLoaded } = useUser();
@@ -67,7 +68,7 @@ export default function PatchPage() {
     const dayCounts = Array(7).fill(0);
 
     for (const log of recentLogs) {
-      const day = new Date(log.published_at).getDay();
+      const day = getKSTDayOfWeek(log.published_at);
       dayCounts[day] += 1;
     }
 
@@ -87,7 +88,7 @@ export default function PatchPage() {
 
   if (loading) {
     return (
-      <main className="relative overflow-x-clip bg-slate-50 py-12 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+      <div className="relative overflow-x-clip bg-slate-50 py-12 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(circle_at_10%_20%,rgba(37,99,235,0.16),transparent_45%),radial-gradient(circle_at_92%_12%,rgba(248,61,84,0.12),transparent_35%)] dark:bg-[radial-gradient(circle_at_10%_20%,rgba(37,99,235,0.28),transparent_45%),radial-gradient(circle_at_92%_12%,rgba(248,61,84,0.2),transparent_35%)]" />
         <div className="relative mx-auto w-full max-w-[1320px] animate-pulse space-y-8 px-6 sm:px-10 lg:px-20 xl:px-28 2xl:px-36">
           <section className="rounded-3xl border border-slate-200 bg-white/90 px-6 py-10 dark:border-slate-800 dark:bg-slate-900/80 sm:px-8">
@@ -127,7 +128,7 @@ export default function PatchPage() {
             </div>
           </section>
         </div>
-      </main>
+      </div>
     );
   }
 
@@ -148,7 +149,7 @@ export default function PatchPage() {
   }
 
   return (
-    <main className="relative overflow-x-clip bg-slate-50 py-12 text-slate-900 dark:bg-slate-950 dark:text-slate-100 md:py-14">
+    <div className="relative overflow-x-clip bg-slate-50 py-12 text-slate-900 dark:bg-slate-950 dark:text-slate-100 md:py-14">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(circle_at_10%_20%,rgba(37,99,235,0.16),transparent_45%),radial-gradient(circle_at_92%_12%,rgba(248,61,84,0.12),transparent_35%)] dark:bg-[radial-gradient(circle_at_10%_20%,rgba(37,99,235,0.28),transparent_45%),radial-gradient(circle_at_92%_12%,rgba(248,61,84,0.2),transparent_35%)]" />
 
       <div className="relative mx-auto w-full max-w-[1320px] space-y-8 px-6 sm:px-10 lg:px-20 xl:px-28 2xl:px-36 md:space-y-10">
@@ -236,7 +237,7 @@ export default function PatchPage() {
                             {replaceEnglishTitles(log.title)}
                           </p>
                           <p className="text-xs text-slate-500 dark:text-slate-400">
-                            {new Date(log.published_at).toLocaleDateString("ko-KR", {
+                            {formatDateKST(log.published_at, {
                               year: "numeric",
                               month: "short",
                               day: "numeric",
@@ -256,7 +257,11 @@ export default function PatchPage() {
                 <div className="inline-flex items-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-600 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 sm:text-sm">
                   <span className="font-semibold text-slate-500 dark:text-slate-400">최근 반영일</span>
                   <span className="ml-2 font-medium text-slate-500 dark:text-slate-400">
-                    {latestDate.toLocaleDateString("ko-KR")}
+                    {formatDateKST(latestDate, {
+                      year: "numeric",
+                      month: "numeric",
+                      day: "numeric",
+                    })}
                   </span>
                 </div>
               </div>
@@ -281,6 +286,6 @@ export default function PatchPage() {
           </div>
         )}
       </div>
-    </main>
+    </div>
   );
 }

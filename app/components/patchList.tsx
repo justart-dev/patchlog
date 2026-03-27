@@ -1,9 +1,8 @@
-import { format, formatDistanceToNow } from "date-fns";
-import { ko } from "date-fns/locale";
 import Link from "next/link";
 import Image from "next/image";
 import { memo, useMemo } from "react";
 import { replaceEnglishTitles } from "../utils/textReplacer";
+import { formatDateKST } from "../utils/dateFormatter";
 
 export interface PatchLog {
   id: string;
@@ -23,19 +22,23 @@ interface PatchListProps {
 export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) {
   const formattedPatchLogs = useMemo(() => {
     return patchLogs.map((log, index) => {
-      const publishedDate = new Date(log.published_at);
-      const timeAgo = formatDistanceToNow(publishedDate, {
-        addSuffix: true,
-        locale: ko,
+      const formattedDate = formatDateKST(log.published_at, {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
       });
-      const formattedDate = format(publishedDate, "yyyy년 MM월 dd일 HH:mm", {
-        locale: ko,
+      const dateLabel = formatDateKST(log.published_at, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
       });
 
       return {
         ...log,
-        publishedDate,
-        timeAgo,
+        dateLabel,
         formattedDate,
         animationDelay: `${index * 100}ms`,
       };
@@ -116,7 +119,7 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
                         className="text-xs"
                         title={log.formattedDate}
                       >
-                        {log.timeAgo}
+                        {log.dateLabel}
                       </time>
                     </div>
                   </div>
