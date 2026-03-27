@@ -247,42 +247,66 @@ export default function Page() {
             <h2 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">Patchlog가 어떻게 작동하나요?</h2>
           </div>
 
-          <div className="mb-6 flex flex-wrap gap-2">
-            {steps.map((item, index) => (
-              <button
-                key={item.step}
-                type="button"
-                onClick={() => setActiveStep(index)}
-                className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-                  activeStep === index
-                    ? "border-hero-blue-500 bg-hero-blue-50 text-hero-blue-700 dark:bg-hero-blue-950/30 dark:text-hero-blue-200"
-                    : "border-slate-300 text-slate-600 hover:border-slate-400 dark:border-slate-700 dark:text-slate-300"
-                }`}
-              >
-                {item.step} {item.title}
-              </button>
-            ))}
+          <div className="mb-7 grid gap-3 md:grid-cols-5">
+            {steps.map((item, index) => {
+              const isActive = activeStep === index;
+              return (
+                <button
+                  key={item.step}
+                  type="button"
+                  onClick={() => setActiveStep(index)}
+                  className={`rounded-2xl border px-4 py-4 text-left transition-all ${
+                    isActive
+                      ? "border-hero-blue-500 bg-hero-blue-50 shadow-sm dark:bg-hero-blue-950/30"
+                      : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900"
+                  }`}
+                >
+                  <p className="text-xs font-black tracking-[0.18em] text-slate-400">{item.step}</p>
+                  <p className="mt-2 text-sm font-bold leading-relaxed">{item.title}</p>
+                </button>
+              );
+            })}
           </div>
 
-          <article className="rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900">
-            <h3 className="text-xl font-black">{currentStep.title}</h3>
-            <div className="mt-2 flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-3">
-              <p className="text-sm text-slate-600 dark:text-slate-300">{currentStep.description}</p>
-              {currentStep.tags?.length ? (
-                <div className="flex flex-wrap gap-2">
-                  {currentStep.tags.map((tag) => (
-                    <span key={tag} className="rounded-full border border-slate-300 px-2.5 py-1 text-xs font-medium dark:border-slate-600">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-            <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
-              <p className="text-sm font-semibold">{currentStep.trackTitle}</p>
-              <p className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{currentStep.detail}</p>
-            </div>
-          </article>
+          <div className="grid gap-5 lg:grid-cols-12">
+            <article className="rounded-3xl border border-slate-300 bg-slate-50 p-6 shadow-sm dark:border-slate-600 dark:bg-slate-900 lg:col-span-7">
+              <p className="text-xs font-bold tracking-[0.16em] text-slate-500 dark:text-slate-400">CURRENT STEP</p>
+              <h3 className="mt-3 text-2xl font-black">{currentStep.title}</h3>
+              <div className="mt-3 flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-3">
+                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">{currentStep.description}</p>
+                {currentStep.tags?.length ? (
+                  <div className="flex flex-wrap gap-2">
+                    {currentStep.tags.map((tag) => (
+                      <span key={tag} className="rounded-full border border-slate-300 px-2.5 py-1 text-xs font-medium dark:border-slate-600">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+              <div className="mt-5 rounded-2xl border border-slate-300 bg-white p-4 dark:border-slate-600 dark:bg-slate-800">
+                <p className="text-sm font-semibold">{currentStep.trackTitle}</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{currentStep.detail}</p>
+              </div>
+            </article>
+
+            <aside className="rounded-3xl bg-white p-6 shadow-sm dark:bg-slate-900 lg:col-span-5">
+              <p className="text-xs font-bold tracking-[0.16em] text-slate-500 dark:text-slate-400">FLOW OUTPUT</p>
+              <ul className="mt-4 space-y-3">
+                {steps.map((item, index) => (
+                  <li key={`${item.step}-flow`} className="flex items-start gap-3">
+                    <span className={`mt-1.5 h-2.5 w-2.5 rounded-full ${index <= activeStep ? "bg-hero-blue-500" : "bg-slate-300 dark:bg-slate-600"}`} />
+                    <div>
+                      <p className={`text-sm font-semibold ${index === activeStep ? "text-slate-900 dark:text-slate-100" : "text-slate-500 dark:text-slate-400"}`}>
+                        {item.title}
+                      </p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">{item.trackTitle}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          </div>
         </div>
       </section>
 
