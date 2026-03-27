@@ -6,6 +6,12 @@
 export function addStylesToHtml(html: string): string {
   if (!html) return "";
 
+  const toSafeImageTag = (rawUrl: string) => {
+    const url = rawUrl.trim().replace(/&amp;/g, "&");
+    if (!/^https?:\/\//i.test(url)) return rawUrl;
+    return `<img src="${url}" alt="patch image" loading="lazy" />`;
+  };
+
   // 이스케이프 문자 제거
   html = html
     .replace(/\\n/g, "\n")
@@ -19,6 +25,12 @@ export function addStylesToHtml(html: string): string {
       /\{STEAM_CLAN_IMAGE\}/g,
       "https://clan.cloudflare.steamstatic.com/images"
     );
+
+  // BBCode 이미지 태그를 HTML 이미지 태그로 변환
+  // 예: [img src="https://..."] / [img src='https://...'] / [img]https://...[/img]
+  html = html
+    .replace(/\[img\s+src=["']([^"']+)["']\s*\]/gi, (_, src) => toSafeImageTag(src))
+    .replace(/\[img\]([\s\S]*?)\[\/img\]/gi, (_, src) => toSafeImageTag(src));
 
   // 한 문단에 붙은 번호 목록(예: "1. ... 2. ... 3. ...")을 줄바꿈 처리
   html = html.replace(/<p([^>]*)>([\s\S]*?)<\/p>/gi, (full, attrs, content) => {
