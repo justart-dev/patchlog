@@ -181,7 +181,7 @@ export default function PatchPage() {
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
             Patchlog Feed
           </p>
-          <h1 className="mt-5 text-3xl font-black leading-tight text-slate-900 dark:text-white md:text-5xl">
+          <h1 className="mt-5 text-xl font-black leading-tight text-slate-900 dark:text-white sm:text-3xl md:text-5xl">
             Marvel Rivals 패치노트
           </h1>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base md:text-lg">
@@ -193,7 +193,7 @@ export default function PatchPage() {
           <>
             <section className="space-y-5">
               <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-black text-slate-900 dark:text-white md:text-3xl">패치 요약</h2>
+                <h2 className="text-xl font-black text-slate-900 dark:text-white md:text-3xl">패치 요약</h2>
               </div>
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
@@ -215,7 +215,7 @@ export default function PatchPage() {
                     </div>
                   ) : null}
 
-                  <h3 className="text-lg font-black text-slate-900 dark:text-white">업데이트 패턴</h3>
+                  <h3 className="text-xl font-black text-slate-900 dark:text-white sm:text-xl">업데이트 패턴</h3>
                   <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">최근 30개 기준으로 요일별 업데이트 빈도를 보여줍니다.</p>
                   <div className="mt-6 grid grid-cols-7 gap-2">
                     {dayLabels.map((day, index) => {
@@ -244,7 +244,7 @@ export default function PatchPage() {
                 </article>
 
                 <article className="rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/85 sm:p-7">
-                  <h3 className="text-lg font-black text-slate-900 dark:text-white">먼저 읽어볼 패치</h3>
+                  <h3 className="text-xl font-black text-slate-900 dark:text-white sm:text-xl">먼저 읽어볼 패치</h3>
                   <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">가장 최근에 올라온 내역을 빠르게 확인하세요.</p>
                   <div className="mt-5 space-y-3">
                     {patchLogs.slice(0, 3).map((log, index) => (
@@ -277,7 +277,7 @@ export default function PatchPage() {
 
             <section className="space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <h2 className="text-2xl font-black text-slate-900 dark:text-white md:text-3xl">패치 노트</h2>
+                <h2 className="text-xl font-black text-slate-900 dark:text-white md:text-3xl">패치 노트</h2>
                 <div className="inline-flex items-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-600 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 sm:text-sm">
                   <span className="font-semibold text-slate-500 dark:text-slate-400">최근 반영일</span>
                   <span className="ml-2 font-medium text-slate-500 dark:text-slate-400">
