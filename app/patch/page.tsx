@@ -91,39 +91,63 @@ export default function PatchPage() {
       <div className="relative overflow-x-clip bg-slate-50 py-12 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(circle_at_10%_20%,rgba(37,99,235,0.16),transparent_45%),radial-gradient(circle_at_92%_12%,rgba(248,61,84,0.12),transparent_35%)] dark:bg-[radial-gradient(circle_at_10%_20%,rgba(37,99,235,0.28),transparent_45%),radial-gradient(circle_at_92%_12%,rgba(248,61,84,0.2),transparent_35%)]" />
         <div className="relative mx-auto w-full max-w-[1320px] animate-pulse space-y-8 px-6 sm:px-10 lg:px-20 xl:px-28 2xl:px-36">
-          <section className="rounded-3xl border border-slate-200 bg-white/90 px-6 py-10 dark:border-slate-800 dark:bg-slate-900/80 sm:px-8">
-            <div className="mx-auto mb-5 h-6 w-32 rounded bg-slate-200 dark:bg-slate-700" />
-            <div className="mx-auto mb-4 h-10 max-w-xl rounded bg-slate-200 dark:bg-slate-700" />
-            <div className="mx-auto h-5 max-w-2xl rounded bg-slate-200 dark:bg-slate-700" />
+          <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white/90 px-6 py-10 shadow-sm dark:border-slate-800 dark:bg-slate-900/80 sm:px-8 md:px-10">
+            <div className="mb-5 h-4 w-28 rounded bg-slate-200 dark:bg-slate-700" />
+            <div className="mb-4 h-10 max-w-xl rounded bg-slate-200 dark:bg-slate-700" />
+            <div className="h-5 max-w-2xl rounded bg-slate-200 dark:bg-slate-700" />
           </section>
 
-          <section className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
-            <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 dark:border-slate-800 dark:bg-slate-900/80">
-              <div className="mb-3 h-5 w-36 rounded bg-slate-200 dark:bg-slate-700" />
-              <div className="mb-2 h-4 w-full rounded bg-slate-200 dark:bg-slate-700" />
-              <div className="mb-6 h-4 w-4/5 rounded bg-slate-200 dark:bg-slate-700" />
-              <div className="h-32 rounded-2xl bg-slate-100 dark:bg-slate-800" />
-            </div>
-            <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 dark:border-slate-800 dark:bg-slate-900/80">
-              <div className="mb-3 h-5 w-28 rounded bg-slate-200 dark:bg-slate-700" />
-              <div className="mb-2 h-4 w-full rounded bg-slate-200 dark:bg-slate-700" />
-              <div className="mb-6 h-4 w-3/4 rounded bg-slate-200 dark:bg-slate-700" />
-              <div className="space-y-2">
-                <div className="h-12 rounded-xl bg-slate-100 dark:bg-slate-800" />
-                <div className="h-12 rounded-xl bg-slate-100 dark:bg-slate-800" />
-                <div className="h-12 rounded-xl bg-slate-100 dark:bg-slate-800" />
+          <section className="space-y-5">
+            <div className="h-8 w-32 rounded bg-slate-200 dark:bg-slate-700" />
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
+              <div className="rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/85 sm:p-7">
+                <div className="mb-3 h-5 w-32 rounded bg-slate-200 dark:bg-slate-700" />
+                <div className="mb-6 h-4 w-4/5 rounded bg-slate-200 dark:bg-slate-700" />
+                <div className="grid grid-cols-7 gap-2">
+                  {[...Array(7)].map((_, idx) => (
+                    <div key={idx} className="flex flex-col items-center gap-2">
+                      <div className="h-20 w-4 rounded-t bg-slate-200 dark:bg-slate-700" />
+                      <div className="h-3 w-4 rounded bg-slate-200 dark:bg-slate-700" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/85 sm:p-7">
+                <div className="mb-3 h-5 w-32 rounded bg-slate-200 dark:bg-slate-700" />
+                <div className="mb-6 h-4 w-3/4 rounded bg-slate-200 dark:bg-slate-700" />
+                <div className="space-y-3">
+                  {[...Array(3)].map((_, idx) => (
+                    <div key={idx} className="rounded-2xl border border-slate-200 bg-slate-50/85 px-3 py-3 dark:border-slate-700 dark:bg-slate-800/60">
+                      <div className="mb-2 h-4 w-4/5 rounded bg-slate-200 dark:bg-slate-700" />
+                      <div className="h-3 w-24 rounded bg-slate-200 dark:bg-slate-700" />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </section>
 
           <section className="space-y-4">
-            <div className="h-8 w-44 rounded bg-slate-200 dark:bg-slate-700" />
+            <div className="flex items-center justify-between gap-3">
+              <div className="h-8 w-32 rounded bg-slate-200 dark:bg-slate-700" />
+              <div className="h-8 w-40 rounded-xl bg-slate-200 dark:bg-slate-700" />
+            </div>
             <div className="space-y-4">
               {[...Array(4)].map((_, index) => (
                 <div
                   key={index}
-                  className="h-36 rounded-3xl border border-slate-200 bg-white/90 dark:border-slate-800 dark:bg-slate-900/80"
-                />
+                  className="overflow-hidden rounded-3xl border border-slate-200 bg-white/95 dark:border-slate-700 dark:bg-slate-900/90"
+                >
+                  <div className="flex flex-col sm:flex-row">
+                    <div className="h-24 w-full border-b border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-800 sm:h-auto sm:w-44 sm:border-b-0 sm:border-r" />
+                    <div className="flex-1 space-y-3 p-5">
+                      <div className="h-4 w-20 rounded bg-slate-200 dark:bg-slate-700" />
+                      <div className="h-6 w-4/5 rounded bg-slate-200 dark:bg-slate-700" />
+                      <div className="h-4 w-full rounded bg-slate-200 dark:bg-slate-700" />
+                      <div className="h-4 w-3/5 rounded bg-slate-200 dark:bg-slate-700" />
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           </section>
@@ -175,7 +199,7 @@ export default function PatchPage() {
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
                 <article className="relative rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/85 sm:p-7">
                   {isLoaded && !isSignedIn ? (
-                    <div className="absolute inset-0 z-10 flex items-center justify-center rounded-3xl bg-white/92 backdrop-blur-sm dark:bg-slate-900/92">
+                    <div className="absolute inset-0 z-10 flex items-center justify-center rounded-3xl bg-white/56 backdrop-blur-md dark:bg-slate-900/56">
                       <div className="px-6 text-center">
                         <div className="mx-auto mb-3 inline-flex h-11 w-11 items-center justify-center rounded-full bg-slate-900 dark:bg-white">
                           <ChartBarIcon className="h-5 w-5 text-white dark:text-slate-900" />
