@@ -10,6 +10,7 @@ import {
 } from "../../utils/textReplacer";
 import ErrorBoundary from "../../components/ErrorBoundary";
 import dynamic from "next/dynamic";
+import { formatDateKST } from "../../utils/dateFormatter";
 
 const CommentSection = dynamic(() => import("../../components/CommentSection"), {
   loading: () => (
@@ -56,7 +57,7 @@ export default function PatchDetailClient({
         <header className="rounded-3xl border border-slate-300 bg-white/92 p-6 shadow-sm dark:border-slate-600 dark:bg-slate-900/85 sm:p-7 md:p-8">
           <div className="mb-5 flex items-center justify-between gap-3">
             <span className="text-xs font-medium text-slate-500 dark:text-slate-400 sm:text-sm">
-              {new Date(patchDetail.published_at).toLocaleDateString("ko-KR", {
+              {formatDateKST(patchDetail.published_at, {
                 year: "numeric",
                 month: "long",
                 day: "numeric",

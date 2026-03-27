@@ -106,11 +106,6 @@ export default function RootLayout({
               } catch (e) {}
             `}
           </Script>
-          <script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6198824361218150"
-            crossOrigin="anonymous"
-          />
         </head>
         <body className="antialiased flex flex-col min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white">
           <ThemeProvider>
@@ -131,6 +126,11 @@ export default function RootLayout({
           </ThemeProvider>
           <Analytics />
           <SpeedInsights />
+          <Script
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6198824361218150"
+            strategy="afterInteractive"
+            crossOrigin="anonymous"
+          />
           <Script
             src="https://cloud.umami.is/script.js"
             data-website-id="83fbc50b-56e9-473d-be24-ea6801d81058"

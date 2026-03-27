@@ -107,7 +107,7 @@ export default function Page() {
   const currentStep = steps[activeStep] ?? steps[0];
 
   return (
-    <main className="relative overflow-x-clip bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div className="relative overflow-x-clip bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[560px] bg-[radial-gradient(circle_at_15%_20%,rgba(37,99,235,0.2),transparent_45%),radial-gradient(circle_at_90%_15%,rgba(248,61,84,0.18),transparent_38%),radial-gradient(circle_at_50%_50%,rgba(15,23,42,0.03),transparent_55%)] dark:bg-[radial-gradient(circle_at_15%_20%,rgba(37,99,235,0.35),transparent_45%),radial-gradient(circle_at_90%_15%,rgba(248,61,84,0.32),transparent_38%),radial-gradient(circle_at_50%_50%,rgba(148,163,184,0.08),transparent_55%)]" />
 
       <section className="relative px-6 pb-20 pt-16 sm:px-10 sm:pb-24 sm:pt-20 lg:px-20 xl:px-28 2xl:px-36">
@@ -342,6 +342,6 @@ export default function Page() {
           </aside>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
