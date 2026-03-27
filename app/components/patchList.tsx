@@ -124,7 +124,7 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
                     </div>
                   </div>
 
-                  <h2 className="mb-3 line-clamp-2 text-lg font-black leading-tight text-slate-900 dark:text-white md:text-2xl">
+                  <h2 className="mb-3 line-clamp-2 text-xl font-black leading-tight text-slate-900 dark:text-white sm:text-xl md:text-2xl">
                     {replaceEnglishTitles(log.title)}
                   </h2>
 
