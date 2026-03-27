@@ -26,6 +26,17 @@ export function addStylesToHtml(html: string): string {
       "https://clan.cloudflare.steamstatic.com/images"
     );
 
+  // nbsp/연속 공백 정리 (모바일에서 단어 간격이 과하게 벌어지는 현상 방지)
+  html = html
+    .replace(/&nbsp;|&#160;/gi, " ")
+    .replace(/\u00A0/g, " ");
+  html = html.replace(/>([^<]+)</g, (full, textContent) => {
+    const normalized = textContent
+      .replace(/[ \t]{2,}/g, " ")
+      .replace(/\s+\n/g, "\n");
+    return `>${normalized}<`;
+  });
+
   // BBCode 이미지 태그를 HTML 이미지 태그로 변환
   // 예: [img src="https://..."] / [img src='https://...'] / [img]https://...[/img]
   html = html
@@ -105,7 +116,7 @@ export function addStylesToHtml(html: string): string {
   // 문단 스타일 (더 나은 가독성)
   html = addStyle(
     "p",
-    "margin: 0 0 1.25rem; font-size: 1.0625rem; line-height: 1.85; color: #4b5563; word-break: keep-all; letter-spacing: -0.003em;"
+    "margin: 0 0 1.25rem; font-size: 1.0625rem; line-height: 1.85; color: #4b5563; word-break: keep-all; letter-spacing: -0.003em; text-align: left; word-spacing: normal; white-space: normal;"
   );
 
   // 목록 스타일
