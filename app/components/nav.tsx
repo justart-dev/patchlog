@@ -65,23 +65,35 @@ export function Navbar() {
             <>
               <SignedOut>
                 <SignInButton mode="modal">
-                  <button className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                  <button className="inline-flex h-11 items-center justify-center rounded-2xl border border-slate-200 bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(241,245,249,0.98))] px-4 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-900 hover:shadow-md dark:border-slate-700 dark:bg-[linear-gradient(135deg,rgba(30,41,59,0.96),rgba(15,23,42,0.98))] dark:text-slate-200 dark:hover:border-slate-600 dark:hover:text-white">
                     로그인
                   </button>
                 </SignInButton>
               </SignedOut>
               <SignedIn>
-                <UserButton afterSignOutUrl="/" />
+                <div className="flex h-11 items-center rounded-2xl border border-slate-200 bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(241,245,249,0.98))] px-1.5 shadow-sm dark:border-slate-700 dark:bg-[linear-gradient(135deg,rgba(30,41,59,0.96),rgba(15,23,42,0.98))]">
+                  <UserButton
+                    afterSignOutUrl="/"
+                    appearance={{
+                      elements: {
+                        avatarBox:
+                          "h-8 w-8 ring-0",
+                        userButtonTrigger:
+                          "rounded-xl focus:shadow-none focus-visible:ring-0",
+                      },
+                    }}
+                  />
+                </div>
               </SignedIn>
             </>
           ) : (
-            <div className="h-8 w-16" aria-hidden="true" />
+            <div className="h-11 w-16 rounded-2xl border border-slate-200 bg-white/80 dark:border-slate-700 dark:bg-slate-900/80" aria-hidden="true" />
           )}
 
           <button
             type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}
-            className="md:hidden p-2 rounded-md text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(241,245,249,0.98))] text-slate-500 shadow-sm transition-colors hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-[linear-gradient(135deg,rgba(30,41,59,0.96),rgba(15,23,42,0.98))] dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-white md:hidden"
             aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
             aria-expanded={isMenuOpen}
             aria-controls={mobileMenuId}
