@@ -43,7 +43,6 @@ export class BatchLogger {
         return null;
       }
 
-      console.log('Batch start logged successfully with ID:', data.id);
       return data.id;
     } catch (error) {
       console.error('Failed to log batch start - Unexpected error:', error);
