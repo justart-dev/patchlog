@@ -122,7 +122,7 @@ export default function Page() {
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight sm:text-5xl md:text-6xl">
               영어 패치노트,
               <br />
-              <span className="bg-gradient-to-r from-hero-blue-500 via-sky-500 to-cyan-400 bg-clip-text text-transparent">한국어로 바로 이해</span>
+              <span className="text-slate-900 dark:text-white">핵심만 한국어로 빠르게</span>
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-300 sm:text-lg">
               자동 수집부터 맥락 번역, 가독성 렌더링까지 한 번에 처리해 핵심 변경점만 빠르게 확인할 수 있게 만듭니다.
@@ -392,6 +392,7 @@ export default function Page() {
               </aside>
             </div>
           </div>
+
         </div>
       </section>
 
@@ -427,6 +428,7 @@ export default function Page() {
           </aside>
         </div>
       </section>
+
     </div>
   );
 }
