@@ -80,6 +80,12 @@ const steps: Step[] = [
   },
 ];
 
+const processHighlights = [
+  { label: "신규 감지", value: "Daily Scan" },
+  { label: "번역 엔진", value: "GPT-5-mini" },
+  { label: "즉시 반영", value: "Auto Update" },
+] as const;
+
 export default function Page() {
   const [patchCount, setPatchCount] = useState(0);
   const [activeProblem, setActiveProblem] = useState(0);
@@ -242,70 +248,149 @@ export default function Page() {
 
       <section id="process" className="px-6 pb-16 pt-8 sm:px-10 sm:pb-24 lg:px-20 xl:px-28 2xl:px-36">
         <div className="mx-auto w-full max-w-[1320px]">
-          <div className="mb-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">How It Works</p>
-            <h2 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">Patchlog가 어떻게 작동하나요?</h2>
-          </div>
-
-          <div className="mb-7 grid gap-3 md:grid-cols-5">
-            {steps.map((item, index) => {
-              const isActive = activeStep === index;
-              return (
-                <button
-                  key={item.step}
-                  type="button"
-                  onClick={() => setActiveStep(index)}
-                  className={`rounded-2xl border px-4 py-4 text-left transition-all ${
-                    isActive
-                      ? "border-hero-blue-500 bg-hero-blue-50 shadow-sm dark:bg-hero-blue-950/30"
-                      : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900"
-                  }`}
+          <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">How It Works</p>
+              <h2 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">Patchlog가 어떻게 작동하나요?</h2>
+              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
+                수집부터 번역, 후처리, 게시까지 하나의 파이프라인으로 이어서
+                사용자가 핵심 변경점만 빠르게 읽을 수 있게 만듭니다.
+              </p>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              {processHighlights.map((item) => (
+                <article
+                  key={item.label}
+                  className="rounded-2xl border border-slate-200 bg-white/90 px-4 py-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/80"
                 >
-                  <p className="text-xs font-black tracking-[0.18em] text-slate-400">{item.step}</p>
-                  <p className="mt-2 text-sm font-bold leading-relaxed">{item.title}</p>
-                </button>
-              );
-            })}
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
+                    {item.label}
+                  </p>
+                  <p className="mt-2 text-sm font-black text-slate-900 dark:text-white sm:text-base">
+                    {item.value}
+                  </p>
+                </article>
+              ))}
+            </div>
           </div>
 
-          <div className="grid gap-5 lg:grid-cols-12">
-            <article className="rounded-3xl border border-slate-300 bg-slate-50 p-6 shadow-sm dark:border-slate-600 dark:bg-slate-900 lg:col-span-7">
-              <p className="text-xs font-bold tracking-[0.16em] text-slate-500 dark:text-slate-400">CURRENT STEP</p>
-              <h3 className="mt-3 text-2xl font-black">{currentStep.title}</h3>
-              <div className="mt-3 flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-3">
-                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">{currentStep.description}</p>
-                {currentStep.tags?.length ? (
-                  <div className="flex flex-wrap gap-2">
-                    {currentStep.tags.map((tag) => (
-                      <span key={tag} className="rounded-full border border-slate-300 px-2.5 py-1 text-xs font-medium dark:border-slate-600">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-              </div>
-              <div className="mt-5 rounded-2xl border border-slate-300 bg-white p-4 dark:border-slate-600 dark:bg-slate-800">
-                <p className="text-sm font-semibold">{currentStep.trackTitle}</p>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{currentStep.detail}</p>
-              </div>
-            </article>
+          <div className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-[linear-gradient(135deg,rgba(255,255,255,0.95),rgba(241,245,249,0.98))] p-4 shadow-sm dark:border-slate-800 dark:bg-[linear-gradient(135deg,rgba(15,23,42,0.92),rgba(2,6,23,0.98))] sm:p-6">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.18),transparent_48%),radial-gradient(circle_at_top_right,rgba(248,61,84,0.12),transparent_42%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.22),transparent_48%),radial-gradient(circle_at_top_right,rgba(248,113,113,0.18),transparent_42%)]" />
 
-            <aside className="rounded-3xl bg-white p-6 shadow-sm dark:bg-slate-900 lg:col-span-5">
-              <p className="text-xs font-bold tracking-[0.16em] text-slate-500 dark:text-slate-400">FLOW OUTPUT</p>
-              <ul className="mt-4 space-y-3">
-                {steps.map((item, index) => (
-                  <li key={`${item.step}-flow`} className="flex items-start gap-3">
-                    <span className={`mt-1.5 h-2.5 w-2.5 rounded-full ${index <= activeStep ? "bg-hero-blue-500" : "bg-slate-300 dark:bg-slate-600"}`} />
+            <div className="relative grid gap-5 xl:grid-cols-[1.2fr_1.8fr_1fr]">
+              <aside className="rounded-3xl border border-slate-200 bg-white/85 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/75">
+                <p className="text-xs font-black tracking-[0.18em] text-slate-400">PIPELINE STEPS</p>
+                <div className="mt-4 space-y-3">
+                  {steps.map((item, index) => {
+                    const isActive = activeStep === index;
+                    return (
+                      <button
+                        key={item.step}
+                        type="button"
+                        onClick={() => setActiveStep(index)}
+                        className={`group w-full rounded-2xl border px-4 py-4 text-left transition-all duration-300 ${
+                          isActive
+                            ? "border-hero-blue-300 bg-[linear-gradient(135deg,rgba(219,234,254,0.92),rgba(255,255,255,0.98))] text-slate-900 shadow-lg shadow-hero-blue-500/10 dark:border-hero-blue-500/40 dark:bg-[linear-gradient(135deg,rgba(30,41,59,0.98),rgba(15,23,42,0.94))] dark:text-white"
+                            : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-200 dark:hover:border-slate-600"
+                        }`}
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className={`text-xs font-black tracking-[0.18em] ${isActive ? "text-hero-blue-700 dark:text-hero-blue-200" : "text-slate-400"}`}>
+                              STEP {item.step}
+                            </p>
+                            <p className="mt-2 text-sm font-bold leading-relaxed">
+                              {item.title}
+                            </p>
+                          </div>
+                          <span
+                            className={`mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full text-xs font-black ${
+                              isActive
+                                ? "bg-white text-hero-blue-600 shadow-sm dark:bg-white/10 dark:text-white"
+                                : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+                            }`}
+                          >
+                            {index + 1}
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </aside>
+
+              <article className="relative overflow-hidden rounded-3xl border border-slate-200 bg-[linear-gradient(145deg,rgba(255,255,255,0.96),rgba(241,245,249,0.98))] p-6 text-slate-900 shadow-xl dark:border-slate-700 dark:bg-[linear-gradient(145deg,rgba(15,23,42,0.92),rgba(30,41,59,0.96))] dark:text-white">
+                <div className="absolute -right-16 top-10 h-44 w-44 rounded-full bg-hero-blue-500/14 blur-3xl" />
+                <div className="absolute -left-12 bottom-0 h-40 w-40 rounded-full bg-hero-red-500/12 blur-3xl" />
+                <div className="relative">
+                  <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className={`text-sm font-semibold ${index === activeStep ? "text-slate-900 dark:text-slate-100" : "text-slate-500 dark:text-slate-400"}`}>
-                        {item.title}
-                      </p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">{item.trackTitle}</p>
+                      <p className="text-xs font-black tracking-[0.18em] text-slate-500 dark:text-white/50">CURRENT STEP</p>
+                      <h3 className="mt-3 text-2xl font-black text-slate-900 dark:text-white sm:text-3xl">{currentStep.title}</h3>
                     </div>
-                  </li>
-                ))}
-              </ul>
-            </aside>
+                    <span className="inline-flex rounded-full border border-slate-300 bg-white/80 px-3 py-1 text-xs font-semibold text-slate-700 dark:border-white/15 dark:bg-white/10 dark:text-white/80">
+                      {currentStep.step} / {steps.length.toString().padStart(2, "0")}
+                    </span>
+                  </div>
+
+                  <div className="mt-4 flex flex-col gap-3">
+                    <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-200 sm:text-base">
+                      {currentStep.description}
+                    </p>
+                    {currentStep.tags?.length ? (
+                      <div className="flex flex-wrap gap-2">
+                        {currentStep.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="rounded-full border border-slate-300 bg-white/80 px-3 py-1 text-xs font-semibold text-slate-700 dark:border-white/15 dark:bg-white/10 dark:text-white/85"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <div className="mt-6 rounded-2xl border border-slate-200 bg-white/85 p-5 dark:border-white/10 dark:bg-white/5">
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">{currentStep.trackTitle}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                      {currentStep.detail}
+                    </p>
+                  </div>
+                </div>
+              </article>
+
+              <aside className="rounded-3xl border border-slate-200 bg-white/85 p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900/75">
+                <p className="text-xs font-black tracking-[0.18em] text-slate-400">FLOW OUTPUT</p>
+                <ul className="mt-4 space-y-3">
+                  {steps.map((item, index) => (
+                    <li key={`${item.step}-flow`} className="flex items-start gap-3">
+                      <span
+                        className={`mt-1.5 h-2.5 w-2.5 rounded-full ${
+                          index <= activeStep
+                            ? "bg-hero-blue-500"
+                            : "bg-slate-300 dark:bg-slate-600"
+                        }`}
+                      />
+                      <div>
+                        <p
+                          className={`text-sm font-semibold ${
+                            index === activeStep
+                              ? "text-slate-900 dark:text-slate-100"
+                              : "text-slate-500 dark:text-slate-400"
+                          }`}
+                        >
+                          {item.title}
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                          {item.trackTitle}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </aside>
+            </div>
           </div>
         </div>
       </section>
