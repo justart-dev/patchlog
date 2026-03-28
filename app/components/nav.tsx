@@ -14,12 +14,14 @@ type NavItem = {
 const navItems: NavItem[] = [
   { name: "소개", href: "/" },
   { name: "패치노트", href: "/patch" },
+  { name: "시즌 티어표", href: "/tier" },
   { name: "사이트 통계", href: "https://cloud.umami.is/share/X4DLIuA7E54r6Fi9", blank: true },
 ];
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const mobileMenuId = "mobile-main-menu";
 
   useEffect(() => {
     setMounted(true);
@@ -80,7 +82,9 @@ export function Navbar() {
             type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}
             className="md:hidden p-2 rounded-md text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-            aria-label="메뉴 열기"
+            aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
+            aria-expanded={isMenuOpen}
+            aria-controls={mobileMenuId}
           >
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {isMenuOpen ? (
@@ -94,7 +98,10 @@ export function Navbar() {
       </div>
 
       {isMenuOpen ? (
-        <div className="md:hidden mt-2 border-t border-gray-200 dark:border-gray-700 pt-2 space-y-1">
+        <div
+          id={mobileMenuId}
+          className="md:hidden mt-2 border-t border-gray-200 dark:border-gray-700 pt-2 space-y-1"
+        >
           {navItems.map((item) => (
             <Link
               key={`${item.href}-mobile`}
