@@ -41,10 +41,7 @@ async function runBatch(request: Request) {
   }
 
   try {
-    console.log("Starting Marvel Rivals batch process...");
-
     // 1단계: 패치 데이터 업데이트 (직접 호출)
-    console.log("Step 1: Updating patch data...");
 
     // 내부 API 로직을 직접 사용
     const { POST: updatePost } = await import("../marvel-patch-update/route");
@@ -57,14 +54,11 @@ async function runBatch(request: Request) {
     const updateResponse = await updatePost(mockUpdateRequest);
     const updateResult = await updateResponse.json();
 
-    console.log("Update result:", updateResult);
-
     if (!updateResponse.ok) {
       throw new Error(`Update failed: ${updateResponse.status}`);
     }
 
     // 2단계: 번역 처리
-    console.log("Step 2: Starting translation...");
 
     // 내부 API 로직을 직접 사용
     const { POST: translatePost } = await import(
@@ -81,8 +75,6 @@ async function runBatch(request: Request) {
     );
     const translateResponse = await translatePost(mockTranslateRequest);
     const translateResult = await translateResponse.json();
-
-    console.log("Translation result:", translateResult);
 
     if (!translateResponse.ok) {
       throw new Error(`Translation failed: ${translateResponse.status}`);

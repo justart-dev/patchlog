@@ -30,7 +30,6 @@ interface CommentSectionProps {
 const organizeComments = (comments: Comment[]): Comment[] => {
   const commentMap = new Map<string, Comment>();
   const rootComments: Comment[] = [];
-  console.log("comments", comments);
   // 모든 댓글을 맵에 저장하고 replies 배열 초기화
   comments.forEach((comment) => {
     commentMap.set(comment.id, { ...comment, replies: [] });
@@ -81,10 +80,27 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
   const [replyContent, setReplyContent] = useState("");
   const [editingComment, setEditingComment] = useState<string | null>(null);
   const [editContent, setEditContent] = useState("");
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<{
+    type: "error" | "success" | "info";
+    message: string;
+  } | null>(null);
 
   useEffect(() => {
     fetchComments();
   }, [patchLogId]);
+
+  useEffect(() => {
+    if (!pendingDeleteId) return;
+    const timer = window.setTimeout(() => setPendingDeleteId(null), 5000);
+    return () => window.clearTimeout(timer);
+  }, [pendingDeleteId]);
+
+  useEffect(() => {
+    if (!feedback) return;
+    const timer = window.setTimeout(() => setFeedback(null), 3000);
+    return () => window.clearTimeout(timer);
+  }, [feedback]);
 
   const fetchComments = async () => {
     try {
@@ -97,6 +113,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
       }
     } catch (error) {
       console.error("Error fetching comments:", error);
+      setFeedback({ type: "error", message: "댓글을 불러오지 못했습니다." });
     } finally {
       setLoading(false);
     }
@@ -106,18 +123,12 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
     e.preventDefault();
 
     if (!newComment.trim() || !isSignedIn) {
-      console.log("Comment submission blocked:", {
-        hasContent: !!newComment.trim(),
-        isSignedIn,
-      });
       return;
     }
 
     setSubmitting(true);
-    console.log("Submitting comment:", {
-      patchLogId,
-      content: newComment.trim(),
-    });
+    setFeedback(null);
+    setFeedback(null);
 
     try {
       const response = await fetch("/api/comments", {
@@ -132,28 +143,21 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
       });
 
       const data = await response.json();
-      console.log("Comment response status:", response.status);
-      console.log("Comment response data:", data);
-
       if (response.ok && data.success) {
         const updatedComments = [...comments, data.data];
         setComments(updatedComments);
         setOrganizedComments(organizeComments(updatedComments));
         setNewComment("");
-        console.log("Comment added successfully");
+        setFeedback({ type: "success", message: "댓글이 등록되었습니다." });
       } else {
-        console.error("Comment submission failed:");
-        console.error("Response status:", response.status);
-        console.error("Response data:", data);
-        alert(
-          `댓글 작성에 실패했습니다 (${response.status}): ${
-            data.error || "알 수 없는 오류"
-          }`
-        );
+        setFeedback({
+          type: "error",
+          message: `댓글 작성에 실패했습니다 (${response.status}): ${data.error || "알 수 없는 오류"}`,
+        });
       }
     } catch (error) {
       console.error("Error submitting comment:", error);
-      alert("댓글 작성 중 오류가 발생했습니다.");
+      setFeedback({ type: "error", message: "댓글 작성 중 오류가 발생했습니다." });
     } finally {
       setSubmitting(false);
     }
@@ -189,16 +193,16 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
         setOrganizedComments(organizeComments(updatedComments));
         setReplyContent("");
         setReplyingTo(null);
+        setFeedback({ type: "success", message: "답글이 등록되었습니다." });
       } else {
-        alert(
-          `답글 작성에 실패했습니다 (${response.status}): ${
-            data.error || "알 수 없는 오류"
-          }`
-        );
+        setFeedback({
+          type: "error",
+          message: `답글 작성에 실패했습니다 (${response.status}): ${data.error || "알 수 없는 오류"}`,
+        });
       }
     } catch (error) {
       console.error("Error submitting reply:", error);
-      alert("답글 작성 중 오류가 발생했습니다.");
+      setFeedback({ type: "error", message: "답글 작성 중 오류가 발생했습니다." });
     } finally {
       setSubmitting(false);
     }
@@ -208,6 +212,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
     if (!editContent.trim()) return;
 
     setSubmitting(true);
+    setFeedback(null);
 
     try {
       const response = await fetch(`/api/comments/${commentId}`, {
@@ -231,23 +236,33 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
         setOrganizedComments(organizeComments(updatedComments));
         setEditingComment(null);
         setEditContent("");
+        setFeedback({ type: "success", message: "댓글이 수정되었습니다." });
       } else {
-        alert(`댓글 수정에 실패했습니다: ${data.error || "알 수 없는 오류"}`);
+        setFeedback({
+          type: "error",
+          message: `댓글 수정에 실패했습니다: ${data.error || "알 수 없는 오류"}`,
+        });
       }
     } catch (error) {
       console.error("Error editing comment:", error);
-      alert("댓글 수정 중 오류가 발생했습니다.");
+      setFeedback({ type: "error", message: "댓글 수정 중 오류가 발생했습니다." });
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleDeleteComment = async (commentId: string) => {
-    if (!confirm("정말로 이 댓글을 삭제하시겠습니까?")) {
+    if (pendingDeleteId !== commentId) {
+      setPendingDeleteId(commentId);
+      setFeedback({
+        type: "info",
+        message: "삭제하려면 같은 버튼을 한 번 더 눌러주세요.",
+      });
       return;
     }
 
     setSubmitting(true);
+    setFeedback(null);
 
     try {
       const response = await fetch(`/api/comments/${commentId}`, {
@@ -263,12 +278,17 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
         );
         setComments(updatedComments);
         setOrganizedComments(organizeComments(updatedComments));
+        setFeedback({ type: "success", message: "댓글이 삭제되었습니다." });
+        setPendingDeleteId(null);
       } else {
-        alert(`댓글 삭제에 실패했습니다: ${data.error || "알 수 없는 오류"}`);
+        setFeedback({
+          type: "error",
+          message: `댓글 삭제에 실패했습니다: ${data.error || "알 수 없는 오류"}`,
+        });
       }
     } catch (error) {
       console.error("Error deleting comment:", error);
-      alert("댓글 삭제 중 오류가 발생했습니다.");
+      setFeedback({ type: "error", message: "댓글 삭제 중 오류가 발생했습니다." });
     } finally {
       setSubmitting(false);
     }
@@ -365,6 +385,22 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
         커뮤니티 ({getTotalCommentCount(organizedComments)})
       </h3>
 
+      {feedback ? (
+        <div
+          className={`mb-4 rounded-lg border px-3 py-2 text-sm ${
+            feedback.type === "success"
+              ? "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-300"
+              : feedback.type === "error"
+                ? "border-red-200 bg-red-50 text-red-700 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300"
+                : "border-slate-200 bg-slate-50 text-slate-700 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-300"
+          }`}
+          role="status"
+          aria-live="polite"
+        >
+          {feedback.message}
+        </div>
+      ) : null}
+
       {/* 댓글 작성 폼 */}
       {isSignedIn ? (
         <form onSubmit={handleSubmitComment} className="mb-8">
@@ -373,6 +409,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               placeholder="패치에 대한 의견을 남겨보세요."
+              aria-label="댓글 내용 입력"
               className="w-full p-3 border border-slate-300 dark:border-gray-600 rounded-lg resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-gray-500 focus:border-slate-300 dark:focus:border-gray-500 bg-white dark:bg-gray-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-gray-400"
               rows={3}
             />
@@ -436,6 +473,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                         <textarea
                           value={editContent}
                           onChange={(e) => setEditContent(e.target.value)}
+                          aria-label="댓글 수정 내용 입력"
                           className="w-full p-2 text-sm border border-slate-300 dark:border-gray-600 rounded-lg resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-gray-500 focus:border-slate-300 dark:focus:border-gray-500 bg-white dark:bg-gray-700 text-slate-900 dark:text-white"
                           rows={3}
                         />
@@ -492,9 +530,13 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                           </button>
                           <button
                             onClick={() => handleDeleteComment(comment.id)}
-                            className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium"
+                            className={`font-medium ${
+                              pendingDeleteId === comment.id
+                                ? "text-red-700 dark:text-red-300"
+                                : "text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
+                            }`}
                           >
-                            삭제
+                            {pendingDeleteId === comment.id ? "삭제 확인" : "삭제"}
                           </button>
                         </>
                       )}
@@ -530,6 +572,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                             value={replyContent}
                             onChange={(e) => setReplyContent(e.target.value)}
                             placeholder={`@${getDisplayName(comment)} `}
+                            aria-label="답글 내용 입력"
                             className="w-full p-2 text-sm border border-slate-300 dark:border-gray-600 rounded-lg resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-gray-500 focus:border-slate-300 dark:focus:border-gray-500 bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-gray-400"
                             rows={2}
                             onFocus={(e) => {
@@ -601,6 +644,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                                         onChange={(e) =>
                                           setEditContent(e.target.value)
                                         }
+                                        aria-label="답글 수정 내용 입력"
                                         className="w-full p-2 text-xs border border-slate-300 dark:border-gray-600 rounded resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-gray-500 focus:border-slate-300 dark:focus:border-gray-500 bg-white dark:bg-gray-700 text-slate-900 dark:text-white"
                                         rows={2}
                                       />
@@ -653,9 +697,13 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                                             onClick={() =>
                                               handleDeleteComment(reply.id)
                                             }
-                                            className="text-red-400 dark:text-red-500 hover:text-red-600 dark:hover:text-red-400"
+                                            className={`${
+                                              pendingDeleteId === reply.id
+                                                ? "text-red-700 dark:text-red-300"
+                                                : "text-red-400 dark:text-red-500 hover:text-red-600 dark:hover:text-red-400"
+                                            }`}
                                           >
-                                            삭제
+                                            {pendingDeleteId === reply.id ? "삭제 확인" : "삭제"}
                                           </button>
                                         </div>
                                       )}

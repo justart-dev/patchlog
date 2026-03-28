@@ -26,8 +26,6 @@ export async function POST(request: Request) {
 
     // 최근 7일 이내 & translated_ko가 null인 레코드들만 가져오기  
     const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-    console.log("Fetching patch logs from last 7 days with null translated_ko...");
-    console.log("Date range: from", sevenDaysAgo, "to now");
 
     const { data: patchLogs, error: fetchError } = await supabase
       .from("steam_patch_logs")
@@ -35,8 +33,6 @@ export async function POST(request: Request) {
       .gte("synced_at", sevenDaysAgo)
       .is("translated_ko", null)
       .limit(20);
-
-    console.log("Found patch logs to translate:", patchLogs?.length || 0);
 
     if (fetchError) {
       console.error("Error fetching patch logs:", fetchError);
@@ -65,7 +61,6 @@ export async function POST(request: Request) {
       try {
         // content가 null이거나 빈 문자열인 경우 건너뛰기
         if (!log.content || log.content.trim() === '') {
-          console.log(`Skipping log ${log.id}: empty content`);
           results.push({ id: log.id, status: "skipped", error: "empty content" });
           continue;
         }
@@ -188,7 +183,6 @@ export async function POST(request: Request) {
 
         translatedCount++;
         results.push({ id: log.id, status: "success", model: openaiData.model, tokens: openaiData.usage?.total_tokens, duration_ms: apiDuration });
-        console.log(`Successfully translated log ${log.id}`);
 
         // API 호출 간 잠시 대기 (rate limit 방지)
         await new Promise((resolve) => setTimeout(resolve, 1000));

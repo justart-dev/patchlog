@@ -46,23 +46,6 @@ export async function GET(request: Request) {
       throw error;
     }
 
-    // 디버깅: user가 null인 댓글 확인
-    // console.log("Raw comment data:", JSON.stringify(data, null, 2));
-    data?.forEach((comment: any, index: number) => {
-      console.log(`Comment ${index}:`, {
-        id: comment.id,
-        user_id: comment.user_id,
-        user: comment.user,
-        hasUser: !!comment.user,
-      });
-
-      if (!comment.user) {
-        console.warn(
-          `⚠️  Comment ${comment.id} has null user! user_id: ${comment.user_id}`
-        );
-      }
-    });
-
     return NextResponse.json({ success: true, data });
   } catch (error) {
     console.error("Error fetching comments:", error);

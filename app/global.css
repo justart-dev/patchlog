@@ -2,46 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 테마 전환을 위한 전역 애니메이션 */
-*,
-*::before,
-*::after {
-  transition: background-color 0.3s ease-in-out, 
-              color 0.3s ease-in-out, 
-              border-color 0.3s ease-in-out,
-              box-shadow 0.3s ease-in-out;
+/* 테마 전환 애니메이션은 상호작용 요소 중심으로 제한 */
+html,
+body,
+button,
+a,
+input,
+textarea,
+select,
+article,
+section,
+nav,
+footer {
+  transition:
+    background-color 0.25s ease-in-out,
+    color 0.25s ease-in-out,
+    border-color 0.25s ease-in-out,
+    box-shadow 0.25s ease-in-out;
 }
 
-/* HTML과 body 레벨에서도 전환 효과 적용 */
-html {
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-}
-
-body {
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body,
+  button,
+  a,
+  input,
+  textarea,
+  select,
+  article,
+  section,
+  nav,
+  footer {
+    transition: none !important;
+  }
 }
 
 ::selection {
   background-color: #47a3f3;
   color: #fefefe;
-}
-
-/* 헤더 네비게이션 다크모드 스타일 */
-.dark nav a:not(.group),
-.dark nav span {
-  color: rgb(255, 255, 255) !important;
-}
-
-.dark nav a:not(.group):hover {
-  color: rgb(229, 231, 235) !important;
-}
-
-/* 컨텐츠 다크모드 스타일 */
-.dark h1,
-.dark h2,
-.dark h3,
-.dark p {
-  color: rgb(229, 231, 235) !important;
 }
 
 /* 패치노트 본문 다크모드 스타일 */
@@ -95,15 +93,6 @@ body {
 
 .dark article hr {
   border-top-color: rgb(75, 85, 99) !important;
-}
-
-/* 메인 컨텐츠 영역의 일반 링크만 파란색 (헤더/푸터 네비 제외) */
-.dark main div:not(.text-center) a:not(.group):not([class*="bg-"]) {
-  color: rgb(96, 165, 250) !important;
-}
-
-.dark main div:not(.text-center) a:not(.group):not([class*="bg-"]):hover {
-  color: rgb(147, 197, 253) !important;
 }
 
 .dark code,

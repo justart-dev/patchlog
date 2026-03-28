@@ -14,7 +14,6 @@ export async function POST(request: Request) {
   try {
     // Steam API에서 데이터 가져오기
     const steamApiUrl = `https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?appid=${appid}&count=${count}&format=json`;
-    console.log("Steam API URL:", steamApiUrl);
     const response = await fetch(steamApiUrl);
 
     if (!response.ok) {

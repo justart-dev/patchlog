@@ -29,27 +29,20 @@ export function ThemeProvider({
   storageKey = 'patchlog-ui-theme',
   ...props
 }: ThemeProviderProps) {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    // 서버에서는 system으로 시작
-    if (typeof window === 'undefined') return 'system'
-    
-    // 클라이언트에서는 즉시 localStorage에서 가져오기
-    const storedTheme = getStorageItem(storageKey) as Theme
-    return storedTheme || defaultTheme
-  })
-  const [mounted, setMounted] = useState(false)
+  // SSR/CSR 초기 렌더를 동일하게 맞추기 위해 기본 테마로 시작
+  const [theme, setThemeState] = useState<Theme>(defaultTheme)
 
-  // 클라이언트에서만 localStorage 접근
+  // 마운트 후 저장된 테마를 복원
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    const storedTheme = getStorageItem(storageKey) as Theme | null
+    if (storedTheme && storedTheme !== theme) {
+      setThemeState(storedTheme)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [storageKey])
 
   useEffect(() => {
-    if (!mounted) return
-
     const root = window.document.documentElement
-    
-    console.log('🔄 Applying theme:', theme, 'mounted:', mounted)
 
     // 부드러운 전환을 위한 transition 클래스 추가
     root.classList.add('transition-colors', 'duration-300', 'ease-in-out')
@@ -62,18 +55,14 @@ export function ThemeProvider({
         .matches
         ? 'dark'
         : 'light'
-      
-      console.log('🖥️ System theme detected:', systemTheme)
       root.classList.add(systemTheme)
       return
     }
 
-    console.log('✅ Adding theme class:', theme)
     root.classList.add(theme)
-  }, [theme, mounted])
+  }, [theme])
 
   const setTheme = (newTheme: Theme) => {
-    console.log('🎨 Theme changing from', theme, 'to', newTheme)
     setStorageItem(storageKey, newTheme)
     setThemeState(newTheme)
   }
@@ -85,9 +74,7 @@ export function ThemeProvider({
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
-      <div suppressHydrationWarning>
-        {children}
-      </div>
+      {children}
     </ThemeProviderContext.Provider>
   )
 }
