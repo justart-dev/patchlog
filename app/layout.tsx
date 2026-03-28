@@ -33,6 +33,11 @@ export const metadata: Metadata = {
   authors: [{ name: "Patchlog" }],
   creator: "Patchlog",
   publisher: "Patchlog",
+  icons: {
+    icon: "/icon",
+    apple: "/apple-icon",
+    shortcut: "/icon",
+  },
   formatDetection: {
     email: false,
     address: false,
