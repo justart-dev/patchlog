@@ -111,6 +111,19 @@ footer {
   color: rgb(187, 247, 208) !important;
 }
 
+.dark .patch-content [style*="background-color: white"],
+.dark .patch-content [style*="background-color:white"],
+.dark .patch-content [style*="background-color: #fff"],
+.dark .patch-content [style*="background-color:#fff"],
+.dark .patch-content [style*="background-color: #ffffff"],
+.dark .patch-content [style*="background-color:#ffffff"],
+.dark .patch-content [style*="background-color: rgb(255, 255, 255)"],
+.dark .patch-content [style*="background-color:rgb(255, 255, 255)"],
+.dark .patch-content [style*="background: white"],
+.dark .patch-content [style*="background:white"] {
+  background: #0f172ad9 !important;
+}
+
 /* Syntax highlighting only */
 :root {
   --sh-class: #2d5e9d;

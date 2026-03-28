@@ -70,8 +70,8 @@ export default function PatchDetailClient({
           </h1>
         </header>
 
-        <article className="mt-6 rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/88 sm:p-8 md:p-10">
-          <div className="min-h-60 max-w-none prose-lg">
+        <article className="mt-6 rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-[#0f172ad9] sm:p-8 md:p-10">
+          <div className="patch-content min-h-60 max-w-none prose-lg dark:p-0">
             {patchDetail.translated_ko ? (
               <div
                 dangerouslySetInnerHTML={{
@@ -108,7 +108,7 @@ export default function PatchDetailClient({
             </button>
             <button
               onClick={() => window.open(patchDetail.url, "_blank")}
-              className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-black dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
+              className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-black dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600"
             >
               <span>원문 보기</span>
               <svg
