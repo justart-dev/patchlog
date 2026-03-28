@@ -47,10 +47,6 @@ export function Navbar() {
                 {item.name}
                 <span
                   aria-hidden="true"
-                  className="pointer-events-none absolute -bottom-1 left-1/2 h-1.5 w-1.5 -translate-x-1/2 scale-0 rounded-full bg-hero-blue-500 transition-transform duration-200 group-hover:scale-100 group-focus-visible:scale-100"
-                />
-                <span
-                  aria-hidden="true"
                   className="pointer-events-none absolute -bottom-2 left-1/2 h-px w-0 -translate-x-1/2 bg-hero-blue-500 transition-all duration-200 group-hover:w-full group-focus-visible:w-full"
                 />
               </Link>
@@ -124,10 +120,6 @@ export function Navbar() {
               onClick={() => setIsMenuOpen(false)}
             >
               {item.name}
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute right-3 top-1/2 h-1.5 w-1.5 -translate-y-1/2 scale-0 rounded-full bg-hero-blue-500 transition-transform duration-200 group-hover:scale-100"
-              />
             </Link>
           ))}
         </div>
