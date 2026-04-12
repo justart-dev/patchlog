@@ -1,0 +1,14 @@
+export const systemGlossary: Record<string, string> = {
+  "All Platforms": "전체 플랫폼",
+  "New In Store": "상점 추가 상품",
+  Platform: "플랫폼",
+  Platforms: "플랫폼",
+  PC: "PC",
+  Console: "콘솔",
+  Consoles: "콘솔",
+  Maintenance: "점검",
+  "Server Maintenance": "서버 점검",
+  "Patch Size": "패치 용량",
+  "Known Issues": "알려진 문제",
+  "Bug Fixes": "버그 수정",
+};
