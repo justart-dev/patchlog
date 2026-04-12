@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import marvelPrompt from "../../utils/marvel.json";
 import { getSkillMap } from "../../utils/skillMapService";
 import { heroMap } from "../../utils/heroMap";
+import { systemGlossary } from "../../utils/systemGlossary";
 
 const supabaseUrl = process.env.SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -83,9 +84,12 @@ export async function POST(request: Request) {
         const heroMappings = Object.entries(heroMap)
           .map(([key, value]) => `        "${key}": "${value}"`)
           .join(",\n");
+        const systemMappings = Object.entries(systemGlossary)
+          .map(([key, value]) => `        "${key}": "${value}"`)
+          .join(",\n");
 
         const enhancedSystemPrompt = marvelPrompt.messages[0].content +
-          `\n\nWhen translating skill names, use these exact mappings:\n{\n${skillMappings}\n}\n\nWhen translating hero names, use these exact mappings:\n{\n${heroMappings}\n}\n\nIMPORTANT: Keep all placeholders like __YOUTUBE_PLACEHOLDER_N__ exactly as they are without translating them.`;
+          `\n\nWhen translating skill names, use these exact mappings:\n{\n${skillMappings}\n}\n\nWhen translating hero names, use these exact mappings:\n{\n${heroMappings}\n}\n\nWhen translating system and UI terms, use these exact mappings:\n{\n${systemMappings}\n}\n\nIMPORTANT: Keep all placeholders like __YOUTUBE_PLACEHOLDER_N__ exactly as they are without translating them.`;
 
         // OpenAI API 호출하여 번역
         const requestBody = {
@@ -167,6 +171,12 @@ export async function POST(request: Request) {
           // 단어 경계를 기준으로 치환해 일반 문장 부작용을 줄임
           const heroPattern = new RegExp(`\\b${escapeRegex(englishName)}\\b`, "gi");
           translatedContent = translatedContent.replace(heroPattern, koreanName);
+        });
+
+        // 후처리: 공통 시스템 문구가 영어로 남아있으면 한글로 강제 치환
+        Object.entries(systemGlossary).forEach(([englishName, koreanName]) => {
+          const systemPattern = new RegExp(`\\b${escapeRegex(englishName)}\\b`, "gi");
+          translatedContent = translatedContent.replace(systemPattern, koreanName);
         });
 
         // DB에 번역 결과 업데이트
