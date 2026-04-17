@@ -11,4 +11,6 @@ export const systemGlossary: Record<string, string> = {
   "Patch Size": "패치 용량",
   "Known Issues": "알려진 문제",
   "Bug Fixes": "버그 수정",
+  "Chain-CC Protection": "연속 CC 보호",
+  Tenacity: "강인함",
 };
