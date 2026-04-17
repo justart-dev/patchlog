@@ -16,6 +16,7 @@ function extractKey(keyPart: string): string {
   if (keyMatch.includes("C")) return "C";
   if (keyMatch.includes("Z")) return "Z";
   if (keyMatch.includes("X")) return "X";
+  if (keyMatch.includes("스페이스바") || keyMatch.includes("Space")) return "Space";
   if (keyMatch.includes("패시브")) return "패시브";
   return "";
 }
