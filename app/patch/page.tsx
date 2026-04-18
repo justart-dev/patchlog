@@ -1,17 +1,27 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import Link from "next/link";
 import { PatchList, type PatchLog } from "../components/patchList";
 import StatusDisplay from "../components/StatusDisplay";
 import { useUser, SignInButton } from "@clerk/nextjs";
 import { ChartBarIcon } from "@heroicons/react/24/outline";
-import { replaceEnglishTitles } from "../utils/textReplacer";
 import { formatDateKST, getKSTDayOfWeek } from "../utils/dateFormatter";
+
+
+type LatestVideo = {
+  title: string;
+  videoId: string;
+  videoUrl: string;
+  publishedAt: string;
+  embedUrl: string;
+  thumbnailUrl: string;
+  source: string;
+};
 
 export default function PatchPage() {
   const { isSignedIn, isLoaded } = useUser();
   const [patchLogs, setPatchLogs] = useState<PatchLog[] | null>(null);
+  const [latestVideo, setLatestVideo] = useState<LatestVideo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const dayLabels = ["일", "월", "화", "수", "목", "금", "토"];
@@ -23,16 +33,26 @@ export default function PatchPage() {
   useEffect(() => {
     const fetchPatchLogs = async () => {
       try {
-        const response = await fetch("/api/marvel-patch-logs", {
-          next: { revalidate: 1800 },
-        });
+        const [patchResponse, latestVideoResponse] = await Promise.all([
+          fetch("/api/marvel-patch-logs", {
+            next: { revalidate: 1800 },
+          }),
+          fetch("/api/marvel-latest-video", {
+            next: { revalidate: 1800 },
+          }),
+        ]);
 
-        if (!response.ok) {
+        if (!patchResponse.ok) {
           throw new Error("패치 로그를 불러오는데 실패했습니다.");
         }
 
-        const data = await response.json();
-        setPatchLogs(data);
+        const patchData = await patchResponse.json();
+        setPatchLogs(patchData);
+
+        if (latestVideoResponse.ok) {
+          const latestVideoData = await latestVideoResponse.json();
+          setLatestVideo(latestVideoData);
+        }
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다."
@@ -197,7 +217,7 @@ export default function PatchPage() {
               </div>
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
-                <article className="relative rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/85 sm:p-7">
+                <article className="relative flex h-full flex-col rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/85 sm:p-7">
                   {isLoaded && !isSignedIn ? (
                     <div className="absolute inset-0 z-10 flex items-center justify-center rounded-3xl bg-white/56 backdrop-blur-md dark:bg-slate-900/56">
                       <div className="px-6 text-center">
@@ -217,15 +237,16 @@ export default function PatchPage() {
 
                   <h3 className="text-xl font-black text-slate-900 dark:text-white sm:text-xl">업데이트 패턴</h3>
                   <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">최근 30개 기준으로 요일별 업데이트 빈도를 보여줍니다.</p>
-                  <div className="mt-6 grid grid-cols-7 gap-2">
+                  <div className="mt-8 flex flex-1 items-center">
+                    <div className="grid w-full grid-cols-7 gap-2">
                     {dayLabels.map((day, index) => {
                       const dayCount = updateStats.dayCounts[index] ?? 0;
-                      const height = Math.min(56, 10 + dayCount * 8);
+                      const height = Math.min(68, 14 + dayCount * 9);
                       return (
                         <div key={day} className="flex flex-col items-center">
-                          <div className="flex h-24 w-full items-end justify-center">
+                          <div className="flex h-28 w-full items-end justify-center">
                             <div
-                              className={`w-4 rounded-t-sm ${
+                              className={`w-5 rounded-t-sm ${
                                 dayCount > 0
                                   ? "bg-slate-900 dark:bg-white"
                                   : "bg-slate-200 dark:bg-slate-700"
@@ -240,37 +261,35 @@ export default function PatchPage() {
                         </div>
                       );
                     })}
+                    </div>
                   </div>
                 </article>
 
-                <article className="rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/85 sm:p-7">
-                  <h3 className="text-xl font-black text-slate-900 dark:text-white sm:text-xl">먼저 읽어볼 패치</h3>
-                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">가장 최근에 올라온 내역을 빠르게 확인하세요.</p>
-                  <div className="mt-5 space-y-3">
-                    {patchLogs.slice(0, 3).map((log, index) => (
-                      <Link
-                        key={log.id}
-                        href={`/patch/${log.id}`}
-                        className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50/85 px-3 py-3 transition-colors hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800/60 dark:hover:border-slate-500"
-                      >
-                        <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-bold text-white dark:bg-white dark:text-slate-900">
-                          {index + 1}
-                        </span>
-                        <div className="min-w-0">
-                          <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">
-                            {replaceEnglishTitles(log.title)}
-                          </p>
-                          <p className="text-xs text-slate-500 dark:text-slate-400">
-                            {formatDateKST(log.published_at, {
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                            })}
-                          </p>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
+                <article className="overflow-hidden rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/85 sm:p-7">
+                  <h3 className="text-xl font-black text-slate-900 dark:text-white sm:text-xl">공식 유튜브 최신 영상</h3>
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">Marvel Rivals 공식 유튜브 채널의 최신 메인 영상을 보여줍니다.</p>
+
+                  {latestVideo ? (
+                    <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-800">
+                      <div className="aspect-video w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+                        <iframe
+                          className="h-full w-full"
+                          src={`${latestVideo.embedUrl}?rel=0`}
+                          title={latestVideo.title}
+                          loading="lazy"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          referrerPolicy="strict-origin-when-cross-origin"
+                          allowFullScreen
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50/85 p-5 dark:border-slate-700 dark:bg-slate-800/60">
+                      <p className="text-sm text-slate-600 dark:text-slate-300">
+                        최신 영상을 불러오는 중이거나 일시적으로 확인할 수 없습니다.
+                      </p>
+                    </div>
+                  )}
                 </article>
               </div>
             </section>
