@@ -266,8 +266,8 @@ export default function PatchPage() {
                 </article>
 
                 <article className="overflow-hidden rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/85 sm:p-7">
-                  <h3 className="text-xl font-black text-slate-900 dark:text-white sm:text-xl">공식 유튜브 최신 영상</h3>
-                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">Marvel Rivals 공식 유튜브 채널의 최신 메인 영상을 보여줍니다.</p>
+                  <h3 className="text-xl font-black text-slate-900 dark:text-white sm:text-xl">공식 영상 하이라이트</h3>
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">Marvel Rivals 공식 채널에서 최신 주요 영상을 골라 보여줍니다.</p>
 
                   {latestVideo ? (
                     <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-800">
