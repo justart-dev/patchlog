@@ -11,22 +11,24 @@ type Step = {
   trackTitle: string;
   detail: string;
   tags?: string[];
+  note?: string;
 };
 
 const stats = [
   { label: "누적 번역 패치노트", value: "60+" },
-  { label: "번역 품질", value: "용어·표기 정리" },
-  { label: "최신 추적", value: "매일 자동 확인" },
+  { label: "맞춤형 번역", value: "AI + 용어 보정" },
+  { label: "자동 반영", value: "하루 2회 업데이트" },
 ] as const;
 
 const problems = [
   {
     id: "01",
     title: "영문 원문은 빠르게 파악하기 어렵습니다.",
-    summary: "변경점을 읽는 데 시간이 걸리고 중요한 수치나 효과를 놓치기 쉽습니다.",
+    summary:
+      "변경점을 읽는 데 시간이 걸리고 중요한 수치나 효과를 놓치기 쉽습니다.",
     pain: "패치가 나와도 무엇이 실제로 달라졌는지 한눈에 파악하기 어렵습니다.",
     solution: [
-      "숫자·효과·조건 중심으로 정리",
+      "숫자 · 효과 · 조건 중심으로 정리",
       "핵심 변경점이 먼저 보이는 문장 구조",
     ],
     image: "/images/spiderman.webp",
@@ -34,9 +36,10 @@ const problems = [
   {
     id: "02",
     title: "일반 번역만으로는 이해가 부족합니다.",
-    summary: "직역 위주 번역은 게임 용어와 밸런스 맥락을 제대로 살리지 못하는 경우가 많습니다.",
+    summary:
+      "직역 위주 번역은 게임 용어와 밸런스 맥락을 제대로 살리지 못하는 경우가 많습니다.",
     pain: "번역은 되어 있어도 실제 플레이에 어떤 의미인지 바로 이해하기 어려울 수 있습니다.",
-    solution: ["게임 용어 사전 기반 번역", "버프·너프 맥락 유지", "스킬명·키 입력 표기 정리"],
+    solution: ["게임 용어 사전 기반 번역", "스킬명 · 키 입력 표기 정리"],
     image: "/images/ironman.webp",
   },
 ] as const;
@@ -45,38 +48,43 @@ const steps: Step[] = [
   {
     step: "01",
     title: "Steam 공지 확인",
-    description: "최신 공지를 자동으로 감시합니다.",
+    description: "하루 2번 최신 공지를 확인합니다.",
     trackTitle: "신규 공지 확인",
-    detail: "매일 Steam에서 새로운 패치노트가 올라왔는지 확인하고 후보를 수집합니다.",
+    detail:
+      "매일 오전/오후 6시에 Steam에서 새로운 패치노트가 올라왔는지 확인하고 후보를 수집합니다.",
   },
   {
     step: "02",
     title: "신규 패치 선별",
     description: "중복을 제거하고 신규 글만 선별합니다.",
     trackTitle: "원문 수집 및 정리",
-    detail: "이미 저장된 글은 제외하고 새로 올라온 패치노트만 번역 파이프라인에 투입합니다.",
+    detail:
+      "이미 저장된 글은 제외하고 새로 올라온 패치노트만 번역 파이프라인에 투입합니다.",
   },
   {
     step: "03",
     title: "맥락 기반 번역",
-    description: "게임 용어와 문맥을 반영해 번역합니다.",
+    description: "최신 AI 모델로 게임 용어와 문맥을 반영해 번역합니다.",
     trackTitle: "맥락 기반 번역 처리",
-    detail: "게임 용어와 한국어 표현 규칙을 반영해 이해하기 쉬운 번역으로 정리합니다.",
+    detail:
+      "GPT-5-mini 모델과 용어 보정 규칙을 함께 사용해 게임 용어와 한국어 표현을 반영한 번역으로 정리합니다.",
     tags: ["한국시간 변환", "용어 매핑", "조사 보정"],
   },
   {
     step: "04",
     title: "가독성 후처리",
-    description: "핵심 수치와 효과를 강조 표시합니다.",
+    description: "수치 변화와 스킬 표기를 읽기 쉽게 다듬습니다.",
     trackTitle: "가독성 후처리",
-    detail: "버프/너프, 신규 효과, 스킬명처럼 중요한 정보가 먼저 보이도록 UI를 후처리합니다.",
+    detail: "수치 변화는 더 눈에 띄게 정리하고, 스킬명과 키 입력은 헷갈리지 않게 구분하며, 용어 표기까지 읽기 쉽게 보정합니다.",
+    note: "예: 스킬명 밑줄 처리, 키 입력 분리 표기, 수치 변화 강조, 용어 표기 정리",
   },
   {
     step: "05",
     title: "웹사이트 자동 반영",
-    description: "완료 즉시 사이트에 공개합니다.",
+    description: "정리된 결과를 사이트에 순차적으로 반영합니다.",
     trackTitle: "자동 반영 및 공개",
-    detail: "처리된 결과를 바로 반영해 사용자가 항상 최신 패치노트를 확인할 수 있게 유지합니다.",
+    detail: "번역과 후처리가 끝난 패치노트를 사이트에 반영해 최신 내용을 이어서 확인할 수 있게 합니다.",
+    note: "반영 시점은 사이트 상태에 따라 조금씩 달라질 수 있으며, 경우에 따라 최대 1시간 정도 걸릴 수 있습니다.",
   },
 ];
 
@@ -122,10 +130,14 @@ export default function Page() {
             <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight sm:text-5xl md:text-6xl">
               영문 패치노트의 핵심만,
               <br />
-              <span className="text-slate-900 dark:text-white">빠르게 한국어로</span>
+              <span className="text-slate-900 dark:text-white">
+                빠르게 한국어로
+              </span>
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-300 sm:text-lg">
-              패치노트를 자동으로 수집하고, 맥락에 맞게 번역해 읽기 쉽게 정리합니다. 복잡한 원문 대신 핵심 변경점만 빠르게 확인할 수 있습니다.
+              패치노트를 자동으로 수집하고, 맥락에 맞게 번역해 읽기 쉽게
+              정리합니다. 복잡한 원문 대신 핵심 변경점만 빠르게 확인할 수
+              있습니다.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -148,8 +160,12 @@ export default function Page() {
             <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-xl dark:border-slate-800 dark:bg-slate-900/80">
               <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-hero-blue-500/15 blur-2xl" />
               <div className="absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-hero-red-500/15 blur-2xl" />
-              <p className="text-xs font-semibold tracking-wide text-slate-500 dark:text-slate-400">RECOMMENDED FOR</p>
-              <h2 className="mt-2 text-2xl font-black leading-tight">이런 분들께 추천합니다</h2>
+              <p className="text-xs font-semibold tracking-wide text-slate-500 dark:text-slate-400">
+                RECOMMENDED FOR
+              </p>
+              <h2 className="mt-2 text-2xl font-black leading-tight">
+                이런 분들께 추천합니다
+              </h2>
               <ul className="mt-4 space-y-2 text-sm text-slate-600 dark:text-slate-300">
                 <li className="flex items-start gap-2">
                   <span className="mt-1.5 h-2 w-2 rounded-full bg-hero-blue-500" />
@@ -184,9 +200,13 @@ export default function Page() {
               className="group relative rounded-2xl border border-slate-200 bg-white/90 px-5 py-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/80"
             >
               <p className="text-3xl font-black text-slate-900 dark:text-white sm:text-4xl">
-                {stat.label === "누적 번역 패치노트" ? `${patchCount}+` : stat.value}
+                {stat.label === "누적 번역 패치노트"
+                  ? `${patchCount}+`
+                  : stat.value}
               </p>
-              <p className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-300">{stat.label}</p>
+              <p className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-300">
+                {stat.label}
+              </p>
             </article>
           ))}
         </div>
@@ -195,8 +215,12 @@ export default function Page() {
       <section className="px-6 py-20 sm:px-10 lg:px-20 xl:px-28 2xl:px-36">
         <div className="mx-auto w-full max-w-[1320px]">
           <div className="mb-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Problem & Solution</p>
-            <h2 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">Patchlog는 이런 문제를 해결합니다</h2>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+              Problem & Solution
+            </p>
+            <h2 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">
+              Patchlog는 이런 문제를 해결합니다
+            </h2>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-12 lg:items-stretch">
@@ -216,26 +240,42 @@ export default function Page() {
                         : "border-slate-200 bg-white text-slate-700 hover:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
                     }`}
                   >
-                    <p className="text-xs font-black tracking-[0.18em] text-slate-400">PROBLEM {item.id}</p>
-                    <p className="mt-3 text-base font-bold leading-relaxed">{item.title}</p>
-                    <p className="mt-3 text-sm leading-relaxed text-slate-500 dark:text-slate-400">{item.summary}</p>
+                    <p className="text-xs font-black tracking-[0.18em] text-slate-400">
+                      PROBLEM {item.id}
+                    </p>
+                    <p className="mt-3 text-base font-bold leading-relaxed">
+                      {item.title}
+                    </p>
+                    <p className="mt-3 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                      {item.summary}
+                    </p>
                   </button>
                 );
               })}
             </div>
 
             <article className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-7 shadow-sm dark:border-slate-800 dark:bg-slate-900 lg:col-span-6">
-              <p className="text-xs font-black tracking-[0.18em] text-slate-400">SOLUTION</p>
+              <p className="text-xs font-black tracking-[0.18em] text-slate-400">
+                SOLUTION
+              </p>
               <h3 className="mt-4 text-2xl font-black">이렇게 해결합니다</h3>
-              <p className="mt-3 max-w-[60ch] text-sm leading-relaxed text-slate-600 dark:text-slate-300">패치노트를 자동으로 수집하고, 핵심 변경점 중심으로 번역·정리합니다.</p>
+              <p className="mt-3 max-w-[60ch] text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                패치노트를 자동으로 수집하고, 핵심 변경점 중심으로
+                번역·정리합니다.
+              </p>
               <div className="mt-6 h-px bg-slate-200 dark:bg-slate-700" />
               <div className="mt-6 inline-flex rounded-full border border-slate-300 px-3 py-1 text-xs font-semibold text-slate-500 dark:border-slate-600 dark:text-slate-400">
                 이 문제를 이렇게 해결합니다
               </div>
-              <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{currentProblem.pain}</p>
+              <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                {currentProblem.pain}
+              </p>
               <ul className="mt-6 space-y-3">
                 {currentProblem.solution.map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-200">
+                  <li
+                    key={item}
+                    className="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-200"
+                  >
                     <span className="h-2.5 w-2.5 rounded-full bg-hero-blue-500" />
                     <span>{item}</span>
                   </li>
@@ -246,14 +286,22 @@ export default function Page() {
         </div>
       </section>
 
-      <section id="process" className="px-6 pb-16 pt-8 sm:px-10 sm:pb-24 lg:px-20 xl:px-28 2xl:px-36">
+      <section
+        id="process"
+        className="px-6 pb-16 pt-8 sm:px-10 sm:pb-24 lg:px-20 xl:px-28 2xl:px-36"
+      >
         <div className="mx-auto w-full max-w-[1320px]">
           <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">How It Works</p>
-              <h2 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">Patchlog는 이렇게 작동합니다</h2>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+                How It Works
+              </p>
+              <h2 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">
+                Patchlog는 이렇게 작동합니다
+              </h2>
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
-                수집, 번역, 후처리, 게시까지 하나의 흐름으로 연결해 핵심 변경점만 빠르게 확인할 수 있도록 만들었습니다.
+                수집, 번역, 후처리, 게시까지 하나의 흐름으로 연결해 핵심
+                변경점만 빠르게 확인할 수 있도록 만들었습니다.
               </p>
             </div>
             <div className="grid grid-cols-3 gap-3">
@@ -278,7 +326,9 @@ export default function Page() {
 
             <div className="relative grid gap-5 xl:grid-cols-[1.2fr_1.8fr_1fr]">
               <aside className="rounded-3xl border border-slate-200 bg-white/85 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/75">
-                <p className="text-xs font-black tracking-[0.18em] text-slate-400">PIPELINE STEPS</p>
+                <p className="text-xs font-black tracking-[0.18em] text-slate-400">
+                  PIPELINE STEPS
+                </p>
                 <div className="mt-4 space-y-3">
                   {steps.map((item, index) => {
                     const isActive = activeStep === index;
@@ -295,7 +345,9 @@ export default function Page() {
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div>
-                            <p className={`text-xs font-black tracking-[0.18em] ${isActive ? "text-hero-blue-700 dark:text-hero-blue-200" : "text-slate-400"}`}>
+                            <p
+                              className={`text-xs font-black tracking-[0.18em] ${isActive ? "text-hero-blue-700 dark:text-hero-blue-200" : "text-slate-400"}`}
+                            >
                               STEP {item.step}
                             </p>
                             <p className="mt-2 text-sm font-bold leading-relaxed">
@@ -324,11 +376,16 @@ export default function Page() {
                 <div className="relative">
                   <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="text-xs font-black tracking-[0.18em] text-slate-500 dark:text-white/50">CURRENT STEP</p>
-                      <h3 className="mt-3 text-2xl font-black text-slate-900 dark:text-white sm:text-3xl">{currentStep.title}</h3>
+                      <p className="text-xs font-black tracking-[0.18em] text-slate-500 dark:text-white/50">
+                        CURRENT STEP
+                      </p>
+                      <h3 className="mt-3 text-2xl font-black text-slate-900 dark:text-white sm:text-3xl">
+                        {currentStep.title}
+                      </h3>
                     </div>
                     <span className="inline-flex rounded-full border border-slate-300 bg-white/80 px-3 py-1 text-xs font-semibold text-slate-700 dark:border-white/15 dark:bg-white/10 dark:text-white/80">
-                      {currentStep.step} / {steps.length.toString().padStart(2, "0")}
+                      {currentStep.step} /{" "}
+                      {steps.length.toString().padStart(2, "0")}
                     </span>
                   </div>
 
@@ -351,19 +408,31 @@ export default function Page() {
                   </div>
 
                   <div className="mt-6 rounded-2xl border border-slate-200 bg-white/85 p-5 dark:border-white/10 dark:bg-white/5">
-                    <p className="text-sm font-semibold text-slate-900 dark:text-white">{currentStep.trackTitle}</p>
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                      {currentStep.trackTitle}
+                    </p>
                     <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
                       {currentStep.detail}
                     </p>
+                    {currentStep.note ? (
+                      <p className="mt-3 text-xs leading-relaxed text-slate-400 dark:text-slate-500">
+                        {currentStep.note}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
               </article>
 
               <aside className="rounded-3xl border border-slate-200 bg-white/85 p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900/75">
-                <p className="text-xs font-black tracking-[0.18em] text-slate-400">FLOW OUTPUT</p>
+                <p className="text-xs font-black tracking-[0.18em] text-slate-400">
+                  FLOW OUTPUT
+                </p>
                 <ul className="mt-4 space-y-3">
                   {steps.map((item, index) => (
-                    <li key={`${item.step}-flow`} className="flex items-start gap-3">
+                    <li
+                      key={`${item.step}-flow`}
+                      className="flex items-start gap-3"
+                    >
                       <span
                         className={`mt-1.5 h-2.5 w-2.5 rounded-full ${
                           index <= activeStep
@@ -391,26 +460,43 @@ export default function Page() {
               </aside>
             </div>
           </div>
-
         </div>
       </section>
 
       <section className="px-6 pb-20 sm:px-10 sm:pb-28 lg:px-20 xl:px-28 2xl:px-36">
         <div className="mx-auto grid w-full max-w-[1320px] gap-8 overflow-hidden rounded-[2rem] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-sky-50/40 px-4 py-10 shadow-sm dark:border-slate-800 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800/70 sm:px-6 md:grid-cols-12 md:items-center lg:px-10">
           <div className="md:col-span-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">Daily Patchlog</p>
-            <h2 className="mt-3 text-3xl font-black leading-tight text-slate-900 dark:text-slate-100 sm:text-4xl">최신 패치노트를 한눈에 확인하세요</h2>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+              Daily Patchlog
+            </p>
+            <h2 className="mt-3 text-3xl font-black leading-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
+              최신 패치노트를 한눈에 확인하세요
+            </h2>
             <div className="mt-4 max-w-2xl space-y-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
               <p>변경사항을 한국어로 읽기 쉽게 정리해 제공합니다.</p>
-              <p>단순 번역이 아니라, 게임 맥락에 맞게 핵심을 이해하기 쉽게 정리합니다.</p>
+              <p>
+                단순 번역이 아니라, 게임 맥락에 맞게 핵심을 이해하기 쉽게
+                정리합니다.
+              </p>
             </div>
             <Link
               href="/patch"
               className="mt-7 inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-6 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-black hover:shadow-md dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
             >
               <span>최신 패치노트 보기</span>
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
               </svg>
             </Link>
           </div>
@@ -427,7 +513,6 @@ export default function Page() {
           </aside>
         </div>
       </section>
-
     </div>
   );
 }
