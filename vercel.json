@@ -3,6 +3,10 @@
     {
       "path": "/api/marvel-batch",
       "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/marvel-batch",
+      "schedule": "0 21 * * *"
     }
   ],
   "buildCommand": "pnpm run build",
