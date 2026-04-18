@@ -21,6 +21,66 @@ function escapeRegex(str: string) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+function extractUnmappedSkillLikeTerms(
+  content: string,
+  skillMap: Record<string, string>
+): string[] {
+  const knownSkills = new Set(Object.keys(skillMap));
+  const knownHeroes = new Set(Object.keys(heroMap));
+  const knownSystemTerms = new Set(Object.keys(systemGlossary));
+  const blockedTerms = new Set([
+    "Marvel Rivals",
+    "Chain-CC Protection",
+    "Ultimate Ability",
+    "Gun Form Ultimate Ability",
+    "Community Announcements",
+    "Patch Notes",
+    "Balance Post",
+    "Dev Vision",
+  ]);
+
+  const candidates = new Set<string>();
+  const patterns = [
+    /([A-Z][A-Za-z0-9'!@#$&.-]*(?:\s+(?:[A-Z][A-Za-z0-9'!@#$&.-]*|of|the|in|on|for|and|to|by|with|Your|Over|Into))+)(?=\s*\()/g,
+    /([A-Z][A-Za-z0-9'!@#$&.-]*(?:\s+(?:[A-Z][A-Za-z0-9'!@#$&.-]*|of|the|in|on|for|and|to|by|with|Your|Over|Into))+\s*-\s*[A-Z][A-Za-z0-9'!@#$&.-]*(?:\s+(?:[A-Z][A-Za-z0-9'!@#$&.-]*|of|the|in|on|for|and|to|by|with|Your|Over|Into))*)/g,
+  ];
+
+  patterns.forEach((pattern) => {
+    Array.from(content.matchAll(pattern)).forEach((match) => {
+      const term = match[1]?.trim();
+      if (!term) return;
+      if (knownSkills.has(term) || knownHeroes.has(term) || knownSystemTerms.has(term)) return;
+      if (blockedTerms.has(term)) return;
+      if (term.length < 4) return;
+      candidates.add(term);
+    });
+  });
+
+  return Array.from(candidates).sort((a, b) => b.length - a.length);
+}
+
+function applyProtectedTermPlaceholders(content: string, terms: string[]) {
+  const placeholders: string[] = [];
+  let protectedContent = content;
+
+  terms.forEach((term) => {
+    const placeholder = `__SKILL_TERM_PLACEHOLDER_${placeholders.length}__`;
+    const pattern = new RegExp(escapeRegex(term), "g");
+    if (!pattern.test(protectedContent)) return;
+    placeholders.push(term);
+    protectedContent = protectedContent.replace(pattern, placeholder);
+  });
+
+  return { protectedContent, placeholders };
+}
+
+function restoreProtectedTermPlaceholders(content: string, placeholders: string[]) {
+  return placeholders.reduce((acc, term, index) => {
+    const placeholder = `__SKILL_TERM_PLACEHOLDER_${index}__`;
+    return acc.replace(new RegExp(escapeRegex(placeholder), "g"), term);
+  }, content);
+}
+
 export async function POST(request: Request) {
   try {
     const skillMap = await getSkillMap();
@@ -77,6 +137,12 @@ export async function POST(request: Request) {
           }
         );
 
+        // 나무위키(skillMap)에 없는 스킬명/팀업명은 영문 그대로 유지하도록 보호
+        const unmappedTerms = extractUnmappedSkillLikeTerms(contentToTranslate, skillMap);
+        const { protectedContent, placeholders: protectedTerms } =
+          applyProtectedTermPlaceholders(contentToTranslate, unmappedTerms);
+        contentToTranslate = protectedContent;
+
         // skillMap을 프롬프트에 추가
         const skillMappings = Object.entries(skillMap)
           .map(([key, value]) => `        "${key}": "${value}"`)
@@ -89,7 +155,7 @@ export async function POST(request: Request) {
           .join(",\n");
 
         const enhancedSystemPrompt = marvelPrompt.messages[0].content +
-          `\n\nWhen translating skill names, use these exact mappings:\n{\n${skillMappings}\n}\n\nWhen translating hero names, use these exact mappings:\n{\n${heroMappings}\n}\n\nWhen translating system and UI terms, use these exact mappings:\n{\n${systemMappings}\n}\n\nIMPORTANT: Keep all placeholders like __YOUTUBE_PLACEHOLDER_N__ exactly as they are without translating them.`;
+          `\n\nWhen translating skill names, use these exact mappings:\n{\n${skillMappings}\n}\n\nWhen translating hero names, use these exact mappings:\n{\n${heroMappings}\n}\n\nWhen translating system and UI terms, use these exact mappings:\n{\n${systemMappings}\n}\n\nIMPORTANT: Skill names that are NOT present in the mappings must remain in the original English exactly as written. Do not invent Korean names for unmapped skills or team-up abilities. Keep all placeholders like __YOUTUBE_PLACEHOLDER_N__ and __SKILL_TERM_PLACEHOLDER_N__ exactly as they are without translating them.`;
 
         // OpenAI API 호출하여 번역
         const requestBody = {
@@ -150,34 +216,75 @@ export async function POST(request: Request) {
           translatedContent = translatedContent.replace(placeholder, tag);
         });
 
-        // 후처리: 잘못 번역된 스킬명들을 올바르게 교체
-        Object.entries(skillMap).forEach(([englishName, koreanName]) => {
-          // 영어명이 그대로 남아있는 경우 한글로 교체
-          const englishPattern = new RegExp(englishName, 'g');
+        // 후처리: 남아 있는 명시적 영문 용어를 치환하고, 키 매핑은 유지하되 중복 생성은 최소화
+        const sortedSkillEntries = Object.entries(skillMap).sort(
+          ([a], [b]) => b.length - a.length
+        );
+        sortedSkillEntries.forEach(([englishName, koreanName]) => {
+          const englishPattern = new RegExp(escapeRegex(englishName), "g");
           translatedContent = translatedContent.replace(englishPattern, koreanName);
-          
-          // 키 정보가 빠진 한글명을 전체 형태로 교체 (이미 키 정보가 있으면 건너뛰기)
+
+          // 모델이 한글 스킬명만 남기고 키 정보를 빠뜨린 경우에만 전체 매핑을 보강
           const koreanMatch = koreanName.match(/^(.+?)\((.+)\)$/);
           if (koreanMatch) {
-            const [, nameOnly, keyInfo] = koreanMatch;
-            // 이미 키 정보가 있는지 확인하여 중복 방지
-            const nameOnlyPattern = new RegExp(`${nameOnly}(?!\\([^)]*\\))`, 'g');
+            const [, nameOnly] = koreanMatch;
+            const nameOnlyPattern = new RegExp(
+              `${escapeRegex(nameOnly)}(?!\([^)]*\))`,
+              "g"
+            );
             translatedContent = translatedContent.replace(nameOnlyPattern, koreanName);
           }
         });
 
-        // 후처리: 캐릭터명이 영어로 남아있으면 한글명으로 강제 치환
-        Object.entries(heroMap).forEach(([englishName, koreanName]) => {
-          // 단어 경계를 기준으로 치환해 일반 문장 부작용을 줄임
-          const heroPattern = new RegExp(`\\b${escapeRegex(englishName)}\\b`, "gi");
+        // 중복 키 표기 보정: (우클릭)(우클릭), (Shift)(Shift) 같은 결과를 하나로 정리
+        translatedContent = translatedContent.replace(
+          /(\((?:좌클릭|우클릭|패시브|궁극기|Shift|E|Q|C|F|X|Ctrl|Space)\))(?:\1)+/g,
+          "$1"
+        );
+
+        // 캐릭터명은 정확한 전체 이름만 치환하고, 부분 일치/추가 괄호 보정은 하지 않음
+        const sortedHeroEntries = Object.entries(heroMap).sort(
+          ([a], [b]) => b.length - a.length
+        );
+        sortedHeroEntries.forEach(([englishName, koreanName]) => {
+          const heroPattern = new RegExp(`\\b${escapeRegex(englishName)}\\b`, "g");
           translatedContent = translatedContent.replace(heroPattern, koreanName);
         });
 
-        // 후처리: 공통 시스템 문구가 영어로 남아있으면 한글로 강제 치환
+        // 시스템 용어는 UI/섹션성 문구만 최소한으로 치환
         Object.entries(systemGlossary).forEach(([englishName, koreanName]) => {
-          const systemPattern = new RegExp(`\\b${escapeRegex(englishName)}\\b`, "gi");
+          const systemPattern = new RegExp(`\\b${escapeRegex(englishName)}\\b`, "g");
           translatedContent = translatedContent.replace(systemPattern, koreanName);
         });
+
+        // LLM이 남긴 혼합형/한국어 잔여 표현 정규화
+        translatedContent = translatedContent
+          .replace(/체인-CC\s*보호/g, "연속 CC 보호")
+          .replace(/체인 CC\s*보호/g, "연속 CC 보호")
+          .replace(/체인-CC\s*\(군중 제어\)\s*보호/g, "연속 CC 보호")
+          .replace(/체인 CC\s*\(군중 제어\)\s*보호/g, "연속 CC 보호")
+          .replace(/체인-CC/g, "연속 CC")
+          .replace(/체인 CC/g, "연속 CC");
+
+        // 강인함 뒤 조사 보정 (예: 강인함를 -> 강인함을, <strong>강인함</strong>를 -> <strong>강인함</strong>을)
+        const correctedTenacityParticles: Record<string, string> = {
+          를: "을",
+          는: "은",
+          가: "이",
+          와: "과",
+          로: "으로",
+          랑: "이랑",
+        };
+        translatedContent = translatedContent.replace(
+          /(강인함(?:<\/[^>]+>)*)(를|는|가|와|로|랑)/g,
+          (_, termWithTags, particle) => `${termWithTags}${correctedTenacityParticles[particle] ?? particle}`
+        );
+
+        // skillMap에 없는 스킬/팀업명은 모든 후처리 이후 영문 그대로 최종 복원
+        translatedContent = restoreProtectedTermPlaceholders(
+          translatedContent,
+          protectedTerms
+        );
 
         // DB에 번역 결과 업데이트
         const { error: updateError } = await supabase
