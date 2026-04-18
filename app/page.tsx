@@ -147,9 +147,8 @@ const steps: Step[] = [
 ];
 
 const processHighlights = [
-  { label: "신규 공지 감지", value: "매일 자동 확인" },
-  { label: "번역 처리", value: "용어 매핑 + 맥락 번역" },
-  { label: "결과 반영", value: "사이트 자동 업데이트" },
+  { label: "Steam 원문 확인", value: "Steam API" },
+  { label: "AI 번역 모델", value: "GPT-5-mini" },
 ] as const;
 
 export default function Page() {
@@ -362,7 +361,7 @@ export default function Page() {
                 변경점만 빠르게 확인할 수 있도록 만들었습니다.
               </p>
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid gap-3 sm:grid-cols-2 lg:w-[360px] lg:flex-none">
               {processHighlights.map((item) => (
                 <article
                   key={item.label}
