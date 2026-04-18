@@ -12,6 +12,16 @@ type Step = {
   detail: string;
   tags?: string[];
   note?: string;
+  examples?: {
+    label: string;
+    lines: {
+      prefix?: string;
+      highlight: string;
+      suffix?: string;
+      tone?: "increase" | "decrease";
+      style?: "underline" | "plain";
+    }[];
+  }[];
 };
 
 const stats = [
@@ -75,16 +85,64 @@ const steps: Step[] = [
     title: "가독성 후처리",
     description: "수치 변화와 스킬 표기를 읽기 쉽게 다듬습니다.",
     trackTitle: "가독성 후처리",
-    detail: "수치 변화는 더 눈에 띄게 정리하고, 스킬명과 키 입력은 헷갈리지 않게 구분하며, 용어 표기까지 읽기 쉽게 보정합니다.",
-    note: "예: 스킬명 밑줄 처리, 키 입력 분리 표기, 수치 변화 강조, 용어 표기 정리",
+    detail:
+      "수치 변화는 더 눈에 띄게 정리하고, 스킬명과 키 입력은 헷갈리지 않게 구분하며, 용어 표기까지 읽기 쉽게 보정합니다.",
+    examples: [
+      {
+        label: "스킬명",
+        lines: [
+          { highlight: "제프 등장!", style: "underline" },
+        ],
+      },
+      {
+        label: "키 커맨드",
+        lines: [
+          {
+            highlight: "제프 등장!",
+            style: "underline",
+            suffix: " (Q)",
+          },
+        ],
+      },
+      {
+        label: "수치 변화",
+        lines: [
+          {
+            prefix: "• 22 → 24 ",
+            highlight: "증가",
+            tone: "increase",
+          },
+          {
+            prefix: "• 10초 → 5초 ",
+            highlight: "감소",
+            tone: "decrease",
+          },
+        ],
+      },
+      {
+        label: "용어 표기",
+        lines: [
+          {
+            highlight: "Chain-CC Protection",
+            style: "plain",
+          },
+          {
+            highlight: "→ 연속 CC 보호",
+            style: "plain",
+          },
+        ],
+      },
+    ],
   },
   {
     step: "05",
     title: "웹사이트 자동 반영",
     description: "정리된 결과를 사이트에 순차적으로 반영합니다.",
     trackTitle: "자동 반영 및 공개",
-    detail: "번역과 후처리가 끝난 패치노트를 사이트에 반영해 최신 내용을 이어서 확인할 수 있게 합니다.",
-    note: "반영 시점은 사이트 상태에 따라 조금씩 달라질 수 있으며, 경우에 따라 최대 1시간 정도 걸릴 수 있습니다.",
+    detail:
+      "번역과 후처리가 끝난 패치노트를 사이트에 반영해 최신 내용을 이어서 확인할 수 있게 합니다.",
+    note:
+      "반영 시점은 사이트 상태에 따라 조금씩 달라질 수 있으며, 경우에 따라 최대 1시간 정도 걸릴 수 있습니다.",
   },
 ];
 
@@ -370,10 +428,10 @@ export default function Page() {
                 </div>
               </aside>
 
-              <article className="relative overflow-hidden rounded-3xl border border-slate-200 bg-[linear-gradient(145deg,rgba(255,255,255,0.96),rgba(241,245,249,0.98))] p-6 text-slate-900 shadow-xl dark:border-slate-700 dark:bg-[linear-gradient(145deg,rgba(15,23,42,0.92),rgba(30,41,59,0.96))] dark:text-white">
+              <article className="relative overflow-hidden rounded-3xl border border-slate-200 bg-[linear-gradient(145deg,rgba(255,255,255,0.96),rgba(241,245,249,0.98))] p-5 text-slate-900 shadow-xl dark:border-slate-700 dark:bg-[linear-gradient(145deg,rgba(15,23,42,0.92),rgba(30,41,59,0.96))] dark:text-white md:min-h-[540px]">
                 <div className="absolute -right-16 top-10 h-44 w-44 rounded-full bg-hero-blue-500/14 blur-3xl" />
                 <div className="absolute -left-12 bottom-0 h-40 w-40 rounded-full bg-hero-red-500/12 blur-3xl" />
-                <div className="relative">
+                <div className="relative flex h-full flex-col">
                   <div className="flex items-center justify-between gap-4">
                     <div>
                       <p className="text-xs font-black tracking-[0.18em] text-slate-500 dark:text-white/50">
@@ -407,7 +465,11 @@ export default function Page() {
                     ) : null}
                   </div>
 
-                  <div className="mt-6 rounded-2xl border border-slate-200 bg-white/85 p-5 dark:border-white/10 dark:bg-white/5">
+                  <div
+                    className={`mt-5 rounded-2xl border border-slate-200 bg-white/85 p-4 dark:border-white/10 dark:bg-white/5 ${
+                      currentStep.step === "04" ? "flex-1" : ""
+                    }`}
+                  >
                     <p className="text-sm font-semibold text-slate-900 dark:text-white">
                       {currentStep.trackTitle}
                     </p>
@@ -418,6 +480,85 @@ export default function Page() {
                       <p className="mt-3 text-xs leading-relaxed text-slate-400 dark:text-slate-500">
                         {currentStep.note}
                       </p>
+                    ) : null}
+                    {currentStep.examples?.length ? (
+                      <div className="mt-3 rounded-2xl border border-slate-200/80 bg-slate-50/90 p-3 dark:border-white/10 dark:bg-slate-950/40">
+                        <p className="text-[11px] font-black uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                          Example Output
+                        </p>
+                        <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                          {currentStep.examples.map((example) => (
+                            <div
+                              key={example.label}
+                              className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 dark:border-slate-700 dark:bg-slate-900/80"
+                            >
+                              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+                                {example.label}
+                              </p>
+                              <div className="mt-1.5 space-y-1.5 text-sm font-semibold leading-relaxed text-slate-800 dark:text-slate-100">
+                                {example.lines.map((line, index) => {
+                                  const toneClass =
+                                    line.style === "underline"
+                                      ? "underline decoration-2 underline-offset-4"
+                                      : line.style === "plain"
+                                        ? ""
+                                        : "";
+
+                                  const toneStyle =
+                                    line.tone === "increase"
+                                      ? {
+                                          background:
+                                            "linear-gradient(180deg, transparent 38%, rgba(219, 234, 254, 0.78) 38%)",
+                                          boxShadow:
+                                            "inset 0 -0.07em 0 rgba(191, 219, 254, 0.42)",
+                                          color: "#1d4ed8",
+                                          fontWeight: 700,
+                                          lineHeight: 1.15,
+                                        }
+                                      : line.tone === "decrease"
+                                        ? {
+                                            background:
+                                              "linear-gradient(180deg, transparent 38%, rgba(254, 242, 242, 0.82) 38%)",
+                                            boxShadow:
+                                              "inset 0 -0.07em 0 rgba(254, 202, 202, 0.42)",
+                                            color: "#b91c1c",
+                                            fontWeight: 700,
+                                            lineHeight: 1.15,
+                                          }
+                                        : undefined;
+
+                                  return (
+                                    <p key={`${example.label}-${index}`}>
+                                      {line.prefix ? (
+                                        <span className="text-slate-800 dark:text-slate-100">
+                                          {line.prefix}
+                                        </span>
+                                      ) : null}
+                                      <span
+                                        className={
+                                          line.style === "plain"
+                                            ? "text-slate-800 dark:text-slate-100"
+                                            : line.style === "underline"
+                                              ? toneClass
+                                              : `rounded-[0.12rem] px-[0.14rem] ${toneClass}`
+                                        }
+                                        style={toneStyle}
+                                      >
+                                        {line.highlight}
+                                      </span>
+                                      {line.suffix ? (
+                                        <span className="text-slate-600 dark:text-slate-300">
+                                          {line.suffix}
+                                        </span>
+                                      ) : null}
+                                    </p>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     ) : null}
                   </div>
                 </div>
