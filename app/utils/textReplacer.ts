@@ -124,17 +124,33 @@ export function wrapSkillsWithUnderline(
     return variants;
   };
 
+  const splitSkillAndCommand = (value: string) => {
+    const match = value.match(/^(.*?)(\((?:좌클릭|우클릭|패시브|궁극기|Shift|E|Q|C|F|X|Ctrl|Space)\))$/);
+    if (!match) {
+      return { label: value, command: "" };
+    }
+    return { label: match[1], command: match[2] };
+  };
+
   // 각 스킬명을 직접 찾아서 <u> 태그로 감싸기
   skillNames.forEach((skillName) => {
     const variants = withUltimateVariant(skillName);
 
     variants.forEach((variant) => {
-      // 이미 <u> 태그로 감싸져 있으면 건너뛰기
-      if (result.includes(`<u>${skillName}</u>`)) return;
+      const { label, command } = splitSkillAndCommand(skillName);
+      const { label: variantLabel } = splitSkillAndCommand(variant);
 
-      // 전체 스킬명으로 먼저 찾기
+      // 이미 밑줄 처리된 경우 건너뛰기
+      if (result.includes(`<u>${label}</u>${command}`) || result.includes(`<u>${skillName}</u>`)) return;
+
+      const replacement = command ? `<u>${label}</u>${command}` : `<u>${label}</u>`;
       const fullSkillPattern = new RegExp(escapeRegex(variant), "g");
-      result = result.replace(fullSkillPattern, `<u>${skillName}</u>`);
+      result = result.replace(fullSkillPattern, replacement);
+
+      if (command && variantLabel !== variant) {
+        const splitPattern = new RegExp(`${escapeRegex(variantLabel)}${escapeRegex(command)}`, "g");
+        result = result.replace(splitPattern, replacement);
+      }
     });
   });
 
