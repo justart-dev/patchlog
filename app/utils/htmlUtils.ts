@@ -173,47 +173,48 @@ export function addStylesToHtml(html: string): string {
     '<span style="display: inline-flex; align-items: center; background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); color: #166534; padding: 0.2rem 0.5rem; border-radius: 0.25rem; font-weight: 600; font-size: 0.875rem; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);">새로운 효과</span>: '
   );
 
-  // 수치 변경사항 하이라이트 (증가는 파란색, 감소는 빨간색) - 더 세련된 스타일
-  // 패턴 1: "숫자에서 숫자로"
+  // 수치 변경사항 가독성 개선: 화살표 수치 구간 전체는 bold, 증가/감소 단어만 색상 강조
+  const valuePattern = "[0-9]+(?:\\.[0-9]+)?(?:m\\/s|\\/s|%|초|s|m|px|개|명|회|배)?";
+  const formatChangeSegment = (oldValue: string, newValue: string) => {
+    return `<strong style="font-weight: 800; color: #111827;">${oldValue} → ${newValue}</strong>`;
+  };
+
+  const formatDirectionWord = (word: string) => {
+    const isPositive = word === "증가" || word === "상향";
+    const color = isPositive ? "#1d4ed8" : "#b91c1c";
+    const bgColor = isPositive
+      ? "linear-gradient(180deg, transparent 38%, rgba(219, 234, 254, 0.78) 38%)"
+      : "linear-gradient(180deg, transparent 38%, rgba(254, 242, 242, 0.82) 38%)";
+    const boxShadow = isPositive
+      ? "inset 0 -0.07em 0 rgba(191, 219, 254, 0.42)"
+      : "inset 0 -0.07em 0 rgba(254, 202, 202, 0.42)";
+    return `<span style="display: inline; margin-left: 0.06rem; padding: 0 0.14rem; border-radius: 0.12rem; background: ${bgColor}; box-shadow: ${boxShadow}; font-weight: 700; color: ${color}; line-height: 1.15;">${word}</span>`;
+  };
+
+  // 화살표 수치 구간은 문맥과 상관없이 우선 bold 처리
   html = html.replace(
-    /([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*에서\s*([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*로/g,
-    (_, oldValue, newValue) => {
-      const oldNum = parseFloat(oldValue.replace(/[^0-9.]/g, ''));
-      const newNum = parseFloat(newValue.replace(/[^0-9.]/g, ''));
-      const isIncrease = newNum > oldNum;
-      const color = isIncrease ? '#2563eb' : '#dc2626';
-      const bgColor = isIncrease ? '#dbeafe' : '#fee2e2';
-      const icon = isIncrease ? '↑' : '↓';
-      return `${oldValue}에서 <span style="display: inline-flex; align-items: center; gap: 0.2rem; color: ${color}; background-color: ${bgColor}; padding: 0.125rem 0.4rem; border-radius: 0.25rem; font-weight: 700; font-size: 0.875rem;">${newValue} ${icon}</span>로`;
-    }
+    new RegExp(`(${valuePattern})\\s*[→➡]\\s*(${valuePattern})`, "g"),
+    (_, oldValue, newValue) => formatChangeSegment(oldValue, newValue)
   );
 
-  // 패턴 2: "숫자에서 숫자으로" (으로 변형)
+  // 한국어 서술형 수치 변경도 함께 bold 처리
   html = html.replace(
-    /([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*에서\s*([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*으로/g,
-    (_, oldValue, newValue) => {
-      const oldNum = parseFloat(oldValue.replace(/[^0-9.]/g, ''));
-      const newNum = parseFloat(newValue.replace(/[^0-9.]/g, ''));
-      const isIncrease = newNum > oldNum;
-      const color = isIncrease ? '#2563eb' : '#dc2626';
-      const bgColor = isIncrease ? '#dbeafe' : '#fee2e2';
-      const icon = isIncrease ? '↑' : '↓';
-      return `${oldValue}에서 <span style="display: inline-flex; align-items: center; gap: 0.2rem; color: ${color}; background-color: ${bgColor}; padding: 0.125rem 0.4rem; border-radius: 0.25rem; font-weight: 700; font-size: 0.875rem;">${newValue} ${icon}</span>으로`;
-    }
+    new RegExp(`(${valuePattern})\\s*에서\\s*(${valuePattern})\\s*로`, "g"),
+    (_, oldValue, newValue) => `${oldValue}에서 ${formatChangeSegment(oldValue, newValue)}로`
+  );
+  html = html.replace(
+    new RegExp(`(${valuePattern})\\s*에서\\s*(${valuePattern})\\s*으로`, "g"),
+    (_, oldValue, newValue) => `${oldValue}에서 ${formatChangeSegment(oldValue, newValue)}으로`
+  );
+  html = html.replace(
+    new RegExp(`(${valuePattern})\\s*를\\s*(${valuePattern})\\s*로`, "g"),
+    (_, oldValue, newValue) => `${oldValue}를 ${formatChangeSegment(oldValue, newValue)}로`
   );
 
-  // 패턴 3: "숫자를 숫자로"
+  // 증가/감소/상향/하향 어간 색상 처리 (활용형 포함)
   html = html.replace(
-    /([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*를\s*([0-9]+(?:\.[0-9]+)?(?:%|초|m|px|개|명|회|배)?)\s*로/g,
-    (_, oldValue, newValue) => {
-      const oldNum = parseFloat(oldValue.replace(/[^0-9.]/g, ''));
-      const newNum = parseFloat(newValue.replace(/[^0-9.]/g, ''));
-      const isIncrease = newNum > oldNum;
-      const color = isIncrease ? '#2563eb' : '#dc2626';
-      const bgColor = isIncrease ? '#dbeafe' : '#fee2e2';
-      const icon = isIncrease ? '↑' : '↓';
-      return `${oldValue}를 <span style="display: inline-flex; align-items: center; gap: 0.2rem; color: ${color}; background-color: ${bgColor}; padding: 0.125rem 0.4rem; border-radius: 0.25rem; font-weight: 700; font-size: 0.875rem;">${newValue} ${icon}</span>로`;
-    }
+    /(증가|감소|상향|하향)(?=(?:시|했|합|되|됐|됩))/g,
+    (_, direction) => formatDirectionWord(direction)
   );
 
   return html;
