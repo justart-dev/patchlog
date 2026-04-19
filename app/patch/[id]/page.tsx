@@ -5,6 +5,7 @@ import PatchDetailClient from './PatchDetailClient';
 import { ArticleStructuredData } from '../../components/StructuredData';
 import { replaceEnglishTitles } from '../../utils/textReplacer';
 import { getSkillMap } from '../../utils/skillMapService';
+import { buildCanonicalUrl, stripHtml } from '@/lib/site';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -25,11 +26,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const title = replaceEnglishTitles(patch.title);
   const description = patch.translated_ko
-    ? patch.translated_ko.replace(/<[^>]*>?/gm, '').substring(0, 160)
+    ? stripHtml(patch.translated_ko).substring(0, 160)
     : `${patch.app_name}의 최신 패치노트입니다.`;
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://patchlog.co.kr';
-  const canonicalUrl = `${baseUrl}/patch/${resolvedParams.id}`;
+  const canonicalUrl = buildCanonicalUrl(`/patch/${resolvedParams.id}`);
 
   return {
     alternates: {
@@ -88,7 +88,7 @@ export default async function PatchDetailPage({ params }: PageProps) {
         title={replaceEnglishTitles(patch.title)} 
         content={patch.translated_ko || patch.content || ''} 
         publishedAt={patch.published_at} 
-        url={`https://patchlog.co.kr/patch/${patch.id}`} 
+        url={buildCanonicalUrl(`/patch/${patch.id}`)} 
       />
       <PatchDetailClient patchDetail={patchDetail} navigation={navigation} skillMap={skillMap} />
     </>

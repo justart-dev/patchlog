@@ -1,15 +1,16 @@
-import { baseUrl } from 'app/sitemap'
+import type { MetadataRoute } from "next";
+import { buildCanonicalUrl, SITE_URL } from "@/lib/site";
 
-export default function robots() {
+export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
-        userAgent: '*',
-        allow: '/',
-        disallow: ['/api/', '/admin/'],
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/api/", "/admin/"],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
-    host: baseUrl,
-  }
+    sitemap: buildCanonicalUrl("/sitemap.xml"),
+    host: SITE_URL,
+  };
 }
