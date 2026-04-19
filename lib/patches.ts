@@ -29,7 +29,7 @@ export const getPatches = unstable_cache(
       .from("steam_patch_logs")
       .select(
         `
-        id, title, app_id, app_gid, app_name, published_at,
+        id, title, app_id, app_gid, app_name, published_at, content, translated_ko,
         steam_app_metadata (
           capsule_image
         )
@@ -38,8 +38,10 @@ export const getPatches = unstable_cache(
       .order("published_at", { ascending: false })
       .limit(limit);
 
-    if (error) return [];
-    
+    if (error) {
+      throw new Error(`failed to load patch list: ${error.message}`);
+    }
+
     return data.map((item: any) => ({
       ...item,
       capsule_image: item.steam_app_metadata?.capsule_image
@@ -47,6 +49,20 @@ export const getPatches = unstable_cache(
   },
   ["patch-list"],
   { revalidate: 1800 }
+);
+
+export const getPatchSitemapEntries = unstable_cache(
+  async () => {
+    const { data, error } = await supabase
+      .from("steam_patch_logs")
+      .select("id, published_at, updated_at")
+      .order("published_at", { ascending: false });
+
+    if (error) return [];
+    return data;
+  },
+  ["patch-sitemap"],
+  { revalidate: 3600 }
 );
 
 export async function getPatchNavigation(currentId: string, publishedAt: string) {
