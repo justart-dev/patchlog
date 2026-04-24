@@ -31,6 +31,7 @@ export const heroMap: Record<string, string> = {
   "Mister Fantastic": "미스터 판타스틱",
   "Invisible Woman": "인비저블 우먼",
   "Moon Knight": "문 나이트",
+  Gambit: "갬빗",
   Psylocke: "사일록",
   "Emma Frost": "엠마 프로스트",
   "Elsa Bloodstone": "엘사 블러드스톤",

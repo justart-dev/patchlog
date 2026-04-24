@@ -1,55 +1,59 @@
 import { supabase } from "./supabase";
 import { unstable_cache } from "next/cache";
 
-export const getPatch = unstable_cache(
-  async (id: string) => {
-    const { data, error } = await supabase
-      .from("steam_patch_logs")
-      .select(
-        `
-      id, title, app_id, app_gid, app_name, published_at, url, content, translated_ko,
-      steam_app_metadata (
-        capsule_image
-      )
-    `
-      )
-      .eq("id", id)
-      .single();
-
-    if (error) return null;
-    return data;
-  },
-  ["patch-detail"],
-  { revalidate: 3600 }
-);
-
-export const getPatches = unstable_cache(
-  async (limit = 10) => {
-    const { data, error } = await supabase
-      .from("steam_patch_logs")
-      .select(
-        `
-        id, title, app_id, app_gid, app_name, published_at, content, translated_ko,
+export async function getPatch(id: string) {
+  return unstable_cache(
+    async () => {
+      const { data, error } = await supabase
+        .from("steam_patch_logs")
+        .select(
+          `
+        id, title, app_id, app_gid, app_name, published_at, url, content, translated_ko,
         steam_app_metadata (
           capsule_image
         )
       `
-      )
-      .order("published_at", { ascending: false })
-      .limit(limit);
+        )
+        .eq("id", id)
+        .single();
 
-    if (error) {
-      throw new Error(`failed to load patch list: ${error.message}`);
-    }
+      if (error) return null;
+      return data;
+    },
+    ["patch-detail", id],
+    { revalidate: 3600, tags: [`patch:${id}`] }
+  )();
+}
 
-    return data.map((item: any) => ({
-      ...item,
-      capsule_image: item.steam_app_metadata?.capsule_image
-    }));
-  },
-  ["patch-list"],
-  { revalidate: 1800 }
-);
+export async function getPatches(limit = 10) {
+  return unstable_cache(
+    async () => {
+      const { data, error } = await supabase
+        .from("steam_patch_logs")
+        .select(
+          `
+          id, title, app_id, app_gid, app_name, published_at, content, translated_ko,
+          steam_app_metadata (
+            capsule_image
+          )
+        `
+        )
+        .order("published_at", { ascending: false })
+        .limit(limit);
+
+      if (error) {
+        throw new Error(`failed to load patch list: ${error.message}`);
+      }
+
+      return data.map((item: any) => ({
+        ...item,
+        capsule_image: item.steam_app_metadata?.capsule_image
+      }));
+    },
+    ["patch-list", String(limit)],
+    { revalidate: 1800, tags: ["patch-list"] }
+  )();
+}
 
 export const getPatchSitemapEntries = unstable_cache(
   async () => {
