@@ -14,7 +14,6 @@ type NavItem = {
 const navItems: NavItem[] = [
   { name: "소개", href: "/" },
   { name: "패치노트", href: "/patch" },
-  { name: "시즌 티어표", href: "/tier" },
   { name: "사이트 통계", href: "https://cloud.umami.is/share/X4DLIuA7E54r6Fi9", blank: true },
 ];
 
