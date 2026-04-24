@@ -30,12 +30,6 @@ export default function Footer() {
               패치노트
             </Link>
             <Link
-              href="/tier"
-              className="inline-flex rounded-full bg-white px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-100 hover:text-slate-900 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:text-white"
-            >
-              시즌 티어표
-            </Link>
-            <Link
               href="https://cloud.umami.is/share/X4DLIuA7E54r6Fi9"
               target="_blank"
               rel="noopener noreferrer"
