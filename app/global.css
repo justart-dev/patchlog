@@ -15,10 +15,10 @@ section,
 nav,
 footer {
   transition:
-    background-color 0.25s ease-in-out,
-    color 0.25s ease-in-out,
-    border-color 0.25s ease-in-out,
-    box-shadow 0.25s ease-in-out;
+    background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -38,93 +38,94 @@ footer {
 }
 
 ::selection {
-  background-color: #47a3f3;
-  color: #fefefe;
+  background-color: #f83d54;
+  color: #ffffff;
 }
 
-/* 패치노트 본문 다크모드 스타일 */
+/* ==================== GLOBAL TEXTURE ==================== */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  z-index: 9999;
+}
+
+.dark body::before {
+  opacity: 0.05;
+}
+
+/* ==================== TYPOGRAPHY REFINEMENT ==================== */
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+  font-family: var(--font-geist-sans), "Pretendard Variable", Pretendard, sans-serif;
+  letter-spacing: -0.011em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-geist-mono), monospace;
+}
+
+/* ==================== UTILITIES ==================== */
+@layer utilities {
+  .glass {
+    @apply backdrop-blur-md bg-white/70 border border-white/20 dark:bg-archive-zinc-900/70 dark:border-archive-zinc-800/50;
+  }
+  
+  .glass-card {
+    @apply glass shadow-ambient rounded-2xl overflow-hidden;
+  }
+
+  .text-shadow-sm {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .comic-dots {
+    background-image: radial-gradient(circle at 1px 1px, currentColor 0.5px, transparent 0);
+    background-size: 8px 8px;
+    opacity: 0.1;
+  }
+}
+
+/* ==================== DARK MODE ARTICLE STYLES ==================== */
 .dark article h1,
 .dark article h2,
 .dark article h3 {
-  color: rgb(243, 244, 246) !important;
+  color: theme('colors.archive-zinc.50') !important;
 }
 
 .dark article p,
 .dark article li {
-  color: rgb(209, 213, 219) !important;
+  color: theme('colors.archive-zinc.300') !important;
 }
 
 .dark article a {
-  color: rgb(96, 165, 250) !important;
-  border-bottom-color: rgba(96, 165, 250, 0.4) !important;
-}
-
-.dark article code {
-  background-color: rgb(55, 65, 81) !important;
-  color: rgb(229, 231, 235) !important;
-}
-
-.dark article pre {
-  background-color: rgb(31, 41, 55) !important;
-  color: rgb(209, 213, 219) !important;
-  border-color: rgb(75, 85, 99) !important;
+  color: theme('colors.hero-blue.400') !important;
+  border-bottom-color: theme('colors.hero-blue.400/30') !important;
 }
 
 .dark article blockquote {
-  background: linear-gradient(to right, rgba(30, 58, 138, 0.3), rgba(31, 41, 55, 0.5)) !important;
-  border-left-color: rgb(59, 130, 246) !important;
-  color: rgb(209, 213, 219) !important;
+  background: theme('colors.archive-zinc.900/50') !important;
+  border-left-color: theme('colors.hero-blue.500') !important;
 }
 
-.dark article table {
-  border-color: rgb(75, 85, 99) !important;
-}
-
-.dark article th {
-  background-color: rgb(31, 41, 55) !important;
-  color: rgb(243, 244, 246) !important;
-  border-bottom-color: rgb(75, 85, 99) !important;
-}
-
-.dark article td {
-  color: rgb(209, 213, 219) !important;
-  border-bottom-color: rgb(55, 65, 81) !important;
-}
-
-.dark article hr {
-  border-top-color: rgb(75, 85, 99) !important;
-}
-
-.dark code,
-.dark pre {
-  background-color: rgb(55, 65, 81) !important;
-  color: rgb(229, 231, 235) !important;
-}
-
-.dark blockquote {
-  border-left-color: rgb(75, 85, 99) !important;
-  color: rgb(156, 163, 175) !important;
-}
-
-.dark span[style*="background-color: rgb(220, 252, 231)"] {
-  background-color: rgb(22, 101, 52) !important;
-  color: rgb(187, 247, 208) !important;
-}
-
-.dark .patch-content [style*="background-color: white"],
-.dark .patch-content [style*="background-color:white"],
-.dark .patch-content [style*="background-color: #fff"],
-.dark .patch-content [style*="background-color:#fff"],
-.dark .patch-content [style*="background-color: #ffffff"],
-.dark .patch-content [style*="background-color:#ffffff"],
-.dark .patch-content [style*="background-color: rgb(255, 255, 255)"],
-.dark .patch-content [style*="background-color:rgb(255, 255, 255)"],
-.dark .patch-content [style*="background: white"],
-.dark .patch-content [style*="background:white"] {
-  background: #0f172ad9 !important;
-}
-
-/* Syntax highlighting only */
+/* Syntax highlighting */
 :root {
   --sh-class: #2d5e9d;
   --sh-identifier: #354150;
@@ -138,119 +139,20 @@ footer {
 }
 
 .dark {
-  --sh-class: #4d9de0;
-  --sh-identifier: #e1e4e8;
-  --sh-sign: #79b8ff;
-  --sh-string: #9ecbff;
-  --sh-keyword: #f97583;
-  --sh-comment: #6a737d;
-  --sh-jsxliterals: #ffab70;
-  --sh-property: #79b8ff;
-  --sh-entity: #fdaeb7;
-}
-
-
-body {
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-size-adjust: 100%;
-  font-family: var(--font-geist-sans), "Pretendard Variable", Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", sans-serif;
-}
-
-code,
-pre,
-kbd,
-samp {
-  font-family: var(--font-geist-mono), "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-}
-
-@media (max-width: 640px) {
-  html {
-    font-size: 15px;
-  }
-}
-
-pre::-webkit-scrollbar {
-  display: none;
-}
-
-pre {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-/* Remove Safari input shadow on mobile */
-input[type="text"],
-input[type="email"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  --sh-class: #60a5fa;
+  --sh-identifier: #e4e4e7;
+  --sh-sign: #a1a1aa;
+  --sh-string: #93c5fd;
+  --sh-keyword: #fb7185;
+  --sh-comment: #71717a;
+  --sh-jsxliterals: #fdba74;
+  --sh-property: #60a5fa;
+  --sh-entity: #fca5a5;
 }
 
 table {
   display: block;
   max-width: fit-content;
   overflow-x: auto;
-  white-space: nowrap;
-}
-
-.title {
-  text-wrap: balance;
-}
-
-/* ==================== HERO/COMIC THEME STYLES ==================== */
-
-/* Comic book halftone pattern background */
-@layer utilities {
-  .comic-dots {
-    background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
-    background-size: 16px 16px;
-  }
-
-  .dark .comic-dots {
-    background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.03) 1px, transparent 0);
-    background-size: 16px 16px;
-  }
-}
-
-/* Hero title gradient text effect */
-.hero-title {
-  background: linear-gradient(135deg, #f83d54 0%, #2563eb 50%, #facc15 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.dark .hero-title {
-  background: linear-gradient(135deg, #ff6b7e 0%, #60a5fa 50%, #fde047 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Power-up button effect */
-.btn-power-up {
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.btn-power-up::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s ease, height 0.6s ease;
-}
-
-.btn-power-up:hover::before {
-  width: 300px;
-  height: 300px;
+  scrollbar-width: thin;
 }
