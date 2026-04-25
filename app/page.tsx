@@ -25,73 +25,74 @@ type Step = {
 };
 
 const stats = [
-  { label: "누적 번역 패치노트", value: "60+" },
-  { label: "맞춤형 번역", value: "AI + 용어 보정" },
-  { label: "자동 반영", value: "하루 2회 업데이트" },
+  { label: "TOTAL SEGMENTS", value: "60+" },
+  { label: "CORE ADAPTATION", value: "AI-POWERED" },
+  { label: "AUTO REFRESH", value: "12H CYCLE" },
 ] as const;
 
 const problems = [
   {
     id: "01",
-    title: "영문 원문은 빠르게 파악하기 어렵습니다.",
-    summary:
-      "변경점을 읽는 데 시간이 걸리고 중요한 수치나 효과를 놓치기 쉽습니다.",
-    pain: "패치가 나와도 무엇이 실제로 달라졌는지 한눈에 파악하기 어렵습니다.",
+    title: "영문 원문의 파악 한계",
+    summary: "빠르게 변화하는 패치 정보를 원문으로만 이해하기엔 시간이 부족합니다.",
+    pain: "중요한 밸런스 수치와 핵심 기믹 변화를 놓칠 위험이 큽니다.",
     solution: [
-      "숫자 · 효과 · 조건 중심으로 정리",
-      "핵심 변경점이 먼저 보이는 문장 구조",
+      "데이터 중심의 수치 요약",
+      "가독성 극대화된 문장 구조",
     ],
-    image: "/images/spiderman.webp",
   },
   {
     id: "02",
-    title: "일반 번역만으로는 이해가 부족합니다.",
-    summary:
-      "직역 위주 번역은 게임 용어와 밸런스 맥락을 제대로 살리지 못하는 경우가 많습니다.",
-    pain: "번역은 되어 있어도 실제 플레이에 어떤 의미인지 바로 이해하기 어려울 수 있습니다.",
-    solution: ["게임 용어 사전 기반 번역", "스킬명 · 키 입력 표기 정리"],
-    image: "/images/ironman.webp",
+    title: "맥락 없는 단순 번역",
+    summary: "일반 번역기는 게임 내 용어와 플레이어들만의 언어를 이해하지 못합니다.",
+    pain: "글자로만 된 패치노트는 이제 그만. 실제 플레이에 직결되는 핵심 포인트만 골라냈습니다.",
+    solution: ["게임 용어 사전(Glossary) 연동", "스킬 및 키 입력 최적화"],
   },
 ] as const;
 
 const steps: Step[] = [
   {
     step: "01",
-    title: "Steam 공지 확인",
-    description: "하루 2번 최신 공지를 확인합니다.",
-    trackTitle: "신규 공지 확인",
-    detail:
-      "매일 오전/오후 6시에 Steam에서 새로운 패치노트가 올라왔는지 확인하고 후보를 수집합니다.",
+    title: "SIGNAL DETECTION",
+    description: "Steam API를 통한 실시간 패치 데이터 감지",
+    trackTitle: "Steam 공지 스캔",
+    detail: "매일 지정된 간격으로 Steam 서버의 신규 패치 데이터를 크롤링하여 데이터베이스에 적재합니다.",
   },
   {
     step: "02",
-    title: "신규 패치 선별",
-    description: "중복을 제거하고 신규 글만 선별합니다.",
-    trackTitle: "원문 수집 및 정리",
-    detail:
-      "이미 저장된 글은 제외하고 새로 올라온 패치노트만 번역 파이프라인에 투입합니다.",
+    title: "CORE EXTRACTION",
+    description: "불필요한 정보를 제외한 핵심 변경점 추출",
+    trackTitle: "원문 파싱 및 필터링",
+    detail: "이미 처리된 로그를 제외하고, 실제 밸런스에 영향을 주는 핵심 내용만을 정제하여 번역 파이프라인에 전달합니다.",
   },
   {
     step: "03",
-    title: "맥락 기반 번역",
-    description: "최신 AI 모델로 게임 용어와 문맥을 반영해 번역합니다.",
+    title: "ADAPTIVE TRANSLATION",
+    description: "GPT-4o 기반의 맥락형 게임 번역",
     trackTitle: "맥락 기반 번역 처리",
-    detail:
-      "GPT-5-mini 모델과 용어 보정 규칙을 함께 사용해 게임 용어와 한국어 표현을 반영한 번역으로 정리합니다.",
+    detail: "단순 직역이 아닌, '마블 라이벌즈' 전용 용어 사전과 매핑 규칙을 적용하여 플레이어 친화적인 언어로 변환합니다.",
     tags: ["한국시간 변환", "용어 매핑", "조사 보정"],
   },
   {
     step: "04",
-    title: "가독성 후처리",
-    description: "수치 변화와 스킬 표기를 읽기 쉽게 다듬습니다.",
-    trackTitle: "가독성 후처리",
-    detail:
-      "수치 변화는 더 눈에 띄게 정리하고, 스킬명과 키 입력은 헷갈리지 않게 구분하며, 용어 표기까지 읽기 쉽게 보정합니다.",
+    title: "VISUAL OPTIMIZATION",
+    description: "수치 변화 가독성을 위한 레이아웃 보정",
+    trackTitle: "데이터 시각화 정리",
+    detail: "증가/감소 수치를 시각적으로 명확히 구분하고, 스킬 단축키 등 핵심 정보를 하이라이트 처리합니다.",
     examples: [
       {
-        label: "스킬명",
+        label: "수치 변화",
         lines: [
-          { highlight: "제프 등장!", style: "underline" },
+          {
+            prefix: "• 22 → 24 ",
+            highlight: "증가",
+            tone: "increase",
+          },
+          {
+            prefix: "• 10초 → 8초 ",
+            highlight: "감소",
+            tone: "decrease",
+          },
         ],
       },
       {
@@ -104,52 +105,16 @@ const steps: Step[] = [
           },
         ],
       },
-      {
-        label: "수치 변화",
-        lines: [
-          {
-            prefix: "• 22 → 24 ",
-            highlight: "증가",
-            tone: "increase",
-          },
-          {
-            prefix: "• 10초 → 5초 ",
-            highlight: "감소",
-            tone: "decrease",
-          },
-        ],
-      },
-      {
-        label: "용어 표기",
-        lines: [
-          {
-            highlight: "Chain-CC Protection",
-            style: "plain",
-          },
-          {
-            highlight: "→ 연속 CC 보호",
-            style: "plain",
-          },
-        ],
-      },
     ],
   },
   {
     step: "05",
-    title: "웹사이트 자동 반영",
-    description: "정리된 결과를 사이트에 순차적으로 반영합니다.",
-    trackTitle: "자동 반영 및 공개",
-    detail:
-      "번역과 후처리가 끝난 패치노트를 사이트에 반영해 최신 내용을 이어서 확인할 수 있게 합니다.",
-    note:
-      "반영 시점은 사이트 상태에 따라 조금씩 달라질 수 있으며, 경우에 따라 최대 1시간 정도 걸릴 수 있습니다.",
+    title: "LIVE DEPLOY",
+    description: "최종 검수된 데이터를 실시간 웹 배포",
+    trackTitle: "시스템 실시간 배포",
+    detail: "모든 처리가 완료된 패치노트는 자동으로 아카이브에 등록되어 누구나 즉시 확인할 수 있는 상태가 됩니다.",
   },
 ];
-
-const processHighlights = [
-  { label: "Steam 원문 확인", value: "Steam API" },
-  { label: "AI 번역 모델", value: "GPT-5-mini" },
-] as const;
 
 export default function Page() {
   const [patchCount, setPatchCount] = useState(0);
@@ -158,501 +123,263 @@ export default function Page() {
 
   useEffect(() => {
     const target = 60;
-    const duration = 1400;
-    let frameId = 0;
+    const duration = 1000;
     let startTime = 0;
 
     const animate = (time: number) => {
       if (!startTime) startTime = time;
-      const elapsed = time - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+      const progress = Math.min((time - startTime) / duration, 1);
       setPatchCount(Math.floor(progress * target));
-      if (progress < 1) frameId = window.requestAnimationFrame(animate);
+      if (progress < 1) requestAnimationFrame(animate);
     };
 
-    frameId = window.requestAnimationFrame(animate);
-    return () => window.cancelAnimationFrame(frameId);
+    requestAnimationFrame(animate);
   }, []);
 
   const currentProblem = problems[activeProblem] ?? problems[0];
   const currentStep = steps[activeStep] ?? steps[0];
 
   return (
-    <div className="relative overflow-x-clip bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[560px] bg-[radial-gradient(circle_at_15%_20%,rgba(37,99,235,0.2),transparent_45%),radial-gradient(circle_at_90%_15%,rgba(248,61,84,0.18),transparent_38%),radial-gradient(circle_at_50%_50%,rgba(15,23,42,0.03),transparent_55%)] dark:bg-[radial-gradient(circle_at_15%_20%,rgba(37,99,235,0.35),transparent_45%),radial-gradient(circle_at_90%_15%,rgba(248,61,84,0.32),transparent_38%),radial-gradient(circle_at_50%_50%,rgba(148,163,184,0.08),transparent_55%)]" />
-
-      <section className="relative px-6 pb-20 pt-16 sm:px-10 sm:pb-24 sm:pt-20 lg:px-20 xl:px-28 2xl:px-36">
-        <div className="mx-auto grid w-full max-w-[1320px] gap-10 md:grid-cols-12 md:items-center">
-          <div className="md:col-span-7">
-            <h1 className="mt-5 text-4xl font-black leading-[1.08] tracking-tight sm:text-5xl md:text-6xl">
-              영문 패치노트의 핵심만,
-              <br />
-              <span className="text-slate-900 dark:text-white">
-                빠르게 한국어로
-              </span>
-            </h1>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-300 sm:text-lg">
-              패치노트를 자동으로 수집하고, 맥락에 맞게 번역해 읽기 쉽게
-              정리합니다. 복잡한 원문 대신 핵심 변경점만 빠르게 확인할 수
-              있습니다.
-            </p>
-
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/patch"
-                className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-6 py-3 text-sm font-bold text-white transition hover:bg-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
-              >
-                최신 패치노트 보기
-              </Link>
-              <a
-                href="#process"
-                className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
-              >
-                작동 방식 보기
-              </a>
-            </div>
+    <>
+      {/* Hero Section */}
+      <section className="relative pt-10 pb-20 px-6 sm:px-10 lg:px-20">
+        <div className="max-w-[1200px] mx-auto text-center">
+          <div className="inline-flex items-center gap-2.5 rounded-full border border-archive-zinc-200 dark:border-archive-zinc-800 bg-white dark:bg-archive-zinc-900 px-3.5 py-2 mb-8 animate-hero-enter shadow-ambient">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-glow-green animate-pulse" />
+            <span className="text-[10px] font-black tracking-[0.2em] uppercase text-archive-zinc-500 leading-none">Sync Status</span>
           </div>
+          
+          <h1 className="text-5xl sm:text-7xl font-black tracking-tighter leading-[0.95] mb-8 animate-hero-enter">
+            영문 패치노트를<br />
+            <span className="text-hero-red-500 italic">CORE </span>로 읽다
+          </h1>
+          
+          <p className="max-w-xl mx-auto text-archive-zinc-600 dark:text-archive-zinc-400 text-base sm:text-lg mb-10 leading-relaxed animate-hero-enter [animation-delay:100ms]">
+            수동적인 번역을 넘어 핵심 변경사항을 추출하고 아카이빙합니다.<br />
+            영문 패치의 모든 변화를 가장 정교한 한국어로 확인하세요.
+          </p>
 
-          <div className="md:col-span-5">
-            <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white/90 p-5 shadow-xl dark:border-slate-800 dark:bg-slate-900/80">
-              <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-hero-blue-500/15 blur-2xl" />
-              <div className="absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-hero-red-500/15 blur-2xl" />
-              <p className="text-xs font-semibold tracking-wide text-slate-500 dark:text-slate-400">
-                RECOMMENDED FOR
-              </p>
-              <h2 className="mt-2 text-2xl font-black leading-tight">
-                이런 분들께 추천합니다
-              </h2>
-              <ul className="mt-4 space-y-2 text-sm text-slate-600 dark:text-slate-300">
-                <li className="flex items-start gap-2">
-                  <span className="mt-1.5 h-2 w-2 rounded-full bg-hero-blue-500" />
-                  <span>영문 패치노트 읽기가 부담스러운 분</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="mt-1.5 h-2 w-2 rounded-full bg-hero-blue-500" />
-                  <span>버프·너프 핵심만 빠르게 확인하고 싶은 분</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="mt-1.5 h-2 w-2 rounded-full bg-hero-blue-500" />
-                  <span>업데이트 내용을 바로 플레이에 적용하고 싶은 분</span>
-                </li>
-              </ul>
-              <div className="relative mt-5 h-56 w-full overflow-hidden rounded-2xl">
-                <Image
-                  src="/images/jeff.webp"
-                  alt="패치노트 요약을 상징하는 캐릭터 이미지"
-                  fill
-                  className="object-contain p-4"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              </div>
-            </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-hero-enter [animation-delay:200ms]">
+            <Link
+              href="/patch"
+              className="w-full sm:w-auto px-8 py-4 bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 font-black text-sm tracking-tight rounded-full hover:scale-[1.02] transition-transform active:scale-[0.98] shadow-xl shadow-black/10 dark:shadow-white/5"
+            >
+              ARCHIVE ACCESS
+            </Link>
+            <a
+              href="#process"
+              className="w-full sm:w-auto px-8 py-4 border border-archive-zinc-900/10 dark:border-white/10 bg-white/50 dark:bg-archive-zinc-900/50 backdrop-blur-sm text-archive-zinc-900 dark:text-white font-black text-sm tracking-tight rounded-full hover:bg-white dark:hover:bg-archive-zinc-800 hover:border-archive-zinc-900/20 dark:hover:border-white/20 transition-all shadow-sm active:scale-95 hover:scale-[1.02]"
+            >
+              HOW IT WORKS
+            </a>
           </div>
         </div>
+      </section>
 
-        <div className="mx-auto mt-24 grid w-full max-w-[1320px] gap-3 sm:mt-28 sm:grid-cols-3">
-          {stats.map((stat) => (
-            <article
-              key={stat.label}
-              className="group relative rounded-2xl border border-slate-200 bg-white/90 px-5 py-6 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/80"
-            >
-              <p className="text-3xl font-black text-slate-900 dark:text-white sm:text-4xl">
-                {stat.label === "누적 번역 패치노트"
-                  ? `${patchCount}+`
-                  : stat.value}
+      {/* Stats Section */}
+      <section className="px-6 py-12">
+        <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
+          {stats.map((stat, i) => (
+            <div key={stat.label} className="glass-card p-8 group hover:border-hero-red-500/50 transition-colors">
+              <p className="text-[10px] font-black tracking-widest text-archive-zinc-500 mb-2">{stat.label}</p>
+              <p className="text-4xl font-black tracking-tighter">
+                {stat.label === "TOTAL SEGMENTS" ? `${patchCount}+` : stat.value}
               </p>
-              <p className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-300">
-                {stat.label}
-              </p>
-            </article>
+            </div>
           ))}
         </div>
       </section>
 
-      <section className="px-6 py-20 sm:px-10 lg:px-20 xl:px-28 2xl:px-36">
-        <div className="mx-auto w-full max-w-[1320px]">
-          <div className="mb-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
-              Problem & Solution
-            </p>
-            <h2 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">
-              Patchlog는 이런 문제를 해결합니다
-            </h2>
-          </div>
-
-          <div className="grid gap-6 lg:grid-cols-12 lg:items-stretch">
-            <div className="lg:col-span-6 space-y-5">
-              {problems.map((item, index) => {
-                const isActive = index === activeProblem;
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onMouseEnter={() => setActiveProblem(index)}
-                    onFocus={() => setActiveProblem(index)}
-                    onClick={() => setActiveProblem(index)}
-                    className={`group w-full min-h-[170px] rounded-2xl border px-5 py-6 text-left transition-all duration-300 ${
-                      isActive
-                        ? "border-hero-blue-500 bg-white text-slate-900 shadow-lg dark:bg-slate-900 dark:text-slate-100"
-                        : "border-slate-200 bg-white text-slate-700 hover:border-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
-                    }`}
-                  >
-                    <p className="text-xs font-black tracking-[0.18em] text-slate-400">
-                      PROBLEM {item.id}
-                    </p>
-                    <p className="mt-3 text-base font-bold leading-relaxed">
-                      {item.title}
-                    </p>
-                    <p className="mt-3 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
-                      {item.summary}
-                    </p>
-                  </button>
-                );
-              })}
-            </div>
-
-            <article className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-7 shadow-sm dark:border-slate-800 dark:bg-slate-900 lg:col-span-6">
-              <p className="text-xs font-black tracking-[0.18em] text-slate-400">
-                SOLUTION
-              </p>
-              <h3 className="mt-4 text-2xl font-black">이렇게 해결합니다</h3>
-              <p className="mt-3 max-w-[60ch] text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                패치노트를 자동으로 수집하고, 핵심 변경점 중심으로
-                번역·정리합니다.
-              </p>
-              <div className="mt-6 h-px bg-slate-200 dark:bg-slate-700" />
-              <div className="mt-6 inline-flex rounded-full border border-slate-300 px-3 py-1 text-xs font-semibold text-slate-500 dark:border-slate-600 dark:text-slate-400">
-                이 문제를 이렇게 해결합니다
-              </div>
-              <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                {currentProblem.pain}
-              </p>
-              <ul className="mt-6 space-y-3">
-                {currentProblem.solution.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-200"
-                  >
-                    <span className="h-2.5 w-2.5 rounded-full bg-hero-blue-500" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section
-        id="process"
-        className="px-6 pb-16 pt-8 sm:px-10 sm:pb-24 lg:px-20 xl:px-28 2xl:px-36"
-      >
-        <div className="mx-auto w-full max-w-[1320px]">
-          <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      {/* Problem & Solution */}
+      <section className="px-6 py-24 relative overflow-hidden">
+        <div className="max-w-[1200px] mx-auto relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
-                How It Works
-              </p>
-              <h2 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">
-                Patchlog는 이렇게 작동합니다
+              <p className="text-[10px] font-black tracking-[0.3em] text-hero-red-500 mb-4 uppercase">Operational Objective</p>
+              <h2 className="text-4xl sm:text-5xl font-black tracking-tighter leading-[1.1] mb-8">
+                읽는 시간은 줄이고,<br />변화의 핵심에만 집중하세요
               </h2>
-              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
-                수집, 번역, 후처리, 게시까지 하나의 흐름으로 연결해 핵심
-                변경점만 빠르게 확인할 수 있도록 만들었습니다.
-              </p>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2 lg:w-[360px] lg:flex-none">
-              {processHighlights.map((item) => (
-                <article
-                  key={item.label}
-                  className="rounded-2xl border border-slate-200 bg-white/90 px-4 py-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/80"
-                >
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
-                    {item.label}
-                  </p>
-                  <p className="mt-2 text-sm font-black text-slate-900 dark:text-white sm:text-base">
-                    {item.value}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </div>
-
-          <div className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-[linear-gradient(135deg,rgba(255,255,255,0.95),rgba(241,245,249,0.98))] p-4 shadow-sm dark:border-slate-800 dark:bg-[linear-gradient(135deg,rgba(15,23,42,0.92),rgba(2,6,23,0.98))] sm:p-6">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.18),transparent_48%),radial-gradient(circle_at_top_right,rgba(248,61,84,0.12),transparent_42%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.22),transparent_48%),radial-gradient(circle_at_top_right,rgba(248,113,113,0.18),transparent_42%)]" />
-
-            <div className="relative grid gap-5 xl:grid-cols-[1.2fr_1.8fr_1fr]">
-              <aside className="rounded-3xl border border-slate-200 bg-white/85 p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/75">
-                <p className="text-xs font-black tracking-[0.18em] text-slate-400">
-                  PIPELINE STEPS
-                </p>
-                <div className="mt-4 space-y-3">
-                  {steps.map((item, index) => {
-                    const isActive = activeStep === index;
-                    return (
-                      <button
-                        key={item.step}
-                        type="button"
-                        onClick={() => setActiveStep(index)}
-                        className={`group w-full rounded-2xl border px-4 py-4 text-left transition-all duration-300 ${
-                          isActive
-                            ? "border-hero-blue-300 bg-[linear-gradient(135deg,rgba(219,234,254,0.92),rgba(255,255,255,0.98))] text-slate-900 shadow-lg shadow-hero-blue-500/10 dark:border-hero-blue-500/40 dark:bg-[linear-gradient(135deg,rgba(30,41,59,0.98),rgba(15,23,42,0.94))] dark:text-white"
-                            : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950/60 dark:text-slate-200 dark:hover:border-slate-600"
-                        }`}
-                      >
-                        <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <p
-                              className={`text-xs font-black tracking-[0.18em] ${isActive ? "text-hero-blue-700 dark:text-hero-blue-200" : "text-slate-400"}`}
-                            >
-                              STEP {item.step}
-                            </p>
-                            <p className="mt-2 text-sm font-bold leading-relaxed">
-                              {item.title}
-                            </p>
-                          </div>
-                          <span
-                            className={`mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full text-xs font-black ${
-                              isActive
-                                ? "bg-white text-hero-blue-600 shadow-sm dark:bg-white/10 dark:text-white"
-                                : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
-                            }`}
-                          >
-                            {index + 1}
-                          </span>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </aside>
-
-              <article className="relative overflow-hidden rounded-3xl border border-slate-200 bg-[linear-gradient(145deg,rgba(255,255,255,0.96),rgba(241,245,249,0.98))] p-5 text-slate-900 shadow-xl dark:border-slate-700 dark:bg-[linear-gradient(145deg,rgba(15,23,42,0.92),rgba(30,41,59,0.96))] dark:text-white md:min-h-[540px]">
-                <div className="absolute -right-16 top-10 h-44 w-44 rounded-full bg-hero-blue-500/14 blur-3xl" />
-                <div className="absolute -left-12 bottom-0 h-40 w-40 rounded-full bg-hero-red-500/12 blur-3xl" />
-                <div className="relative flex h-full flex-col">
-                  <div className="flex items-center justify-between gap-4">
-                    <div>
-                      <p className="text-xs font-black tracking-[0.18em] text-slate-500 dark:text-white/50">
-                        CURRENT STEP
-                      </p>
-                      <h3 className="mt-3 text-2xl font-black text-slate-900 dark:text-white sm:text-3xl">
-                        {currentStep.title}
-                      </h3>
-                    </div>
-                    <span className="inline-flex rounded-full border border-slate-300 bg-white/80 px-3 py-1 text-xs font-semibold text-slate-700 dark:border-white/15 dark:bg-white/10 dark:text-white/80">
-                      {currentStep.step} /{" "}
-                      {steps.length.toString().padStart(2, "0")}
-                    </span>
-                  </div>
-
-                  <div className="mt-4 flex flex-col gap-3">
-                    <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-200 sm:text-base">
-                      {currentStep.description}
-                    </p>
-                    {currentStep.tags?.length ? (
-                      <div className="flex flex-wrap gap-2">
-                        {currentStep.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="rounded-full border border-slate-300 bg-white/80 px-3 py-1 text-xs font-semibold text-slate-700 dark:border-white/15 dark:bg-white/10 dark:text-white/85"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    ) : null}
-                  </div>
-
-                  <div
-                    className={`mt-5 rounded-2xl border border-slate-200 bg-white/85 p-4 dark:border-white/10 dark:bg-white/5 ${
-                      currentStep.step === "04" ? "flex-1" : ""
-                    }`}
-                  >
-                    <p className="text-sm font-semibold text-slate-900 dark:text-white">
-                      {currentStep.trackTitle}
-                    </p>
-                    <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                      {currentStep.detail}
-                    </p>
-                    {currentStep.note ? (
-                      <p className="mt-3 text-xs leading-relaxed text-slate-400 dark:text-slate-500">
-                        {currentStep.note}
-                      </p>
-                    ) : null}
-                    {currentStep.examples?.length ? (
-                      <div className="mt-3 rounded-2xl border border-slate-200/80 bg-slate-50/90 p-3 dark:border-white/10 dark:bg-slate-950/40">
-                        <p className="text-[11px] font-black uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
-                          Example Output
-                        </p>
-                        <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                          {currentStep.examples.map((example) => (
-                            <div
-                              key={example.label}
-                              className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 dark:border-slate-700 dark:bg-slate-900/80"
-                            >
-                              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
-                                {example.label}
-                              </p>
-                              <div className="mt-1.5 space-y-1.5 text-sm font-semibold leading-relaxed text-slate-800 dark:text-slate-100">
-                                {example.lines.map((line, index) => {
-                                  const toneClass =
-                                    line.style === "underline"
-                                      ? "underline decoration-2 underline-offset-4"
-                                      : line.style === "plain"
-                                        ? ""
-                                        : "";
-
-                                  const toneStyle =
-                                    line.tone === "increase"
-                                      ? {
-                                          background:
-                                            "linear-gradient(180deg, transparent 38%, rgba(219, 234, 254, 0.78) 38%)",
-                                          boxShadow:
-                                            "inset 0 -0.07em 0 rgba(191, 219, 254, 0.42)",
-                                          color: "#1d4ed8",
-                                          fontWeight: 700,
-                                          lineHeight: 1.15,
-                                        }
-                                      : line.tone === "decrease"
-                                        ? {
-                                            background:
-                                              "linear-gradient(180deg, transparent 38%, rgba(254, 242, 242, 0.82) 38%)",
-                                            boxShadow:
-                                              "inset 0 -0.07em 0 rgba(254, 202, 202, 0.42)",
-                                            color: "#b91c1c",
-                                            fontWeight: 700,
-                                            lineHeight: 1.15,
-                                          }
-                                        : undefined;
-
-                                  return (
-                                    <p key={`${example.label}-${index}`}>
-                                      {line.prefix ? (
-                                        <span className="text-slate-800 dark:text-slate-100">
-                                          {line.prefix}
-                                        </span>
-                                      ) : null}
-                                      <span
-                                        className={
-                                          line.style === "plain"
-                                            ? "text-slate-800 dark:text-slate-100"
-                                            : line.style === "underline"
-                                              ? toneClass
-                                              : `rounded-[0.12rem] px-[0.14rem] ${toneClass}`
-                                        }
-                                        style={toneStyle}
-                                      >
-                                        {line.highlight}
-                                      </span>
-                                      {line.suffix ? (
-                                        <span className="text-slate-600 dark:text-slate-300">
-                                          {line.suffix}
-                                        </span>
-                                      ) : null}
-                                    </p>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ) : null}
-                  </div>
-                </div>
-              </article>
-
-              <aside className="rounded-3xl border border-slate-200 bg-white/85 p-5 shadow-sm dark:border-slate-700 dark:bg-slate-900/75">
-                <p className="text-xs font-black tracking-[0.18em] text-slate-400">
-                  FLOW OUTPUT
-                </p>
-                <ul className="mt-4 space-y-3">
-                  {steps.map((item, index) => (
-                    <li
-                      key={`${item.step}-flow`}
-                      className="flex items-start gap-3"
+              
+              <div className="space-y-3">
+                {problems.map((item, index) => {
+                  const isActive = activeProblem === index;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => setActiveProblem(index)}
+                      className={`group w-full p-6 text-left rounded-2xl border transition-all duration-300 relative ${
+                        isActive 
+                        ? "bg-white dark:bg-archive-zinc-900 border-archive-zinc-200 dark:border-archive-zinc-800 shadow-xl" 
+                        : "border-transparent opacity-50 hover:opacity-100 hover:bg-archive-zinc-50 dark:hover:bg-white/5"
+                      }`}
                     >
-                      <span
-                        className={`mt-1.5 h-2.5 w-2.5 rounded-full ${
-                          index <= activeStep
-                            ? "bg-hero-blue-500"
-                            : "bg-slate-300 dark:bg-slate-600"
-                        }`}
-                      />
-                      <div>
-                        <p
-                          className={`text-sm font-semibold ${
-                            index === activeStep
-                              ? "text-slate-900 dark:text-slate-100"
-                              : "text-slate-500 dark:text-slate-400"
-                          }`}
-                        >
-                          {item.title}
-                        </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
-                          {item.trackTitle}
-                        </p>
+                      {isActive && (
+                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-hero-red-500 rounded-r-full" />
+                      )}
+                      <div className="flex gap-4 items-start">
+                        <span className={`font-mono text-xs font-bold ${isActive ? "text-hero-red-500" : "text-archive-zinc-400"}`}>
+                          0{index + 1}
+                        </span>
+                        <div>
+                          <h4 className={`font-black text-lg mb-1 transition-colors ${isActive ? "text-archive-zinc-950 dark:text-white" : "text-archive-zinc-600 dark:text-archive-zinc-400"}`}>
+                            {item.title}
+                          </h4>
+                          <p className="text-sm text-archive-zinc-500 dark:text-archive-zinc-400 leading-relaxed">{item.summary}</p>
+                        </div>
                       </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="glass-card p-10 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-hero-red-500/5 blur-3xl rounded-full" />
+              <div className="relative z-10">
+                <span className="inline-block px-3 py-1 rounded-md bg-hero-red-500/10 text-hero-red-500 text-[10px] font-black tracking-widest mb-6 uppercase">Tactical Solution</span>
+                <p className="text-xl font-bold leading-relaxed mb-8">{currentProblem.pain}</p>
+                <div className="h-px bg-archive-zinc-200 dark:bg-archive-zinc-800 mb-8" />
+                <ul className="space-y-4">
+                  {currentProblem.solution.map((item) => (
+                    <li key={item} className="flex items-center gap-3 text-sm font-bold">
+                      <svg className="w-5 h-5 text-hero-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {item}
                     </li>
                   ))}
                 </ul>
-              </aside>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="px-6 pb-20 sm:px-10 sm:pb-28 lg:px-20 xl:px-28 2xl:px-36">
-        <div className="mx-auto grid w-full max-w-[1320px] gap-8 overflow-hidden rounded-[2rem] border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-sky-50/40 px-4 py-10 shadow-sm dark:border-slate-800 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800/70 sm:px-6 md:grid-cols-12 md:items-center lg:px-10">
-          <div className="md:col-span-8">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
-              Daily Patchlog
-            </p>
-            <h2 className="mt-3 text-3xl font-black leading-tight text-slate-900 dark:text-slate-100 sm:text-4xl">
-              최신 패치노트를 한눈에 확인하세요
-            </h2>
-            <div className="mt-4 max-w-2xl space-y-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
-              <p>변경사항을 한국어로 읽기 쉽게 정리해 제공합니다.</p>
-              <p>
-                단순 번역이 아니라, 게임 맥락에 맞게 핵심을 이해하기 쉽게
-                정리합니다.
-              </p>
+      {/* Pipeline */}
+      <section id="process" className="px-6 py-24 relative">
+        <div className="max-w-[1200px] mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-[10px] font-black tracking-[0.3em] text-hero-blue-500 mb-4 uppercase">Technical Workflow</p>
+            <h2 className="text-4xl sm:text-5xl font-black tracking-tighter">데이터 처리 아키텍처</h2>
+          </div>
+
+          <div className="grid lg:grid-cols-[1fr_2fr] gap-8">
+            <div className="space-y-2">
+              {steps.map((step, index) => (
+                <button
+                  key={step.step}
+                  onClick={() => setActiveStep(index)}
+                  className={`w-full p-5 text-left rounded-xl transition-all flex items-center justify-between group ${
+                    activeStep === index 
+                    ? "bg-archive-zinc-950 text-white shadow-lg" 
+                    : "hover:bg-archive-zinc-100 dark:hover:bg-white/5"
+                  }`}
+                >
+                  <div className="flex items-center gap-4">
+                    <span className={`text-[10px] font-mono font-bold transition-none ${activeStep === index ? "text-hero-blue-400" : "text-archive-zinc-400"}`}>
+                      PHASE 0{index + 1}
+                    </span>
+                    <span className="font-black text-sm tracking-tight">{step.title}</span>
+                  </div>
+                  <svg className={`w-4 h-4 transition-transform ${activeStep === index ? "translate-x-1" : "opacity-0 group-hover:opacity-100"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              ))}
             </div>
+
+            <div className="glass-card p-10 min-h-[450px] flex flex-col justify-between relative group">
+              <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                <span className="text-[120px] font-black leading-none pointer-events-none tracking-tighter select-none">0{activeStep + 1}</span>
+              </div>
+              
+              <div className="relative z-10">
+                <p className="text-[10px] font-black tracking-widest text-hero-blue-500 mb-2 uppercase">{currentStep.trackTitle}</p>
+                <h3 className="text-3xl font-black mb-4">{currentStep.title}</h3>
+                <p className="text-archive-zinc-600 dark:text-archive-zinc-400 leading-relaxed mb-6">{currentStep.description}</p>
+                
+                <div className="p-6 rounded-2xl bg-archive-zinc-100/50 dark:bg-archive-zinc-900/50 border border-archive-zinc-200 dark:border-archive-zinc-800 mb-8">
+                  <p className="text-sm font-medium leading-relaxed text-archive-zinc-700 dark:text-archive-zinc-300">{currentStep.detail}</p>
+                </div>
+
+                {currentStep.examples && (
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {currentStep.examples.map((ex) => (
+                      <div key={ex.label} className="p-4 rounded-xl border border-archive-zinc-200 dark:border-archive-zinc-800 bg-white/50 dark:bg-archive-zinc-900/50">
+                        <p className="text-[10px] font-black text-archive-zinc-400 mb-2 uppercase">{ex.label}</p>
+                        {ex.lines.map((line, index) => {
+                          const toneStyle =
+                            line.tone === "increase"
+                              ? {
+                                  background: "linear-gradient(180deg, transparent 38%, rgba(219, 234, 254, 0.78) 38%)",
+                                  boxShadow: "inset 0 -0.07em 0 rgba(191, 219, 254, 0.42)",
+                                  color: "#1d4ed8",
+                                  fontWeight: 700,
+                                }
+                              : line.tone === "decrease"
+                                ? {
+                                    background: "linear-gradient(180deg, transparent 38%, rgba(254, 242, 242, 0.82) 38%)",
+                                    boxShadow: "inset 0 -0.07em 0 rgba(254, 202, 202, 0.42)",
+                                    color: "#b91c1c",
+                                    fontWeight: 700,
+                                  }
+                                : undefined;
+
+                          return (
+                            <div key={index} className="text-sm font-bold">
+                              {line.prefix}
+                              <span 
+                                className={line.style === "underline" ? "underline decoration-2 underline-offset-4" : ""}
+                                style={toneStyle}
+                              >
+                                {line.highlight}
+                              </span>
+                              {line.suffix}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-8 flex gap-2">
+                {currentStep.tags?.map(tag => (
+                  <span key={tag} className="text-[10px] font-black px-2 py-1 rounded bg-archive-zinc-900/5 dark:bg-white/5 text-archive-zinc-500">#{tag}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Daily Patchlog Section */}
+      <section className="px-6 py-24">
+        <div className="group max-w-[1000px] mx-auto p-12 sm:p-20 text-center relative overflow-hidden transition-all duration-500">
+          <div className="relative z-10">
+            <p className="text-[10px] font-black tracking-[0.4em] text-hero-red-500 mb-8 uppercase">Daily Patchlog</p>
+            <h2 className="text-5xl sm:text-7xl font-black tracking-tighter mb-8 leading-[0.95]">
+              최신 패치노트를<br />
+              한눈에 확인하세요
+            </h2>
+            <p className="max-w-lg mx-auto text-archive-zinc-600 dark:text-archive-zinc-400 text-sm mb-12 leading-relaxed">
+              변경사항을 한국어로 읽기 쉽게 정리해 제공합니다.<br />
+              단순 번역이 아니라, 게임 맥락에 맞게 핵심을 이해하기 쉽게 정리합니다.
+            </p>
+            
             <Link
               href="/patch"
-              className="mt-7 inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-6 py-3 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-black hover:shadow-md dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
+              className="inline-flex items-center gap-3 px-10 py-5 bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 font-black tracking-[0.2em] uppercase text-xs rounded-full hover:scale-105 transition-all shadow-xl"
             >
               <span>최신 패치노트 보기</span>
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                />
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </Link>
           </div>
-          <aside className="relative md:col-span-4">
-            <div className="relative mx-auto w-full max-w-md overflow-hidden rounded-2xl aspect-[16/9]">
-              <Image
-                src="/images/jeff.webp"
-                alt="패치로그 상어 캐릭터 이미지"
-                fill
-                className="object-contain p-2"
-                sizes="(max-width: 768px) 90vw, 35vw"
-              />
-            </div>
-          </aside>
         </div>
       </section>
-    </div>
+    </>
   );
 }

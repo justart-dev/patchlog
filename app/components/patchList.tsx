@@ -54,15 +54,14 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
         ...log,
         dateLabel: relativeDateLabel,
         formattedDate,
-        animationDelay: `${index * 100}ms`,
+        animationDelay: `${index * 50}ms`,
       };
     });
   }, [patchLogs]);
 
   return (
-    <div className="grid grid-cols-1 gap-4">
+    <div className="grid grid-cols-1 gap-6">
       {formattedPatchLogs.map((log, index) => {
-        const isFirst = index === 0;
         const headerImage = log.capsule_image
           ? `https://cdn.akamai.steamstatic.com/steam/apps/${log.capsule_image.match(/\/apps\/(\d+)\//)?.[1]}/header.jpg`
           : null;
@@ -71,88 +70,51 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
           <Link
             key={log.id}
             href={`/patch/${log.id}`}
-            className="group block"
-            style={{ animationDelay: log.animationDelay }}
+            className="group block animate-hero-enter opacity-0"
+            style={{ animationDelay: log.animationDelay, animationFillMode: 'forwards' }}
           >
-            <article className="overflow-hidden rounded-3xl border border-slate-200 bg-white/95 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-900/90 dark:hover:border-slate-500">
+            <article className="glass-card hover:border-hero-red-500/50 transition-all duration-300 group-hover:-translate-y-1 group-active:scale-[0.99] border-archive-zinc-200 dark:border-archive-zinc-800">
               <div className="flex flex-col sm:flex-row">
-                <div className="relative w-full flex-shrink-0 overflow-hidden border-b border-slate-200 py-5 sm:h-auto sm:w-40 sm:border-b-0 sm:border-r dark:border-slate-700 md:w-44 lg:w-48">
+                <div className="relative w-full aspect-video sm:aspect-auto sm:w-60 flex-shrink-0 overflow-hidden bg-archive-zinc-900/5 dark:bg-white/5 border-b sm:border-b-0 sm:border-r border-archive-zinc-200 dark:border-archive-zinc-800">
                   {log.capsule_image ? (
-                    isFirst && headerImage ? (
-                      <div className="relative flex h-full w-full items-center justify-center px-3">
-                        <Image
-                          src={headerImage}
-                          alt={log.app_name}
-                          width={460}
-                          height={215}
-                          className="h-auto max-w-[220px] object-contain transition-transform duration-300 group-hover:scale-[1.03] sm:max-w-full"
-                          priority
-                        />
-                      </div>
-                    ) : (
-                      <div className="relative flex h-full w-full items-center justify-center px-3">
-                        <Image
-                          src={log.capsule_image}
-                          alt={log.app_name}
-                          width={231}
-                          height={87}
-                          className="h-auto max-w-[220px] object-contain transition-transform duration-300 group-hover:scale-[1.03] sm:max-w-full"
-                          priority={false}
-                        />
-                      </div>
-                    )
+                    <Image
+                      src={headerImage || log.capsule_image}
+                      alt={log.app_name}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, 240px"
+                    />
                   ) : (
                     <div className="flex h-full items-center justify-center">
-                      <div className="text-slate-300 dark:text-slate-600">
-                        <svg
-                          className="w-8 h-8"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={1.5}
-                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                          />
-                        </svg>
-                      </div>
+                      <span className="text-archive-zinc-300 dark:text-archive-zinc-700 font-black text-xs">NO DATA</span>
                     </div>
                   )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
 
-                <div className="flex min-w-0 flex-1 flex-col p-5 md:p-6">
-                  <div className="mb-3 flex items-center justify-between gap-3">
-                    <span className="inline-flex items-center rounded-full border border-slate-300 px-2.5 py-1 text-[11px] font-semibold text-slate-500 dark:border-slate-600 dark:text-slate-300">
+                <div className="flex-1 p-6 sm:p-8">
+                  <div className="flex items-center justify-between gap-4 mb-4">
+                    <span className="inline-flex px-2 py-0.5 rounded bg-hero-red-500/10 text-hero-red-600 dark:text-hero-red-400 text-[10px] font-black tracking-widest uppercase">
                       {log.app_name}
                     </span>
-                    <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-                      <span className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-600" />
-                      <time
-                        className="text-xs"
-                        title={log.formattedDate}
-                      >
-                        {log.dateLabel}
-                      </time>
-                    </div>
+                    <time className="text-[10px] font-bold text-archive-zinc-500 tracking-tighter" title={log.formattedDate}>
+                      {log.dateLabel}
+                    </time>
                   </div>
 
-                  <h2 className="mb-3 line-clamp-2 text-xl font-black leading-tight text-slate-900 dark:text-white sm:text-xl md:text-2xl">
+                  <h2 className="text-xl sm:text-2xl font-black tracking-tighter leading-tight mb-4 group-hover:text-hero-red-500 transition-colors line-clamp-2">
                     {replaceEnglishTitles(log.title)}
                   </h2>
 
                   {(log.translated_ko || log.content) && (
-                    <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300 md:text-base">
-                      {stripHtml(log.translated_ko || log.content).substring(0, 120)}
-                      ...
+                    <p className="text-sm leading-relaxed text-archive-zinc-600 dark:text-archive-zinc-400 line-clamp-2 mb-6">
+                      {stripHtml(log.translated_ko || log.content)}
                     </p>
                   )}
 
-                  <div className="mt-auto">
-                    <time className="text-xs text-slate-500 dark:text-slate-400" title={log.formattedDate}>
-                      {log.formattedDate}
-                    </time>
+                  <div className="flex items-center gap-2">
+                    <span className="h-px w-8 bg-archive-zinc-200 dark:bg-archive-zinc-800" />
+                    <span className="text-[10px] font-black text-archive-zinc-400 dark:text-archive-zinc-600 tracking-widest uppercase">Archived Segment</span>
                   </div>
                 </div>
               </div>
