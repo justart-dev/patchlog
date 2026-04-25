@@ -85,7 +85,7 @@ export const metadata: Metadata = {
   },
 };
 
-const cx = (...classes) => classes.filter(Boolean).join(" ");
+const cx = (...classes: (string | undefined | false)[]) => classes.filter(Boolean).join(" ");
 
 export default function RootLayout({
   children,
@@ -103,6 +103,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <head>
+          <WebSiteStructuredData />
           <Script id="theme-init" strategy="beforeInteractive">
             {`
               try {
@@ -116,22 +117,30 @@ export default function RootLayout({
             `}
           </Script>
         </head>
-        <body className="antialiased flex flex-col min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white">
+        <body className="antialiased flex flex-col min-h-screen bg-archive-zinc-50 dark:bg-archive-zinc-950 text-archive-zinc-900 dark:text-archive-zinc-50 overflow-x-hidden selection:bg-hero-red-500 selection:text-white">
           <ThemeProvider>
-            <WebSiteStructuredData />
-            <div className="w-full bg-white dark:bg-gray-900">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-                <Navbar />
-              </div>
+            {/* Global Background Elements */}
+            <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+              <div className="absolute top-[-5%] left-[-10%] w-[50%] h-[50%] rounded-full bg-hero-blue-500/10 blur-[120px] dark:bg-hero-blue-500/15" />
+              <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-hero-red-500/10 blur-[120px] dark:bg-hero-red-500/15" />
+              <div className="absolute inset-0 opacity-[0.015] dark:opacity-[0.03] pointer-events-none" 
+                   style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
             </div>
-            <main className="flex-grow">
+
+            {/* Floating Navbar Container */}
+            <div className="fixed top-0 left-0 right-0 z-[100] flex justify-center p-4 sm:p-6 pointer-events-none">
+              <Navbar />
+            </div>
+
+            <main className="flex-grow pt-24 sm:pt-28 relative z-10">
               {children}
             </main>
-            <div className="w-full bg-gradient-to-t from-gray-50 to-white dark:from-gray-900 dark:to-gray-900 border-t border-gray-200 dark:border-gray-800 mt-auto">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+
+            <footer className="w-full bg-archive-zinc-100/5 dark:bg-archive-zinc-900/10 border-t border-archive-zinc-200/50 dark:border-archive-zinc-800/30 mt-12 relative z-10">
+              <div className="max-w-7xl mx-auto px-6 py-2">
                 <Footer />
               </div>
-            </div>
+            </footer>
           </ThemeProvider>
           <Analytics />
           <SpeedInsights />
