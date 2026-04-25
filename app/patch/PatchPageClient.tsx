@@ -187,11 +187,11 @@ export default function PatchPageClient({
             <section className="space-y-8 animate-hero-enter [animation-delay:200ms]">
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-archive-zinc-200 dark:border-archive-zinc-800 pb-8">
                 <div>
-                  <h2 className="text-2xl font-black tracking-tighter uppercase">Records Directory</h2>
-                  <p className="text-xs font-bold text-archive-zinc-500 mt-1 uppercase tracking-widest">Chronological archive of all balance shifts</p>
+                  <h2 className="text-2xl font-black tracking-tighter uppercase">패치 로그 아카이브</h2>
+                  <p className="text-xs font-bold text-archive-zinc-500 mt-1 uppercase tracking-widest">밸런스 변경점부터 업데이트 내역까지 모두 기록합니다</p>
                 </div>
                 <div className="px-4 py-2 glass rounded-full flex items-center gap-3">
-                  <span className="text-[10px] font-black text-archive-zinc-400 uppercase tracking-widest">Last Synced</span>
+                  <span className="text-[10px] font-black text-archive-zinc-400 uppercase tracking-widest">마지막 업데이트</span>
                   <span className="text-xs font-black tracking-tight">
                     {formatDateKST(latestDate, {
                       year: "numeric",
