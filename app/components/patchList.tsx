@@ -75,13 +75,13 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
           >
             <article className="glass-card hover:border-hero-red-500/50 transition-all duration-300 group-hover:-translate-y-1 group-active:scale-[0.99] border-archive-zinc-200 dark:border-archive-zinc-800">
               <div className="flex flex-col sm:flex-row">
-                <div className="relative w-full aspect-video sm:aspect-auto sm:w-60 flex-shrink-0 overflow-hidden bg-archive-zinc-900/5 dark:bg-white/5 border-b sm:border-b-0 sm:border-r border-archive-zinc-200 dark:border-archive-zinc-800">
+                <div className="relative w-full aspect-video sm:aspect-auto sm:w-60 flex-shrink-0 overflow-hidden bg-transparent border-b sm:border-b-0 sm:border-r border-archive-zinc-200 dark:border-archive-zinc-800">
                   {log.capsule_image ? (
                     <Image
                       src={headerImage || log.capsule_image}
                       alt={log.app_name}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-contain p-2 bg-transparent transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 640px) 100vw, 240px"
                     />
                   ) : (
@@ -89,11 +89,11 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
                       <span className="text-archive-zinc-300 dark:text-archive-zinc-700 font-black text-xs">NO DATA</span>
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute inset-0 bg-transparent transition-opacity" />
                 </div>
 
                 <div className="flex-1 p-6 sm:p-8">
-                  <div className="flex items-center justify-between gap-4 mb-4">
+                  <div className="flex items-center justify-between gap-4 mb-3">
                     <span className="inline-flex px-2 py-0.5 rounded bg-hero-red-500/10 text-hero-red-600 dark:text-hero-red-400 text-[10px] font-black tracking-widest uppercase">
                       {log.app_name}
                     </span>
@@ -102,20 +102,15 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
                     </time>
                   </div>
 
-                  <h2 className="text-xl sm:text-2xl font-black tracking-tighter leading-tight mb-4 group-hover:text-hero-red-500 transition-colors line-clamp-2">
+                  <h2 className="text-xl sm:text-2xl font-black tracking-tighter leading-tight mb-3 group-hover:text-hero-red-500 transition-colors line-clamp-2">
                     {replaceEnglishTitles(log.title)}
                   </h2>
 
                   {(log.translated_ko || log.content) && (
-                    <p className="text-sm leading-relaxed text-archive-zinc-600 dark:text-archive-zinc-400 line-clamp-2 mb-6">
+                    <p className="text-sm leading-relaxed text-archive-zinc-600 dark:text-archive-zinc-400 line-clamp-2">
                       {stripHtml(log.translated_ko || log.content)}
                     </p>
                   )}
-
-                  <div className="flex items-center gap-2">
-                    <span className="h-px w-8 bg-archive-zinc-200 dark:bg-archive-zinc-800" />
-                    <span className="text-[10px] font-black text-archive-zinc-400 dark:text-archive-zinc-600 tracking-widest uppercase">Archived Segment</span>
-                  </div>
                 </div>
               </div>
             </article>
