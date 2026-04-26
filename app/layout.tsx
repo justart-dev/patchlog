@@ -114,12 +114,12 @@ export default function RootLayout({
             `}
           </Script>
         </head>
-        <body className="antialiased flex flex-col min-h-screen bg-archive-zinc-50 dark:bg-archive-zinc-950 text-archive-zinc-900 dark:text-archive-zinc-50 overflow-x-hidden selection:bg-hero-red-500 selection:text-white">
+        <body className="antialiased flex flex-col min-h-screen bg-archive-zinc-50 dark:bg-archive-zinc-950 text-archive-zinc-900 dark:text-archive-zinc-50 overflow-x-hidden selection:bg-hero-red-500 selection:text-white" suppressHydrationWarning>
           <ThemeProvider>
             {/* Global Background Elements */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10" aria-hidden="true">
-              <div className="absolute top-[-5%] left-[-10%] w-[50%] h-[50%] rounded-full bg-hero-blue-500/10 blur-[120px] dark:bg-hero-blue-500/15" />
-              <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-hero-red-500/10 blur-[120px] dark:bg-hero-red-500/15" />
+              <div className="absolute top-[-5%] left-[-10%] w-[50%] h-[50%] rounded-full bg-hero-blue-500/10 blur-[80px] dark:bg-hero-blue-500/15" />
+              <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-hero-red-500/10 blur-[80px] dark:bg-hero-red-500/15" />
               <div className="absolute inset-0 opacity-[0.015] dark:opacity-[0.03] pointer-events-none bg-noise" />
             </div>
 
@@ -128,7 +128,8 @@ export default function RootLayout({
               <Navbar />
             </div>
 
-            <main className="flex-grow pt-24 sm:pt-28 relative z-10">
+            {/* The single, definitive semantic main tag for the entire site */}
+            <main className="flex-grow pt-24 sm:pt-28 relative z-10" suppressHydrationWarning>
               {children}
             </main>
 

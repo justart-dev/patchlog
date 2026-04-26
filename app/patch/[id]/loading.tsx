@@ -10,11 +10,23 @@ export default function PatchDetailLoading() {
 
         {/* Content Skeleton */}
         <article className="glass-card p-6 sm:p-12 mb-10 border-archive-zinc-200 dark:border-archive-zinc-800 bg-archive-zinc-100/50 dark:bg-archive-zinc-900/50">
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="h-5 w-full rounded bg-archive-zinc-200 dark:bg-archive-zinc-800" />
             <div className="h-5 w-full rounded bg-archive-zinc-200 dark:bg-archive-zinc-800" />
             <div className="h-5 w-11/12 rounded bg-archive-zinc-200 dark:bg-archive-zinc-800" />
             <div className="h-5 w-10/12 rounded bg-archive-zinc-200 dark:bg-archive-zinc-800" />
+            <div className="h-5 w-full rounded bg-archive-zinc-200 dark:bg-archive-zinc-800" />
+            <div className="h-5 w-2/3 rounded bg-archive-zinc-200 dark:bg-archive-zinc-800" />
+            <div className="h-5 w-11/12 rounded bg-archive-zinc-200 dark:bg-archive-zinc-800" />
+            <div className="h-5 w-3/4 rounded bg-archive-zinc-200 dark:bg-archive-zinc-800" />
+            <div className="h-5 w-full rounded bg-archive-zinc-200 dark:bg-archive-zinc-800" />
+            <div className="h-5 w-11/12 rounded bg-archive-zinc-200 dark:bg-archive-zinc-800" />
+            <div className="h-5 w-full rounded bg-archive-zinc-200 dark:bg-archive-zinc-800" />
+            <div className="h-5 w-4/5 rounded bg-archive-zinc-200 dark:bg-archive-zinc-800" />
+            <div className="h-5 w-full rounded bg-archive-zinc-200 dark:bg-archive-zinc-800" />
+            <div className="h-5 w-2/3 rounded bg-archive-zinc-200 dark:bg-archive-zinc-800" />
+            <div className="h-5 w-11/12 rounded bg-archive-zinc-200 dark:bg-archive-zinc-800" />
+            <div className="h-5 w-1/2 rounded bg-archive-zinc-200 dark:bg-archive-zinc-800" />
           </div>
         </article>
 
