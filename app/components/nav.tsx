@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { ThemeToggle } from "./theme-toggle";
 
 type NavItem = {
@@ -20,14 +21,22 @@ const navItems: NavItem[] = [
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const mobileMenuId = "mobile-main-menu";
+  const pathname = usePathname();
+  const navRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
-    <nav className="relative pointer-events-auto transition-all duration-300">
+    <nav className="relative pointer-events-auto transition-all duration-300" ref={navRef}>
       <div className="flex items-center gap-2 glass px-2.5 py-1.5 rounded-full shadow-ambient ring-1 ring-black/5 dark:ring-white/10">
         <div className="flex items-center gap-1 sm:gap-2 px-1">
           <Link href="/" className="inline-flex items-center min-w-0 px-3 py-1.5">
@@ -37,17 +46,24 @@ export function Navbar() {
           </Link>
 
           <div className="hidden md:flex items-center gap-0.5">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                target={item.blank ? "_blank" : "_self"}
-                rel={item.blank ? "noopener noreferrer" : undefined}
-                className="px-4 py-2 text-[11px] font-bold tracking-tight text-archive-zinc-500 dark:text-archive-zinc-400 hover:text-archive-zinc-950 dark:hover:text-white rounded-full transition-all hover:bg-black/[0.03] dark:hover:bg-white/[0.03]"
-              >
-                {item.name}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  target={item.blank ? "_blank" : "_self"}
+                  rel={item.blank ? "noopener noreferrer" : undefined}
+                  className={`px-4 py-2 text-[11px] font-bold tracking-tight rounded-full transition-all ${
+                    isActive
+                      ? "text-archive-zinc-950 dark:text-white bg-black/[0.04] dark:bg-white/[0.06]"
+                      : "text-archive-zinc-500 dark:text-archive-zinc-400 hover:text-archive-zinc-950 dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.03]"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              );
+            })}
           </div>
         </div>
 
@@ -82,38 +98,49 @@ export function Navbar() {
           ) : (
             <div className="h-8 min-w-[70px] rounded-full bg-archive-zinc-100 dark:bg-archive-zinc-800 animate-pulse" />
           )}
-          <button
-            type="button"
-            onClick={() => setIsMenuOpen((prev) => !prev)}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full text-archive-zinc-500 hover:bg-black/5 dark:hover:bg-white/10 md:hidden transition-colors"
-            aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
-            aria-expanded={isMenuOpen}
-          >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {isMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+
+          <div className="relative md:hidden flex items-center">
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full text-archive-zinc-500 hover:text-archive-zinc-950 dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.03] transition-all"
+              aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {isMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+
+            {isMenuOpen && (
+              <div className="absolute right-0 top-full mt-3 w-32 glass p-1.5 rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10 z-[110] animate-slide-up">
+                {navItems.map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={`${item.href}-mobile`}
+                      href={item.href}
+                      target={item.blank ? "_blank" : "_self"}
+                      rel={item.blank ? "noopener noreferrer" : undefined}
+                      className={`flex w-full items-center px-3 py-1.5 rounded-xl text-[11px] font-bold transition-colors ${
+                        isActive
+                          ? "bg-archive-zinc-950 text-white dark:bg-white dark:text-archive-zinc-950"
+                          : "text-archive-zinc-600 dark:text-archive-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03]"
+                      }`}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <span>{item.name}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
       </div>
-
-      {isMenuOpen && (
-        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 glass p-1.5 rounded-2xl shadow-xl md:hidden border border-archive-zinc-200 dark:border-archive-zinc-800 animate-slide-up z-[120]">
-          {navItems.map((item) => (
-            <Link
-              key={`${item.href}-mobile`}
-              href={item.href}
-              className="block px-4 py-2 text-[11px] font-bold text-archive-zinc-600 dark:text-archive-zinc-400 hover:text-archive-zinc-950 dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.03] rounded-xl transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {item.name}
-            </Link>
-          ))}
-        </div>
-      )}
     </nav>
   );
 }
