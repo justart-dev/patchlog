@@ -116,7 +116,7 @@ export default function PatchPageClient({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-hero-enter [animation-delay:100ms]">
               {/* Pattern Analysis */}
               <article className="glass-card p-8 relative flex flex-col justify-between overflow-hidden">
-                {isLoaded && !isSignedIn && (
+                {mounted && isLoaded && !isSignedIn && (
                   <div className="absolute inset-0 z-10 flex items-center justify-center bg-archive-zinc-50/95 dark:bg-archive-zinc-950/95 backdrop-blur-[12px]">
                     <div className="text-center p-6">
                       <p className="text-[10px] font-black tracking-widest uppercase mb-2 opacity-50">Data Encrypted</p>
