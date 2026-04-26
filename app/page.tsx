@@ -45,7 +45,7 @@ const problems = [
     id: "02",
     title: "맥락 없는 단순 번역",
     summary: "일반 번역기는 게임 내 용어와 플레이어들만의 언어를 이해하지 못합니다.",
-    pain: "번역기만으로는 알 수 없는 스킬 매커니즘의 변화를 직관적으로 정리합니다.",
+    pain: "글자로만 된 패치노트는 이제 그만. 실제 플레이에 직결되는 핵심 포인트만 골라냈습니다.",
     solution: ["게임 용어 사전(Glossary) 연동", "스킬 및 키 입력 최적화"],
   },
 ] as const;
@@ -146,7 +146,7 @@ export default function Page() {
         <div className="max-w-[1200px] mx-auto text-center">
           <div className="inline-flex items-center gap-2.5 rounded-full border border-archive-zinc-200 dark:border-archive-zinc-800 bg-white dark:bg-archive-zinc-900 px-3.5 py-2 mb-8 animate-hero-enter shadow-ambient">
             <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-glow-green animate-pulse" />
-            <span className="text-[10px] font-black tracking-[0.2em] uppercase text-archive-zinc-500 leading-none">Sync Status</span>
+            <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-archive-zinc-500 leading-none">Sync Status</span>
           </div>
           
           <h1 className="text-5xl sm:text-7xl font-black tracking-tighter leading-[0.95] mb-8 animate-hero-enter">
