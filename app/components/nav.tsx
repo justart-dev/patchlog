@@ -57,7 +57,7 @@ export function Navbar() {
           <ThemeToggle />
 
           {mounted ? (
-            <>
+            <div className="min-w-[70px] flex items-center justify-center">
               <SignedOut>
                 <SignInButton mode="modal">
                   <button className="h-8 px-4 text-[10px] font-black tracking-widest uppercase text-white bg-hero-red-500 hover:bg-hero-red-600 rounded-full transition-all active:scale-95 shadow-sm shadow-hero-red-500/20">
@@ -78,11 +78,10 @@ export function Navbar() {
                   />
                 </div>
               </SignedIn>
-            </>
+            </div>
           ) : (
-            <div className="h-8 w-12 rounded-full bg-archive-zinc-100 dark:bg-archive-zinc-800 animate-pulse" />
+            <div className="h-8 min-w-[70px] rounded-full bg-archive-zinc-100 dark:bg-archive-zinc-800 animate-pulse" />
           )}
-
           <button
             type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}

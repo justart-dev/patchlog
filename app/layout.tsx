@@ -96,10 +96,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html
         lang="ko"
-        className={cx(
-          GeistSans.variable,
-          GeistMono.variable
-        )}
+        className={cx(GeistSans.variable, GeistMono.variable)}
         suppressHydrationWarning
       >
         <head>
@@ -112,7 +109,7 @@ export default function RootLayout({
                   theme === 'system'
                     ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
                     : theme;
-                document.documentElement.classList.add(actualTheme);
+                document.documentElement.classList.toggle('dark', actualTheme === 'dark');
               } catch (e) {}
             `}
           </Script>
@@ -120,11 +117,10 @@ export default function RootLayout({
         <body className="antialiased flex flex-col min-h-screen bg-archive-zinc-50 dark:bg-archive-zinc-950 text-archive-zinc-900 dark:text-archive-zinc-50 overflow-x-hidden selection:bg-hero-red-500 selection:text-white">
           <ThemeProvider>
             {/* Global Background Elements */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+            <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10" aria-hidden="true">
               <div className="absolute top-[-5%] left-[-10%] w-[50%] h-[50%] rounded-full bg-hero-blue-500/10 blur-[120px] dark:bg-hero-blue-500/15" />
               <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-hero-red-500/10 blur-[120px] dark:bg-hero-red-500/15" />
-              <div className="absolute inset-0 opacity-[0.015] dark:opacity-[0.03] pointer-events-none" 
-                   style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+              <div className="absolute inset-0 opacity-[0.015] dark:opacity-[0.03] pointer-events-none bg-noise" />
             </div>
 
             {/* Floating Navbar Container */}
