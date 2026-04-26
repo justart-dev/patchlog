@@ -136,7 +136,7 @@ module.exports = {
         'hero-gradient-dark': 'linear-gradient(135deg, #c1122d 0%, #1e3a8a 100%)',
         'power-gradient': 'linear-gradient(45deg, #facc15 0%, #a855f7 100%)',
         'comic-radial': 'radial-gradient(circle at 50% 50%, rgba(248, 61, 84, 0.05) 0%, transparent 70%)',
-        'noise': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Ffilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
+        'noise': "url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3dy95eXl6enqBgYGHh4d8fHx9fX1+fn6AgIB/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f3wAAAAMWHRSTlMGP0y3uL9XmMSZKNz9M9L998KAobCAgP40989VAAAAaklEQVQ4y2NgYAz8n4gwAi0vRE6Yn69gdXQWIifD6vgsRE6S1fFZDJyYnK9gdXQWIifD6vgsRE6S1fFZDJyYnK9gdXQWIifD6vgsRE6S1fFZDJyYnK9gdXQWIifD6vgsRE6S1fFZDJyYnK9gdXQWIn8AGv0Uf6vC43QAAAAASUVORK5CYII=\")",
       },
       boxShadow: {
         'hero': '0 10px 40px rgba(0, 0, 0, 0.1), 0 0 20px rgba(37, 99, 235, 0.05)',
