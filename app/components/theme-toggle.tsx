@@ -42,7 +42,7 @@ export function ThemeToggle() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-32 glass p-1.5 rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10 z-[110] animate-slide-up">
+        <div className="absolute right-0 mt-3 w-32 glass p-1.5 rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10 z-[110] animate-slide-up">
           {themes.map((t) => (
             <button
               key={t.id}
