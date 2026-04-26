@@ -425,13 +425,13 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
           </div>
         </form>
       ) : (
-        <div className="text-center py-8 bg-slate-50 dark:bg-gray-800 rounded-lg mb-8">
-          <p className="text-slate-600 dark:text-gray-300 mb-3">
+        <div className="text-center py-10 bg-archive-zinc-100/50 dark:bg-archive-zinc-900/50 border border-archive-zinc-200 dark:border-archive-zinc-800 rounded-2xl mb-8">
+          <p className="text-archive-zinc-600 dark:text-archive-zinc-400 mb-4 font-bold">
             로그인하고 커뮤니티에 참여해보세요!
           </p>
           <SignInButton mode="modal">
-            <button className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg text-sm font-medium hover:bg-blue-700 dark:hover:bg-blue-600">
-              로그인하기
+            <button className="px-8 py-2.5 bg-hero-red-500 hover:bg-hero-red-600 text-white rounded-full text-xs font-black tracking-widest uppercase transition-all hover:scale-105 shadow-lg shadow-hero-red-500/20">
+              Login to Comment
             </button>
           </SignInButton>
         </div>
