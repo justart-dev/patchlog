@@ -69,17 +69,6 @@ export const metadata: Metadata = {
     description: "Marvel Rivals 패치노트와 밸런스 변경을 한국어로 정리한 Patchlog",
     images: [DEFAULT_OG_IMAGE],
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
   verification: {
     google: "vhwJw57Gjn2GqP4ls2gFNnU2QPZLp9OwT6g7aOxP3yM",
   },
