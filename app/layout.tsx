@@ -37,6 +37,11 @@ export const metadata: Metadata = {
   authors: [{ name: "Patchlog" }],
   creator: "Patchlog",
   publisher: "Patchlog",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "패치로그",
+  },
   icons: {
     icon: "/icon",
     apple: "/apple-icon",
