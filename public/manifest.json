@@ -1,0 +1,40 @@
+{
+  "id": "/",
+  "name": "패치로그 - 마블 라이벌즈 한글 패치노트",
+  "short_name": "패치로그",
+  "description": "마블 라이벌즈 최신 패치노트와 밸런스 변경을 한국어로 빠르게 확인하세요.",
+  "start_url": "/patch?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "categories": ["games", "news", "utilities"],
+  "lang": "ko-KR",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/maskable-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/maskable-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

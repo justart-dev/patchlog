@@ -1,24 +1,16 @@
-const withPWAInit = require("next-pwa");
-
-const withPWA = withPWAInit({
-  dest: "public",
-  disable: process.env.NODE_ENV === "development",
-  register: true,
-  skipWaiting: true,
-});
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  turbopack: {}, // Silence Turbopack vs Webpack config conflict
   serverExternalPackages: ["playwright", "@playwright/test"],
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'shared.akamai.steamstatic.com',
+        protocol: "https",
+        hostname: "shared.akamai.steamstatic.com",
       },
       {
-        protocol: 'https',
-        hostname: 'cdn.akamai.steamstatic.com',
+        protocol: "https",
+        hostname: "cdn.akamai.steamstatic.com",
       },
     ],
     unoptimized: true,
@@ -26,8 +18,8 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/patch/:id/',
-        destination: '/patch/:id',
+        source: "/patch/:id/",
+        destination: "/patch/:id",
         permanent: true,
       },
     ];
@@ -35,34 +27,34 @@ const nextConfig = {
   async headers() {
     const indexableHeaders = [
       {
-        key: 'X-Robots-Tag',
-        value: 'index, follow',
+        key: "X-Robots-Tag",
+        value: "index, follow",
       },
     ];
 
     return [
       {
-        source: '/',
+        source: "/",
         headers: indexableHeaders,
       },
       {
-        source: '/patch',
+        source: "/patch",
         headers: indexableHeaders,
       },
       {
-        source: '/patch/:path*',
+        source: "/patch/:path*",
         headers: indexableHeaders,
       },
       {
-        source: '/sitemap.xml',
+        source: "/sitemap.xml",
         headers: indexableHeaders,
       },
       {
-        source: '/robots.txt',
+        source: "/robots.txt",
         headers: indexableHeaders,
       },
     ];
   },
 };
 
-module.exports = withPWA(nextConfig);
+module.exports = nextConfig;
