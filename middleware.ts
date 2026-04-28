@@ -7,7 +7,10 @@ const isPublicRoute = createRouteMatcher([
   "/sign-up(.*)",
   "/api(.*)",
   "/_next(.*)",
-  "/(assets|images|favicon.ico)(/.*)?",
+  "/(assets|images|icons|favicon.ico)(/.*)?",
+  "/manifest.json",
+  "/offline.html",
+  "/sw.js",
   "/sitemap.xml",
   "/robots.txt",
 ]);

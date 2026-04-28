@@ -9,6 +9,7 @@ import Script from "next/script";
 import Footer from "./components/footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { WebSiteStructuredData } from "./components/StructuredData";
+import PWARegister from "./components/PWARegister";
 import { ThemeProvider } from "@/lib/theme-provider";
 import { buildCanonicalUrl, DEFAULT_OG_IMAGE, SITE_BRAND_NAME, SITE_URL } from "@/lib/site";
 
@@ -42,10 +43,14 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     title: "패치로그",
   },
+  manifest: "/manifest.json",
   icons: {
-    icon: "/icon",
-    apple: "/apple-icon",
-    shortcut: "/icon",
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/icons/icon-192.png",
   },
   formatDetection: {
     email: false,
@@ -94,6 +99,11 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <head>
+          <meta name="theme-color" content="#ffffff" />
+          <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <link rel="manifest" href="/manifest.json" />
+          <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
           <WebSiteStructuredData />
           <Script id="theme-init" strategy="beforeInteractive">
             {`
@@ -133,6 +143,7 @@ export default function RootLayout({
               </div>
             </footer>
           </ThemeProvider>
+          <PWARegister />
           <Analytics />
           <SpeedInsights />
           <Script
