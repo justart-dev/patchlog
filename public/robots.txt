@@ -3,4 +3,5 @@ Allow: /
 Disallow: /api/
 Disallow: /admin/
 
+Host: https://patchlog.vercel.app
 Sitemap: https://patchlog.vercel.app/sitemap.xml
