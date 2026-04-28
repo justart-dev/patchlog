@@ -57,13 +57,33 @@ export async function getPatches(limit = 10) {
 
 export const getPatchSitemapEntries = unstable_cache(
   async () => {
-    const { data, error } = await supabase
+    const query = () =>
+      supabase
+        .from("steam_patch_logs")
+        .select("id, published_at, updated_at")
+        .order("published_at", { ascending: false });
+
+    const { data, error } = await query();
+
+    if (!error) return data;
+
+    // Some deployments still use the older steam_patch_logs schema without
+    // updated_at. Do not let that make sitemap.xml silently drop every patch URL.
+    if (error.message?.includes("updated_at")) {
+      const { data: fallbackData, error: fallbackError } = await supabase
       .from("steam_patch_logs")
-      .select("id, published_at, updated_at")
+        .select("id, published_at")
       .order("published_at", { ascending: false });
 
-    if (error) return [];
-    return data;
+      if (!fallbackError) {
+        return (fallbackData || []).map((patch) => ({
+          ...patch,
+          updated_at: null,
+        }));
+      }
+    }
+
+    throw new Error(`failed to load patch sitemap entries: ${error.message}`);
   },
   ["patch-sitemap"],
   { revalidate: 3600 }

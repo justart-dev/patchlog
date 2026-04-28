@@ -32,6 +32,37 @@ const nextConfig = {
       },
     ];
   },
+  async headers() {
+    const indexableHeaders = [
+      {
+        key: 'X-Robots-Tag',
+        value: 'index, follow',
+      },
+    ];
+
+    return [
+      {
+        source: '/',
+        headers: indexableHeaders,
+      },
+      {
+        source: '/patch',
+        headers: indexableHeaders,
+      },
+      {
+        source: '/patch/:path*',
+        headers: indexableHeaders,
+      },
+      {
+        source: '/sitemap.xml',
+        headers: indexableHeaders,
+      },
+      {
+        source: '/robots.txt',
+        headers: indexableHeaders,
+      },
+    ];
+  },
 };
 
 module.exports = withPWA(nextConfig);
