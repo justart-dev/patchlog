@@ -68,8 +68,8 @@ dist
 # clerk configuration (can include secrets)
 /.clerk/
 
-# next-pwa
-public/sw.js
+# next-pwa generated artifacts
+# Keep public/sw.js tracked because Patchlog uses a hand-written service worker.
 public/sw.js.map
 public/workbox-*.js
 public/workbox-*.js.map
