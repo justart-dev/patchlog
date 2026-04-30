@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 import { memo, useMemo } from "react";
 import { formatDistanceToNow } from "date-fns";
@@ -66,7 +65,7 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
           : null;
 
         return (
-          <Link
+          <a
             key={log.id}
             href={`/patch/${log.id}`}
             className="group block animate-hero-enter opacity-0"
@@ -108,7 +107,7 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
                 </div>
               </div>
             </article>
-          </Link>
+          </a>
         );
       })}
     </div>
