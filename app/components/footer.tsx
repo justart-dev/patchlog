@@ -22,6 +22,7 @@ export default function Footer() {
               <Link
                 key={link.label}
                 href={link.href}
+                prefetch={link.href === "/patch" ? false : undefined}
                 className="px-5 py-2.5 text-xs font-black tracking-tight rounded-full bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 hover:scale-105 transition-transform"
               >
                 {link.label}

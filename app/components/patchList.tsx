@@ -5,7 +5,6 @@ import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { replaceEnglishTitles } from "../utils/textReplacer";
 import { formatDateKST } from "../utils/dateFormatter";
-import { stripHtml } from "@/lib/site";
 
 export interface PatchLog {
   id: string;
@@ -106,11 +105,6 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
                     {replaceEnglishTitles(log.title)}
                   </h2>
 
-                  {(log.translated_ko || log.content) && (
-                    <p className="text-sm leading-relaxed text-archive-zinc-600 dark:text-archive-zinc-400 line-clamp-2">
-                      {stripHtml(log.translated_ko || log.content)}
-                    </p>
-                  )}
                 </div>
               </div>
             </article>

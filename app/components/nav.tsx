@@ -54,6 +54,7 @@ export function Navbar() {
                   href={item.href}
                   target={item.blank ? "_blank" : "_self"}
                   rel={item.blank ? "noopener noreferrer" : undefined}
+                  prefetch={item.href === "/patch" ? false : undefined}
                   className={`px-4 py-2 text-[11px] font-bold tracking-tight rounded-full transition-all ${
                     isActive
                       ? "text-archive-zinc-950 dark:text-white bg-black/[0.04] dark:bg-white/[0.06]"
@@ -125,6 +126,7 @@ export function Navbar() {
                       href={item.href}
                       target={item.blank ? "_blank" : "_self"}
                       rel={item.blank ? "noopener noreferrer" : undefined}
+                      prefetch={item.href === "/patch" ? false : undefined}
                       className={`flex w-full items-center px-3 py-1.5 rounded-xl text-[11px] font-bold transition-colors ${
                         isActive
                           ? "bg-archive-zinc-950 text-white dark:bg-white dark:text-archive-zinc-950"
