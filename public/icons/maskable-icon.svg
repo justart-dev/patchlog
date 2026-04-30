@@ -1,20 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Patchlog maskable icon">
-  <defs>
-    <linearGradient id="bg" x1="68" y1="44" x2="446" y2="470" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#111827"/>
-      <stop offset="0.5" stop-color="#18181b"/>
-      <stop offset="1" stop-color="#0f172a"/>
-    </linearGradient>
-    <linearGradient id="accent" x1="168" y1="144" x2="344" y2="368" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#60a5fa"/>
-      <stop offset="0.52" stop-color="#a78bfa"/>
-      <stop offset="1" stop-color="#f43f5e"/>
-    </linearGradient>
-  </defs>
-  <rect width="512" height="512" fill="url(#bg)"/>
-  <circle cx="102" cy="92" r="96" fill="#2563eb" opacity="0.24"/>
-  <circle cx="414" cy="418" r="132" fill="#f43f5e" opacity="0.18"/>
-  <rect x="146" y="120" width="220" height="272" rx="48" fill="#ffffff"/>
-  <path d="M196 182h75c52 0 84 29 84 75 0 48-33 76-87 76h-20v57h-52V182Zm52 43v65h22c22 0 36-12 36-33 0-20-13-32-36-32h-22Z" fill="#111827"/>
-  <path d="M178 364h156" stroke="url(#accent)" stroke-width="24" stroke-linecap="round"/>
+  <rect width="512" height="512" fill="#ffffff"/>
+
+  <rect x="154" y="126" width="204" height="252" rx="48" fill="#18181b"/>
+  <rect x="197" y="184" width="118" height="16" rx="8" fill="#ffffff"/>
+  <rect x="197" y="232" width="118" height="16" rx="8" fill="#ffffff"/>
+  <rect x="197" y="280" width="86" height="16" rx="8" fill="#ffffff"/>
+
+  <g transform="rotate(-8 344 344)">
+    <rect x="304" y="304" width="80" height="80" rx="24" fill="#f83d54"/>
+    <text x="344" y="362" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="48" font-weight="900" fill="#ffffff">P</text>
+  </g>
 </svg>
