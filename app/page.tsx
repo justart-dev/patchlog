@@ -162,6 +162,7 @@ export default function Page() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-hero-enter [animation-delay:200ms]">
             <Link
               href="/patch"
+              prefetch={false}
               className="w-full sm:w-auto px-8 py-4 bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 font-black text-sm tracking-tight rounded-full hover:scale-[1.02] transition-transform active:scale-[0.98] shadow-xl shadow-black/10 dark:shadow-white/5"
             >
               ARCHIVE ACCESS
@@ -370,6 +371,7 @@ export default function Page() {
             
             <Link
               href="/patch"
+              prefetch={false}
               className="inline-flex items-center gap-3 px-10 py-5 bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 font-black tracking-[0.2em] uppercase text-xs rounded-full hover:scale-105 transition-all shadow-xl"
             >
               <span>최신 패치노트 보기</span>
