@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getPatch, getPatchNavigation, getAllPatchIds } from '../../../lib/patches';
 import PatchDetailClient from './PatchDetailClient';
-import { ArticleStructuredData } from '../../components/StructuredData';
+import { ArticleStructuredData, BreadcrumbStructuredData } from '../../components/StructuredData';
 import { replaceEnglishTitles } from '../../utils/textReplacer';
 import { getSkillMap } from '../../utils/skillMapService';
 import { buildCanonicalUrl, stripHtml } from '@/lib/site';
@@ -46,6 +46,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: `${title} | 마블 라이벌즈 패치로그`,
       description: `${description} 히어로 스킬 변경, 맵 업데이트, 메타 변화 확인.`,
+      url: canonicalUrl,
       type: 'article',
       publishedTime: patch.published_at,
       siteName: "패치로그",
@@ -89,6 +90,13 @@ export default async function PatchDetailPage({ params }: PageProps) {
         content={patch.translated_ko || patch.content || ''} 
         publishedAt={patch.published_at} 
         url={buildCanonicalUrl(`/patch/${patch.id}`)} 
+      />
+      <BreadcrumbStructuredData
+        items={[
+          { name: "홈", url: buildCanonicalUrl("/") },
+          { name: "패치노트", url: buildCanonicalUrl("/patch") },
+          { name: replaceEnglishTitles(patch.title), url: buildCanonicalUrl(`/patch/${patch.id}`) },
+        ]}
       />
       <PatchDetailClient patchDetail={patchDetail} navigation={navigation} skillMap={skillMap} />
     </>

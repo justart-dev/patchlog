@@ -5,7 +5,12 @@ function escapeRegex(str: string) {
 }
 
 const titlePhraseReplacements: Array<[string, string]> = [
+  ["What's New In", "신규 콘텐츠"],
+  ["What New In", "신규 콘텐츠"],
+  ["Whats New In", "신규 콘텐츠"],
+  ["What Is New In", "신규 콘텐츠"],
   ["Instructions for Enabling", ""],
+  ["Dev Vision", "개발자 비전"],
   ["Performance Optimization", "성능 최적화"],
   ["Combat Mechanics", "전투 메커니즘"],
   ["Combat Mechanic", "전투 메커니즘"],
@@ -81,6 +86,9 @@ export function replaceEnglishTitles(title: string): string {
   result = replaceTitleWords(result, titlePhraseReplacements);
   result = result.replace(/([가-힣A-Za-z0-9])'s\b/g, "$1의");
   result = result.replace(/\bAnd\b/gi, "및");
+  result = result.replace(/\bWhat의\s+new\s+in\b/gi, "신규 콘텐츠");
+  result = result.replace(/\bWhat\s+new\s+in\b/gi, "신규 콘텐츠");
+  result = result.replace(/\bWhat\s+is\s+new\s+in\b/gi, "신규 콘텐츠");
   result = result.replace(/^Regarding\b\s*/i, "");
   result = result.replace(/^On\b\s*/i, "");
   result = result.replace(/^How to\b\s*/i, "");
