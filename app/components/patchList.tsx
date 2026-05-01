@@ -100,9 +100,9 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
                     </time>
                   </div>
 
-                  <h2 className="text-xl sm:text-2xl font-black tracking-tighter leading-tight mb-3 group-hover:text-hero-red-500 transition-colors line-clamp-2">
+                  <h3 className="text-xl sm:text-2xl font-black tracking-tighter leading-tight mb-3 group-hover:text-hero-red-500 transition-colors line-clamp-2">
                     {replaceEnglishTitles(log.title)}
-                  </h2>
+                  </h3>
 
                 </div>
               </div>
