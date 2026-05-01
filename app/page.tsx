@@ -356,11 +356,11 @@ export default function Page() {
       </section>
 
       {/* Daily Patchlog Section */}
-      <section className="px-6 py-24">
-        <div className="group max-w-[1000px] mx-auto p-12 sm:p-20 text-center relative overflow-hidden transition-all duration-500">
+      <section className="px-4 sm:px-6 py-24">
+        <div className="group max-w-[1000px] mx-auto px-4 py-12 sm:p-20 text-center relative overflow-hidden transition-all duration-500">
           <div className="relative z-10">
             <p className="text-[10px] font-black tracking-[0.4em] text-hero-red-500 mb-8 uppercase">Daily Patchlog</p>
-            <h2 className="text-5xl sm:text-7xl font-black tracking-tighter mb-8 leading-[0.95]">
+            <h2 className="text-4xl sm:text-7xl font-black tracking-tighter mb-8 leading-[0.95] break-keep">
               최신 패치노트를<br />
               한눈에 확인하세요
             </h2>
