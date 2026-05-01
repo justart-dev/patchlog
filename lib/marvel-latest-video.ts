@@ -1,6 +1,16 @@
 const MARVEL_RIVALS_YOUTUBE_FEED =
   "https://www.youtube.com/feeds/videos.xml?channel_id=UCWzmOSSiSPbVnVu3ZAyDx2w";
 
+const FALLBACK_LATEST_VIDEO = {
+  title: "Path to Doomsday: The Avengers | New Asymmetric PvP Mode Trailer | Marvel Rivals",
+  videoId: "prgi9DELhjc",
+  videoUrl: "https://www.youtube.com/watch?v=prgi9DELhjc",
+  publishedAt: "2026-04-29T15:01:28+00:00",
+  embedUrl: "https://www.youtube-nocookie.com/embed/prgi9DELhjc",
+  thumbnailUrl: "https://i.ytimg.com/vi/prgi9DELhjc/hqdefault.jpg",
+  source: "Marvel Rivals YouTube"
+};
+
 export type LatestVideo = {
   title: string;
   videoId: string;
@@ -79,13 +89,14 @@ export async function getLatestMarvelVideo(): Promise<LatestVideo | null> {
   const response = await fetch(MARVEL_RIVALS_YOUTUBE_FEED, {
     next: { revalidate: 1800 },
     headers: {
+      Accept: "application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8",
       "User-Agent":
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
     }
   } as RequestInit & { next: { revalidate: number } });
 
   if (!response.ok) {
-    throw new Error(`유튜브 피드를 불러오지 못했습니다. (${response.status})`);
+    return FALLBACK_LATEST_VIDEO;
   }
 
   const xml = await response.text();
@@ -117,7 +128,7 @@ export async function getLatestMarvelVideo(): Promise<LatestVideo | null> {
   const selectedEntry = candidateEntries[0]?.entryBlock;
 
   if (!selectedEntry) {
-    return null;
+    return FALLBACK_LATEST_VIDEO;
   }
 
   const videoId = extractTag(selectedEntry, "yt:videoId");
@@ -126,7 +137,7 @@ export async function getLatestMarvelVideo(): Promise<LatestVideo | null> {
   const videoUrl = extractLink(selectedEntry);
 
   if (!videoId || !title || !publishedAt || !videoUrl) {
-    throw new Error("최신 영상 정보 파싱에 실패했습니다.");
+    return FALLBACK_LATEST_VIDEO;
   }
 
   return {
