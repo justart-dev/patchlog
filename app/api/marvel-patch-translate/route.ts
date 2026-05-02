@@ -10,6 +10,7 @@ import {
   extractUnmappedSkillLikeTerms,
   restoreProtectedTermPlaceholders,
 } from "../../utils/translationProtection";
+import { convertUtcDateTimesToKorean } from "../../utils/utcDateFormatter";
 
 const supabaseUrl = process.env.SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -74,7 +75,7 @@ export async function POST(request: Request) {
 
         // YouTube 태그를 플레이스홀더로 치환하여 보존
         const youtubeTags: string[] = [];
-        let contentToTranslate = log.content.replace(
+        let contentToTranslate = convertUtcDateTimesToKorean(log.content).replace(
           /\[previewyoutube="([^"]+)"\]\[\/previewyoutube\]/g,
           (match) => {
             const placeholder = `__YOUTUBE_PLACEHOLDER_${youtubeTags.length}__`;
@@ -197,11 +198,13 @@ export async function POST(request: Request) {
           translatedContent = translatedContent.replace(heroPattern, koreanName);
         });
 
-        // 시스템 용어는 UI/섹션성 문구만 최소한으로 치환
-        Object.entries(systemGlossary).forEach(([englishName, koreanName]) => {
-          const systemPattern = new RegExp(`\\b${escapeRegex(englishName)}\\b`, "g");
-          translatedContent = translatedContent.replace(systemPattern, koreanName);
-        });
+        // 시스템/섹션성 용어는 긴 문구부터 치환해 짧은 단어가 먼저 먹지 않게 처리
+        Object.entries(systemGlossary)
+          .sort(([a], [b]) => b.length - a.length)
+          .forEach(([englishName, koreanName]) => {
+            const systemPattern = new RegExp(`\\b${escapeRegex(englishName)}\\b`, "g");
+            translatedContent = translatedContent.replace(systemPattern, koreanName);
+          });
 
         // LLM이 남긴 혼합형/한국어 잔여 표현 정규화
         translatedContent = translatedContent
