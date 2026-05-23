@@ -12,14 +12,14 @@ test.describe("UTC date localization", () => {
   test("uses the nearest prior date for time-only UTC ranges", () => {
     const source = "Event Period: April 30th, 2026, at 09 : 00 : 00 (UTC) to 03 : 00 : 00 (UTC)";
 
-    expect(convertUtcDateTimesToKorean(source)).toBe("Event Period: 4월 30일 오후 6시 to 4월 30일 오후 12시");
+    expect(convertUtcDateTimesToKorean(source)).toBe("Event Period: 4월 30일 오후 6시 ~ 4월 30일 오후 12시");
   });
 
   test("converts Steam date ranges that share one UTC marker at the end", () => {
     const source = "Event Period: April 30th, 2026, 09 : 00 : 00 to May 28th, 2026, 09 : 00 : 00 (UTC)";
 
     expect(convertUtcDateTimesToKorean(source)).toBe(
-      "Event Period: 4월 30일 오후 6시 to 5월 28일 오후 6시"
+      "Event Period: 4월 30일 오후 6시 ~ 5월 28일 오후 6시"
     );
   });
 
@@ -30,10 +30,18 @@ test.describe("UTC date localization", () => {
     ].join("\n");
 
     expect(convertUtcDateTimesToKorean(source)).toContain(
-      "A: 4월 30일 오후 6시 to 4월 30일 오후 12시"
+      "A: 4월 30일 오후 6시 ~ 4월 30일 오후 12시"
     );
     expect(convertUtcDateTimesToKorean(source)).toContain(
-      "B: 5월 1일 오전 11시 to 5월 1일 오후 6시"
+      "B: 5월 1일 오전 11시 ~ 5월 1일 오후 6시"
+    );
+  });
+
+  test("converts Steam date ranges whose end date omits the comma after ordinal day", () => {
+    const source = "Limited Time: May 22nd, 2026, 02 : 00 : 00 to June 19th 2026, 02 : 00 : 00 (UTC)";
+
+    expect(convertUtcDateTimesToKorean(source)).toBe(
+      "Limited Time: 5월 22일 오전 11시 ~ 6월 19일 오전 11시"
     );
   });
 
