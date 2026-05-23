@@ -49,6 +49,9 @@ async function runBatch(request: Request) {
       `${baseUrl}/api/marvel-patch-update`,
       {
         method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.CRON_SECRET}`,
+        },
       }
     );
     const updateResponse = await updatePost(mockUpdateRequest);
@@ -70,6 +73,7 @@ async function runBatch(request: Request) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.CRON_SECRET}`,
         },
       }
     );

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { parseSkillData, ParsedSkill } from "../../utils/skillParser";
 import { getSkillMap, upsertSkillMap } from "../../utils/skillMapService";
+import { currentUser } from "@clerk/nextjs/server";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -248,6 +249,26 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  // 1) Bearer Token (CRON_SECRET) 검증
+  const authHeader = request.headers.get("authorization");
+  const expectedAuth = `Bearer ${process.env.CRON_SECRET}`;
+  const isCronAuthorized = authHeader === expectedAuth;
+
+  // 2) Clerk 로그인 여부 검증 (사용자 인증)
+  let isUserAuthorized = false;
+  try {
+    const user = await currentUser();
+    if (user) {
+      isUserAuthorized = true;
+    }
+  } catch (error) {
+    console.warn("[skillmap-sync] Clerk auth check failed:", error);
+  }
+
+  if (!isCronAuthorized && !isUserAuthorized) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const body = (await request.json().catch(() => ({}))) as {
       rawText?: string;
