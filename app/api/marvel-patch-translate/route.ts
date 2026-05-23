@@ -44,6 +44,12 @@ function replaceMappedTerm(content: string, englishName: string, koreanName: str
 }
 
 export async function POST(request: Request) {
+  const authHeader = request.headers.get("authorization");
+  const expectedAuth = `Bearer ${process.env.CRON_SECRET}`;
+  if (authHeader !== expectedAuth) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const skillMap = await getSkillMap();
 
