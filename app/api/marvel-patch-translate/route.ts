@@ -28,6 +28,21 @@ function escapeRegex(str: string) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+function replaceMappedTerm(content: string, englishName: string, koreanName: string) {
+  const escaped = escapeRegex(englishName);
+  const startsWithWord = /^[A-Za-z0-9]/.test(englishName);
+  const endsWithWord = /[A-Za-z0-9]$/.test(englishName);
+  const pattern = new RegExp(
+    `${startsWithWord ? "(^|[^A-Za-z0-9])" : ""}(${escaped})${endsWithWord ? "(?=$|[^A-Za-z0-9])" : ""}`,
+    "g"
+  );
+
+  return content.replace(pattern, (...args) => {
+    const prefix = startsWithWord ? args[1] : "";
+    return `${prefix}${koreanName}`;
+  });
+}
+
 export async function POST(request: Request) {
   try {
     const skillMap = await getSkillMap();
@@ -194,6 +209,15 @@ export async function POST(request: Request) {
           ([a], [b]) => b.length - a.length
         );
         sortedHeroEntries.forEach(([englishName, koreanName]) => {
+          const possessivePattern = new RegExp(
+            `\\b${escapeRegex(englishName)}['’]s\\b`,
+            "g"
+          );
+          translatedContent = translatedContent.replace(
+            possessivePattern,
+            `${koreanName}의`
+          );
+
           const heroPattern = new RegExp(`\\b${escapeRegex(englishName)}\\b`, "g");
           translatedContent = translatedContent.replace(heroPattern, koreanName);
         });
@@ -202,8 +226,11 @@ export async function POST(request: Request) {
         Object.entries(systemGlossary)
           .sort(([a], [b]) => b.length - a.length)
           .forEach(([englishName, koreanName]) => {
-            const systemPattern = new RegExp(`\\b${escapeRegex(englishName)}\\b`, "g");
-            translatedContent = translatedContent.replace(systemPattern, koreanName);
+            translatedContent = replaceMappedTerm(
+              translatedContent,
+              englishName,
+              koreanName
+            );
           });
 
         // LLM이 남긴 혼합형/한국어 잔여 표현 정규화

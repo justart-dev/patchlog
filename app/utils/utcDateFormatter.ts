@@ -16,7 +16,7 @@ const MONTHS: Record<string, number> = {
 const MONTH_PATTERN = Object.keys(MONTHS).join("|");
 const DATE_PART_SOURCE =
   `(${MONTH_PATTERN})\\s+` +
-  `(\\d{1,2})(?:st|nd|rd|th)?,\\s*` +
+  `(\\d{1,2})(?:st|nd|rd|th)?(?:,)?\\s*` +
   `(\\d{4}),?\\s*(?:at\\s*)?`;
 const TIME_PART_SOURCE = `(\\d{1,2})\\s*:\\s*(\\d{2})\\s*:\\s*(\\d{2})`;
 const FULL_UTC_TIMESTAMP_SOURCE =
@@ -42,6 +42,8 @@ function formatKoreanKst(date: Date) {
     hour12: true,
   }).format(date);
 }
+
+const RANGE_SEPARATOR = " ~ ";
 
 function utcDateFromParts(
   monthName: string,
@@ -93,45 +95,47 @@ export function convertUtcDateTimesToKorean(content: string) {
           startMinute,
           startSecond
         )
-      )} to ${formatKoreanKst(
+      )}${RANGE_SEPARATOR}${formatKoreanKst(
         utcDateFromParts(endMonth, endDay, endYear, endHour, endMinute, endSecond)
       )}`;
     }
   );
 
-  return contentWithRangesConverted.replace(
-    UTC_TIMESTAMP,
-    (
-      match,
-      monthName,
-      day,
-      year,
-      fullHour,
-      fullMinute,
-      fullSecond,
-      timeOnlyHour,
-      timeOnlyMinute,
-      timeOnlySecond
-    ) => {
-      if (monthName) {
-        activeUtcDate = { monthName, day, year };
+  return contentWithRangesConverted
+    .replace(
+      UTC_TIMESTAMP,
+      (
+        match,
+        monthName,
+        day,
+        year,
+        fullHour,
+        fullMinute,
+        fullSecond,
+        timeOnlyHour,
+        timeOnlyMinute,
+        timeOnlySecond
+      ) => {
+        if (monthName) {
+          activeUtcDate = { monthName, day, year };
+          return formatKoreanKst(
+            utcDateFromParts(monthName, day, year, fullHour, fullMinute, fullSecond)
+          );
+        }
+
+        if (!activeUtcDate) return match;
+
         return formatKoreanKst(
-          utcDateFromParts(monthName, day, year, fullHour, fullMinute, fullSecond)
+          utcDateFromParts(
+            activeUtcDate.monthName,
+            activeUtcDate.day,
+            activeUtcDate.year,
+            timeOnlyHour,
+            timeOnlyMinute,
+            timeOnlySecond
+          )
         );
       }
-
-      if (!activeUtcDate) return match;
-
-      return formatKoreanKst(
-        utcDateFromParts(
-          activeUtcDate.monthName,
-          activeUtcDate.day,
-          activeUtcDate.year,
-          timeOnlyHour,
-          timeOnlyMinute,
-          timeOnlySecond
-        )
-      );
-    }
-  );
+    )
+    .replace(/\s+to\s+(?=\d{1,2}월\s+\d{1,2}일)/g, RANGE_SEPARATOR);
 }

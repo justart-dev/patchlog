@@ -6,9 +6,10 @@ function escapeRegex(str: string) {
 }
 
 const STORE_MARKETING_KEYWORDS = [
-  "Bundle",
+  "Chroma",
   "Costume",
   "Costumes",
+  "Bundle",
   "Emoji",
   "Spray",
   "Nameplate",
