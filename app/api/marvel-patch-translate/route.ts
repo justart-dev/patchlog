@@ -3,13 +3,11 @@ import { createClient } from "@supabase/supabase-js";
 import { revalidatePath, revalidateTag } from "next/cache";
 import marvelPrompt from "../../utils/marvel.json";
 import { getSkillMap } from "../../utils/skillMapService";
-import { heroMap } from "../../utils/heroMap";
-import { systemGlossary } from "../../utils/systemGlossary";
 import {
   applyProtectedTermPlaceholders,
   extractUnmappedSkillLikeTerms,
-  restoreProtectedTermPlaceholders,
 } from "../../utils/translationProtection";
+import { postProcessTranslation } from "../../utils/postProcessTranslation";
 import { convertUtcDateTimesToKorean } from "../../utils/utcDateFormatter";
 
 const supabaseUrl = process.env.SUPABASE_URL!;
@@ -22,25 +20,6 @@ interface PatchLog {
   id: string;
   content: string;
   translated_ko?: string;
-}
-
-function escapeRegex(str: string) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-function replaceMappedTerm(content: string, englishName: string, koreanName: string) {
-  const escaped = escapeRegex(englishName);
-  const startsWithWord = /^[A-Za-z0-9]/.test(englishName);
-  const endsWithWord = /[A-Za-z0-9]$/.test(englishName);
-  const pattern = new RegExp(
-    `${startsWithWord ? "(^|[^A-Za-z0-9])" : ""}(${escaped})${endsWithWord ? "(?=$|[^A-Za-z0-9])" : ""}`,
-    "g"
-  );
-
-  return content.replace(pattern, (...args) => {
-    const prefix = startsWithWord ? args[1] : "";
-    return `${prefix}${koreanName}`;
-  });
 }
 
 export async function POST(request: Request) {
@@ -111,19 +90,13 @@ export async function POST(request: Request) {
           applyProtectedTermPlaceholders(contentToTranslate, unmappedTerms);
         contentToTranslate = protectedContent;
 
-        // skillMap을 프롬프트에 추가
+        // skillMap을 프롯트에 추가
         const skillMappings = Object.entries(skillMap)
-          .map(([key, value]) => `        "${key}": "${value}"`)
-          .join(",\n");
-        const heroMappings = Object.entries(heroMap)
-          .map(([key, value]) => `        "${key}": "${value}"`)
-          .join(",\n");
-        const systemMappings = Object.entries(systemGlossary)
           .map(([key, value]) => `        "${key}": "${value}"`)
           .join(",\n");
 
         const enhancedSystemPrompt = marvelPrompt.messages[0].content +
-          `\n\nWhen translating skill names, use these exact mappings:\n{\n${skillMappings}\n}\n\nWhen translating hero names, use these exact mappings:\n{\n${heroMappings}\n}\n\nWhen translating system and UI terms, use these exact mappings:\n{\n${systemMappings}\n}\n\nIMPORTANT: Skill names that are NOT present in the mappings must remain in the original English exactly as written. Do not invent Korean names for unmapped skills or team-up abilities. Keep all placeholders like __YOUTUBE_PLACEHOLDER_N__ and __SKILL_TERM_PLACEHOLDER_N__ exactly as they are without translating them.`;
+          `\n\nWhen translating skill names, use these exact mappings:\n{\n${skillMappings}\n}\n\nIMPORTANT: Skill names that are NOT present in the mappings must remain in the original English exactly as written. Do not invent Korean names for unmapped skills or team-up abilities. Keep all placeholders like __YOUTUBE_PLACEHOLDER_N__ and __SKILL_TERM_PLACEHOLDER_N__ exactly as they are without translating them.`;
 
         // OpenAI API 호출하여 번역
         const requestBody = {
@@ -175,98 +148,21 @@ export async function POST(request: Request) {
           continue;
         }
 
-        // ```html ``` 태그 제거 (ChatGPT가 코드블록으로 감쌀 경우)
+        // ```html ``` 태그 제거
         translatedContent = translatedContent.replace(/```html\n?/g, '').replace(/```\n?/g, '');
 
-        // YouTube 플레이스홀더를 원래 태그로 복원
+        // YouTube 플레이스홀더 복원
         youtubeTags.forEach((tag, index) => {
           const placeholder = `__YOUTUBE_PLACEHOLDER_${index}__`;
           translatedContent = translatedContent.replace(placeholder, tag);
         });
 
-        // 후처리: 남아 있는 명시적 영문 용어를 치환하고, 키 매핑은 유지하되 중복 생성은 최소화
-        const sortedSkillEntries = Object.entries(skillMap).sort(
-          ([a], [b]) => b.length - a.length
-        );
-        sortedSkillEntries.forEach(([englishName, koreanName]) => {
-          const englishPattern = new RegExp(escapeRegex(englishName), "g");
-          translatedContent = translatedContent.replace(englishPattern, koreanName);
-
-          // 모델이 한글 스킬명만 남기고 키 정보를 빠뜨린 경우에만 전체 매핑을 보강
-          const koreanMatch = koreanName.match(/^(.+?)\((.+)\)$/);
-          if (koreanMatch) {
-            const [, nameOnly] = koreanMatch;
-            const nameOnlyPattern = new RegExp(
-              `${escapeRegex(nameOnly)}(?!\([^)]*\))`,
-              "g"
-            );
-            translatedContent = translatedContent.replace(nameOnlyPattern, koreanName);
-          }
-        });
-
-        // 중복 키 표기 보정: (우클릭)(우클릭), (Shift)(Shift) 같은 결과를 하나로 정리
-        translatedContent = translatedContent.replace(
-          /(\((?:좌클릭|우클릭|패시브|궁극기|Shift|E|Q|C|F|X|Ctrl|Space)\))(?:\1)+/g,
-          "$1"
-        );
-
-        // 캐릭터명은 정확한 전체 이름만 치환하고, 부분 일치/추가 괄호 보정은 하지 않음
-        const sortedHeroEntries = Object.entries(heroMap).sort(
-          ([a], [b]) => b.length - a.length
-        );
-        sortedHeroEntries.forEach(([englishName, koreanName]) => {
-          const possessivePattern = new RegExp(
-            `\\b${escapeRegex(englishName)}['’]s\\b`,
-            "g"
-          );
-          translatedContent = translatedContent.replace(
-            possessivePattern,
-            `${koreanName}의`
-          );
-
-          const heroPattern = new RegExp(`\\b${escapeRegex(englishName)}\\b`, "g");
-          translatedContent = translatedContent.replace(heroPattern, koreanName);
-        });
-
-        // 시스템/섹션성 용어는 긴 문구부터 치환해 짧은 단어가 먼저 먹지 않게 처리
-        Object.entries(systemGlossary)
-          .sort(([a], [b]) => b.length - a.length)
-          .forEach(([englishName, koreanName]) => {
-            translatedContent = replaceMappedTerm(
-              translatedContent,
-              englishName,
-              koreanName
-            );
-          });
-
-        // LLM이 남긴 혼합형/한국어 잔여 표현 정규화
-        translatedContent = translatedContent
-          .replace(/체인-CC\s*보호/g, "연속 CC 보호")
-          .replace(/체인 CC\s*보호/g, "연속 CC 보호")
-          .replace(/체인-CC\s*\(군중 제어\)\s*보호/g, "연속 CC 보호")
-          .replace(/체인 CC\s*\(군중 제어\)\s*보호/g, "연속 CC 보호")
-          .replace(/체인-CC/g, "연속 CC")
-          .replace(/체인 CC/g, "연속 CC");
-
-        // 강인함 뒤 조사 보정 (예: 강인함를 -> 강인함을, <strong>강인함</strong>를 -> <strong>강인함</strong>을)
-        const correctedTenacityParticles: Record<string, string> = {
-          를: "을",
-          는: "은",
-          가: "이",
-          와: "과",
-          로: "으로",
-          랑: "이랑",
-        };
-        translatedContent = translatedContent.replace(
-          /(강인함(?:<\/[^>]+>)*)(를|는|가|와|로|랑)/g,
-          (_, termWithTags, particle) => `${termWithTags}${correctedTenacityParticles[particle] ?? particle}`
-        );
-
-        // skillMap에 없는 스킬/팀업명은 모든 후처리 이후 영문 그대로 최종 복원
-        translatedContent = restoreProtectedTermPlaceholders(
+        // 후처리: 모든 치환을 하나의 함수로 통합
+        translatedContent = postProcessTranslation({
           translatedContent,
-          protectedTerms
-        );
+          skillMap,
+          protectedTerms,
+        });
 
         // DB에 번역 결과 업데이트
         const { error: updateError } = await supabase
