@@ -78,12 +78,8 @@ export function clearSkillMapCache() {
 }
 
 export async function getSkillMap(): Promise<Record<string, string>> {
-  try {
-    return await getCachedSkillMap();
-  } catch (error) {
-    console.warn("[skill-map] cached fetch failed, trying direct fetch:", error);
-    return fetchSkillMapFromDb(false);
-  }
+  // TEMP: bypass cache to test new DB entries
+  return fetchSkillMapFromDb(false);
 }
 
 export async function upsertSkillMap(skills: ParsedSkill[], source: string) {

@@ -48,6 +48,8 @@ export const systemGlossary: Record<string, string> = {
   "Hellfire Gala": "헬파이어 갈라",
   "Dev Vision": "개발자 비전",
   "Will of Galacta": "갈락타의 의지",
+  "Suave Spector": "수려한 스펙터",
+  "Primal Groove": "원시 그루브",
   Increase: "증가",
   Reduce: "감소",
   Bundle: "번들",
