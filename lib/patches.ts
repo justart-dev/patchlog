@@ -21,7 +21,7 @@ export async function getPatch(id: string) {
       return data;
     },
     ["patch-detail", id],
-    { revalidate: 3600, tags: [`patch:${id}`] }
+    { revalidate: 60, tags: [`patch:${id}`] }
   )();
 }
 
@@ -51,7 +51,7 @@ export async function getPatches(limit = 10) {
       }));
     },
     ["patch-list", String(limit)],
-    { revalidate: 1800, tags: ["patch-list"] }
+    { revalidate: 300, tags: ["patch-list"] }
   )();
 }
 
