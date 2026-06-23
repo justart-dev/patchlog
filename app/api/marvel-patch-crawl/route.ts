@@ -5,7 +5,13 @@ const supabaseUrl = process.env.SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const OFFICIAL_NEWS_URL = "https://www.marvelrivals.com/news/";
+const OFFICIAL_CATEGORIES = [
+  "https://www.marvelrivals.com/gameupdate/",
+  "https://www.marvelrivals.com/devdiaries/",
+  "https://www.marvelrivals.com/balancepost/",
+  "https://www.marvelrivals.com/announcements/",
+];
+
 const USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36";
 
@@ -20,7 +26,7 @@ function stripHtmlTags(text: string): string {
 function extractNewsList(html: string): { title: string; url: string }[] {
   const results: { title: string; url: string }[] = [];
   const regex =
-    /<a[^>]+href="(https:\/\/www\.marvelrivals\.com\/gameupdate\/[^"]+\.html)"[^>]*>[\s\S]*?<h2[^>]*>([\s\S]*?)<\/h2>[\s\S]*?<\/a>/gi;
+    /<a[^>]+href="(https:\/\/www\.marvelrivals\.com\/(?:gameupdate|devdiaries|balancepost|announcements)\/[^"]+\.html)"[^>]*>[\s\S]*?<h2[^>]*>([\s\S]*?)<\/h2>[\s\S]*?<\/a>/gi;
 
   let match;
   while ((match = regex.exec(html)) !== null) {
@@ -51,6 +57,17 @@ function extractContent(html: string): string | null {
   return html.slice(start, i + 6);
 }
 
+async function fetchCategoryList(categoryUrl: string): Promise<{ title: string; url: string }[]> {
+  const res = await fetch(categoryUrl, {
+    headers: { "User-Agent": USER_AGENT },
+  });
+  if (!res.ok) {
+    throw new Error(`Category fetch failed: ${categoryUrl} -> ${res.status}`);
+  }
+  const html = await res.text();
+  return extractNewsList(html);
+}
+
 async function crawlOfficialPatchLogs() {
   const { data: patches, error } = await supabase
     .from("steam_patch_logs")
@@ -64,14 +81,18 @@ async function crawlOfficialPatchLogs() {
     return { crawled: 0, total: 0, results: [] };
   }
 
-  const listRes = await fetch(OFFICIAL_NEWS_URL, {
-    headers: { "User-Agent": USER_AGENT },
-  });
-  if (!listRes.ok) {
-    throw new Error(`Official news list fetch failed: ${listRes.status}`);
+  const listArrays = await Promise.all(
+    OFFICIAL_CATEGORIES.map((url) => fetchCategoryList(url))
+  );
+  const newsMap = new Map<string, { title: string; url: string }>();
+  for (const arr of listArrays) {
+    for (const item of arr) {
+      if (!newsMap.has(item.url)) {
+        newsMap.set(item.url, item);
+      }
+    }
   }
-  const listHtml = await listRes.text();
-  const newsList = extractNewsList(listHtml);
+  const newsList = Array.from(newsMap.values());
 
   const results: any[] = [];
   for (const patch of patches) {

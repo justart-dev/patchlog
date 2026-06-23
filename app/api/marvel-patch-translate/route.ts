@@ -32,14 +32,13 @@ export async function POST(request: Request) {
   try {
     const skillMap = await getSkillMap();
 
-    // 최근 7일 이내 & translated_ko가 null인 레코드들만 가져오기  
-    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
-
+    // content가 있고 translated_ko가 null인 레코드들만 가져오기
     const { data: patchLogs, error: fetchError } = await supabase
       .from("steam_patch_logs")
       .select("id, content, translated_ko")
-      .gte("synced_at", sevenDaysAgo)
+      .not("content", "is", null)
       .is("translated_ko", null)
+      .order("published_at", { ascending: false })
       .limit(20);
 
     if (fetchError) {
