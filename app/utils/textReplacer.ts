@@ -27,6 +27,7 @@ const titlePhraseReplacements: Array<[string, string]> = [
   ["Update", "업데이트"],
   ["Version", "버전"],
   ["Season", "시즌"],
+  ["Arrives", "출시"],
   ["Enabling", "활성화"],
   ["Enable", "활성화"],
   ["Mechanics", "메커니즘"],

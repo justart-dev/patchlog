@@ -1,4 +1,5 @@
 import { buildCanonicalUrl, SITE_NAME, SITE_URL, stripHtml } from "@/lib/site";
+import { replaceEnglishTitles } from "@/app/utils/textReplacer";
 
 export function WebSiteStructuredData() {
   const structuredData = {
@@ -46,7 +47,7 @@ export function ArticleStructuredData({
     "@context": "https://schema.org",
     "@type": "Article",
     headline: title,
-    description: stripHtml(content).substring(0, 160),
+    description: replaceEnglishTitles(stripHtml(content)).substring(0, 160),
     datePublished: publishedAt,
     dateModified: publishedAt,
     author: {
@@ -101,7 +102,7 @@ export function PatchCollectionStructuredData({
     position: index + 1,
     url: buildCanonicalUrl(`/patch/${patch.id}`),
     name: patch.title,
-    description: stripHtml(patch.translated_ko || patch.content).substring(0, 160),
+    description: replaceEnglishTitles(stripHtml(patch.translated_ko || patch.content)).substring(0, 160),
     datePublished: patch.published_at,
   }));
 
