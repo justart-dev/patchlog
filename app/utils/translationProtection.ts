@@ -13,8 +13,6 @@ const STORE_MARKETING_KEYWORDS = [
   "Emoji",
   "Spray",
   "Nameplate",
-  "Ultimate Ability VFX",
-  "MVP",
   "Emote",
 ];
 
@@ -28,7 +26,6 @@ export function extractUnmappedSkillLikeTerms(
 ): string[] {
   const knownSkills = new Set(Object.keys(skillMap));
   const knownHeroes = new Set(Object.keys(heroMap));
-  const knownSystemTerms = new Set(Object.keys(systemGlossary));
   const blockedTerms = new Set([
     "Marvel Rivals",
     "Chain-CC Protection",
@@ -43,14 +40,14 @@ export function extractUnmappedSkillLikeTerms(
   const candidates = new Set<string>();
   const patterns = [
     /([A-Z][A-Za-z0-9'!@#$&.-]*(?:\s+(?:[A-Z][A-Za-z0-9'!@#$&.-]*|of|the|in|on|for|and|to|by|with|Your|Over|Into))+)(?=\s*\()/g,
-    /([A-Z][A-Za-z0-9'!@#$&.-]*(?:\s+(?:[A-Z][A-Za-z0-9'!@#$&.-]*|of|the|in|on|for|and|to|by|with|Your|Over|Into))+\s*-\s*[A-Z][A-Za-z0-9'!@#$&.-]*(?:\s+(?:[A-Z][A-Za-z0-9'!@#$&.-]*|of|the|in|on|for|and|to|by|with|Your|Over|Into))*)/g,
+    /([A-Z][A-Za-z0-9'!@#$&.-]*(?:\s+(?:[A-Z][A-Za-z0-9'!@#$&.-]*|of|the|in|on|for|and|to|by|with|Your|Over|Into))*\s*-\s*[A-Z][A-Za-z0-9'!@#$&.-]*(?:\s+(?:[A-Z][A-Za-z0-9'!@#$&.-]*|of|the|in|on|for|and|to|by|with|Your|Over|Into))*)/g,
   ];
 
   patterns.forEach((pattern) => {
     Array.from(content.matchAll(pattern)).forEach((match) => {
       const term = match[1]?.trim();
       if (!term) return;
-      if (knownSkills.has(term) || knownHeroes.has(term) || knownSystemTerms.has(term)) return;
+      if (knownSkills.has(term) || knownHeroes.has(term)) return;
       if (blockedTerms.has(term)) return;
       if (looksLikeStoreMarketingLabel(term)) return;
       if (term.length < 4) return;
