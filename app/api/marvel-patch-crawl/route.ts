@@ -47,7 +47,7 @@ function extractContent(html: string): string | null {
   let depth = 0;
   let i = start;
   for (; i < html.length; i++) {
-    if (html.slice(i, i + 5) === "<div") {
+    if (html.slice(i, i + 4) === "<div") {
       depth++;
     } else if (html.slice(i, i + 6) === "</div>") {
       depth--;
@@ -57,37 +57,111 @@ function extractContent(html: string): string | null {
   return cleanContent(html.slice(start, i + 6));
 }
 
+function getAttr(tag: string, name: string): string {
+  const match = tag.match(new RegExp(`${name}=["']([^"']*)["']`, "i"));
+  return match ? match[1] : "";
+}
+
+function classAttrIncludes(tag: string, cls: string): boolean {
+  const m = tag.match(/class=["']([^"']*)["']/i);
+  if (!m) return false;
+  return m[1].split(/\s+/).includes(cls);
+}
+
+function removeDivBlocks(content: string, classNames: string[]): string {
+  const result: string[] = [];
+  let i = 0;
+  while (i < content.length) {
+    if (content.slice(i, i + 4) === "<div") {
+      const tagEnd = content.indexOf(">", i);
+      if (tagEnd === -1) {
+        result.push(content.slice(i));
+        break;
+      }
+      const tag = content.slice(i, tagEnd + 1);
+      const shouldRemove = classNames.some((cls) => classAttrIncludes(tag, cls));
+      if (shouldRemove) {
+        let depth = 1;
+        let j = tagEnd + 1;
+        for (; j < content.length; j++) {
+          if (content.slice(j, j + 4) === "<div") depth++;
+          else if (content.slice(j, j + 6) === "</div>") {
+            depth--;
+            if (depth === 0) break;
+          }
+        }
+        i = j + 6;
+        continue;
+      }
+      result.push(tag);
+      i = tagEnd + 1;
+      continue;
+    }
+    result.push(content[i]);
+    i++;
+  }
+  return result.join("");
+}
+
 function cleanContent(content: string): string {
-  // 1) 영상 플레이어 블럭을 HTML5 <video> 태그로 변환
+  // 1) 영상 플레이어 블럹을 HTML5 <video> 태그로 변환 (속성 순서 무관)
   content = content.replace(
-    /<div[^>]*class=["']video_ctn["'][^>]*data-hdmovieurl=["']([^"']*)["'][^>]*data-movieurl=["']([^"']*)["'][^>]*data-startimg=["']([^"']*)["'][^>]*data-width=["']([^"']*)["'][^>]*data-height=["']([^"']*)["'][^>]*>[\s\S]*?<\/div>/gi,
-    (_, hdUrl, sdUrl, poster, width, height) => {
+    /<div[^>]*class=["']video_ctn["'][^>]*>/gi,
+    (match) => {
+      const hdUrl = getAttr(match, "data-hdmovieurl");
+      const sdUrl = getAttr(match, "data-movieurl");
+      const poster = getAttr(match, "data-startimg");
+      const width = getAttr(match, "data-width") || "100%";
+      const height = getAttr(match, "data-height") || "auto";
       const src = hdUrl || sdUrl;
       if (!src) return "";
       const sources: string[] = [];
       if (hdUrl) sources.push(`<source src="${hdUrl}" type="video/mp4" />`);
-      if (sdUrl) sources.push(`<source src="${sdUrl}" type="video/mp4" />`);
+      if (sdUrl && sdUrl !== hdUrl) sources.push(`<source src="${sdUrl}" type="video/mp4" />`);
       return `<video controls poster="${poster}" width="${width}" height="${height}" style="max-width:100%;height:auto;border-radius:0.875rem;margin:2rem 0;">${sources.join("")}</video>`;
     }
   );
 
-  // 2) 비디오 배경 스타일 태그 제거
-  content = content.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "");
+  // 2) 푸터, 팝업, 드롭용 바 등 제거
+  content = removeDivBlocks(content, [
+    "footer",
+    "popup popup-email",
+    "Layer",
+    "commig-pop pop",
+    "line",
+    "go-top",
+  ]);
 
-  // 3) 공통 푸터 소셜 링크 블록 제거 (Discord|X|Facebook|Instagram|TikTok|YouTube|Twitch)
-  const socialLinks = ["Discord", "X", "Facebook", "Instagram", "TikTok", "YouTube", "Twitch", "트위치"];
+  // 3) 스크립트/스타일/링크/주석 제거
+  content = content.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "");
+  content = content.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
+  content = content.replace(/<link[^>]*>/gi, "");
+  content = content.replace(/<!--[\s\S]*?-->/g, "");
+
+  // 4) 공통 푸터 소셜 링크 블록 제거
+  const socialLinks = [
+    "Discord",
+    "X",
+    "Facebook",
+    "Instagram",
+    "TikTok",
+    "YouTube",
+    "Twitch",
+    "트위치",
+  ];
   content = content.replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, (match, inner) => {
-    const hasAllSocial = socialLinks.every((platform) =>
+    const textOnly = inner.replace(/<[^>]+>/g, "").replace(/[\s|]+/g, "");
+    if (textOnly === "") return "";
+    const hasSocial = socialLinks.some((platform) =>
       new RegExp(`<a[^>]*>${platform}<\\/a>`, "i").test(inner)
     );
-    if (hasAllSocial) return "";
-    return match;
+    return hasSocial ? "" : match;
   });
 
-  // 4) 빈 &nbsp; 문단 정리
+  // 5) 빈 &nbsp; 문단 정리
   content = content.replace(/<p[^>]*>\s*&nbsp;\s*<\/p>/gi, "");
 
-  return content;
+  return content.trim();
 }
 
 async function fetchCategoryList(categoryUrl: string): Promise<{ title: string; url: string }[]> {
