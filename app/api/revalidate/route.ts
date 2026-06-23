@@ -11,22 +11,38 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { tag, path } = body;
+    const { tag, path, tags, paths } = body;
+    const revalidated: string[] = [];
 
     if (tag) {
       revalidateTag(tag, "max");
-      return NextResponse.json({ revalidated: true, tag });
+      revalidated.push(tag);
     }
-
+    if (Array.isArray(tags)) {
+      for (const t of tags) {
+        revalidateTag(t, "max");
+        revalidated.push(t);
+      }
+    }
     if (path) {
       revalidatePath(path, "page");
-      return NextResponse.json({ revalidated: true, path });
+      revalidated.push(path);
+    }
+    if (Array.isArray(paths)) {
+      for (const p of paths) {
+        revalidatePath(p, "page");
+        revalidated.push(p);
+      }
     }
 
-    return NextResponse.json(
-      { error: "Missing tag or path" },
-      { status: 400 }
-    );
+    if (revalidated.length === 0) {
+      return NextResponse.json(
+        { error: "Missing tag or path" },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json({ revalidated: true, items: revalidated });
   } catch (error) {
     return NextResponse.json(
       { error: "Invalid request body" },
