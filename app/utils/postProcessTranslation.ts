@@ -1,5 +1,6 @@
 import { heroMap } from "./heroMap";
 import { systemGlossary } from "./systemGlossary";
+import { replaceEnglishTitles } from "./textReplacer";
 import { restoreProtectedTermPlaceholders } from "./translationProtection";
 
 function escapeRegex(str: string) {
@@ -143,6 +144,13 @@ export function postProcessTranslation(options: PostProcessOptions): string {
         koreanName
       );
     });
+
+  // 9) 공홈 원문 제목(artTitle) 영어 한국어화
+  translatedContent = translatedContent.replace(
+    /(<h1 class="artTitle">)(.*?)(<\/h1>)/g,
+    (_, open: string, inner: string, close: string) =>
+      `${open}${replaceEnglishTitles(inner)}${close}`
+  );
 
   return translatedContent;
 }
