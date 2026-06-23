@@ -61,9 +61,25 @@ async function runBatch(request: Request) {
       throw new Error(`Update failed: ${updateResponse.status}`);
     }
 
-    // 2단계: 번역 처리
+    // 2단계: 공식 홈페이지 본문 크롤링
+    const { POST: crawlPost } = await import("../marvel-patch-crawl/route");
+    const mockCrawlRequest = new Request(
+      `${baseUrl}/api/marvel-patch-crawl`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.CRON_SECRET}`,
+        },
+      }
+    );
+    const crawlResponse = await crawlPost(mockCrawlRequest);
+    const crawlResult = await crawlResponse.json();
 
-    // 내부 API 로직을 직접 사용
+    if (!crawlResponse.ok) {
+      throw new Error(`Crawl failed: ${crawlResponse.status}`);
+    }
+
+    // 3단계: 번역 처리
     const { POST: translatePost } = await import(
       "../marvel-patch-translate/route"
     );
@@ -95,9 +111,12 @@ async function runBatch(request: Request) {
     if (logId) {
       await BatchLogger.logSuccess(logId, {
         steamDataFetched: updateResult.success === true,
-        steamItemsCount: translateResult.translatedCount || 0, // 실제 번역한 패치 수
+        steamItemsCount: updateResult.compare_target_items || 0,
+        crawledCount: crawlResult.crawled || 0,
+        crawlTotal: crawlResult.total || 0,
         results: {
           update: updateResult,
+          crawl: crawlResult,
           translate: translateResult,
         },
       });
@@ -108,6 +127,7 @@ async function runBatch(request: Request) {
       timestamp: new Date().toISOString(),
       results: {
         update: updateResult,
+        crawl: crawlResult,
         translate: translateResult,
       },
     });

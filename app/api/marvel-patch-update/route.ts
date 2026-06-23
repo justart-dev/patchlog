@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const appid = searchParams.get("appid") || gameAppIds.marvelRivals;
-  const count = searchParams.get("count") || "5";
+  const count = searchParams.get("count") || "4";
 
   try {
     // Steam API에서 데이터 가져오기
@@ -30,23 +30,15 @@ export async function POST(request: Request) {
 
     const processedItems = data.appnews.newsitems
       .filter((item: any) => item.feed_type === 1)
-      .map((item: any) => {
-        const formatContent = item.contents.replace(
-          "{STEAM_CLAN_IMAGE}",
-          "https://clan.cloudflare.steamstatic.com/images"
-        );
-
-        return {
-          app_id: data.appnews.appid.toString(),
-          app_name: item.author,
-          app_gid: item.gid,
-          title: item.title,
-          content: formatContent,
-          url: item.url,
-          published_at: new Date(item.date * 1000).toISOString(),
-          synced_at: new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString(),
-        };
-      });
+      .map((item: any) => ({
+        app_id: data.appnews.appid.toString(),
+        app_name: item.author,
+        app_gid: item.gid,
+        title: item.title,
+        url: item.url,
+        published_at: new Date(item.date * 1000).toISOString(),
+        synced_at: new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString(),
+      }));
 
     const { error } = await supabase
       .from("steam_patch_logs")
