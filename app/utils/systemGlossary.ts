@@ -78,7 +78,15 @@ export const systemGlossary: Record<string, string> = {
   PvE: "PvE",
   Twitch: "트위치",
   "Beach Bod": "비치 보디",
+  "Fantastic": "판타스틱",
   "X-Press": "X-프레스",
   Juice: "쥬스",
   Rivals: "라이벌즈",
+  // Season 8.5 summer bundles
+  "Breezy Butterfly": "브리즈 버터플라이",
+  "Robe of Relaxation": "로브 오브 릴렉세이션",
+  "Azure Shade": "애저 셰이드",
+  "Aqua Arsenal": "아쿠아 아스날",
+  "Polarity Bond": "폴라리티 본드",
+  "Polarity Soldier": "폴라리티 솔저",
 };
