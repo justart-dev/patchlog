@@ -24,6 +24,7 @@ export const heroMap: Record<string, string> = {
   Namor: "네이머",
   "Peni Parker": "페니 파커",
   Punisher: "퍼니셔",
+  "The Punisher": "퍼니셔",
   "Squirrel Girl": "스쿼럴 걸",
   Thor: "토르",
   "The Thing": "더 씽",

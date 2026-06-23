@@ -54,7 +54,40 @@ function extractContent(html: string): string | null {
       if (depth === 0) break;
     }
   }
-  return html.slice(start, i + 6);
+  return cleanContent(html.slice(start, i + 6));
+}
+
+function cleanContent(content: string): string {
+  // 1) 영상 플레이어 블럭을 HTML5 <video> 태그로 변환
+  content = content.replace(
+    /<div[^>]*class=["']video_ctn["'][^>]*data-hdmovieurl=["']([^"']*)["'][^>]*data-movieurl=["']([^"']*)["'][^>]*data-startimg=["']([^"']*)["'][^>]*data-width=["']([^"']*)["'][^>]*data-height=["']([^"']*)["'][^>]*>[\s\S]*?<\/div>/gi,
+    (_, hdUrl, sdUrl, poster, width, height) => {
+      const src = hdUrl || sdUrl;
+      if (!src) return "";
+      const sources: string[] = [];
+      if (hdUrl) sources.push(`<source src="${hdUrl}" type="video/mp4" />`);
+      if (sdUrl) sources.push(`<source src="${sdUrl}" type="video/mp4" />`);
+      return `<video controls poster="${poster}" width="${width}" height="${height}" style="max-width:100%;height:auto;border-radius:0.875rem;margin:2rem 0;">${sources.join("")}</video>`;
+    }
+  );
+
+  // 2) 비디오 배경 스타일 태그 제거
+  content = content.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "");
+
+  // 3) 공통 푸터 소셜 링크 블록 제거 (Discord|X|Facebook|Instagram|TikTok|YouTube|Twitch)
+  const socialLinks = ["Discord", "X", "Facebook", "Instagram", "TikTok", "YouTube", "Twitch", "트위치"];
+  content = content.replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, (match, inner) => {
+    const hasAllSocial = socialLinks.every((platform) =>
+      new RegExp(`<a[^>]*>${platform}<\\/a>`, "i").test(inner)
+    );
+    if (hasAllSocial) return "";
+    return match;
+  });
+
+  // 4) 빈 &nbsp; 문단 정리
+  content = content.replace(/<p[^>]*>\s*&nbsp;\s*<\/p>/gi, "");
+
+  return content;
 }
 
 async function fetchCategoryList(categoryUrl: string): Promise<{ title: string; url: string }[]> {

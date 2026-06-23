@@ -84,16 +84,28 @@ export function addStylesToHtml(html: string): string {
 
   // 공통 스타일링 함수
   const addStyle = (tag: string, style: string) => {
-    const regex = new RegExp(`<${tag}(\\s+[^>]*)?>`, "gi");
+    const regex = new RegExp(`<${tag}(\\s+[^>]*)?\\/?>`, "gi");
     return html.replace(regex, (match, group) => {
-      if (group && group.includes("style=")) {
-        return match.replace(
+      const isSelfClosing = match.trimEnd().endsWith("/>");
+      let attributes = group ? group.trim() : "";
+      // self-closing 태그의 trailing 슬래시는 attributes에서 분리
+      if (isSelfClosing && attributes.endsWith("/")) {
+        attributes = attributes.slice(0, -1).trim();
+      }
+
+      if (attributes.includes("style=")) {
+        const styledAttrs = attributes.replace(
           /style=(["'])([^"']*)\1/i,
           (_, quote, styleValue) => `style="${styleValue} ${style}"`
         );
+        return `<${tag}${attributes ? ` ${styledAttrs}` : styledAttrs}${
+          isSelfClosing ? " />" : ">"
+        }`;
       } else {
-        const attributes = group ? group : "";
-        return `<${tag}${attributes} style="${style}">`;
+        const attrPrefix = attributes ? ` ${attributes}` : "";
+        return `<${tag}${attrPrefix} style="${style}"${
+          isSelfClosing ? " />" : ">"
+        }`;
       }
     });
   };
