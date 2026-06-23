@@ -91,7 +91,9 @@ export function postProcessTranslation(options: PostProcessOptions): string {
     .replace(/체인-CC\s*\(군중 제어\)\s*보호/g, "연속 CC 보호")
     .replace(/체인 CC\s*\(군중 제어\)\s*보호/g, "연속 CC 보호")
     .replace(/체인-CC/g, "연속 CC")
-    .replace(/체인 CC/g, "연속 CC");
+    .replace(/체인 CC/g, "연속 CC")
+    .replace(/X-프레스 쥐스/g, "X-프레스 쥬스")
+    .replace(/쥐스/g, "쥬스");
 
   // 6) 강인함 조사 보정
   const correctedTenacityParticles: Record<string, string> = {

@@ -54,4 +54,5 @@ export const heroMap: Record<string, string> = {
   Ultron: "울트론",
   "Monster Hulk": "몬스터 헐크",
   "Jeff the Land Shark": "제프 더 랜드 샤크",
+  Angela: "안젤라",
 };
