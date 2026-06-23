@@ -115,5 +115,33 @@ export function postProcessTranslation(options: PostProcessOptions): string {
     protectedTerms
   );
 
+  // 8) 복원된 원문 영어에 대해 heroMap/systemGlossary 치환 재적용
+  const sortedHeroEntries2 = Object.entries(heroMap).sort(
+    ([a], [b]) => b.length - a.length
+  );
+  sortedHeroEntries2.forEach(([englishName, koreanName]) => {
+    const possessivePattern = new RegExp(
+      `\\b${escapeRegex(englishName)}['']s\\b`,
+      "g"
+    );
+    translatedContent = translatedContent.replace(
+      possessivePattern,
+      `${koreanName}의`
+    );
+
+    const heroPattern = new RegExp(`\\b${escapeRegex(englishName)}\\b`, "g");
+    translatedContent = translatedContent.replace(heroPattern, koreanName);
+  });
+
+  Object.entries(systemGlossary)
+    .sort(([a], [b]) => b.length - a.length)
+    .forEach(([englishName, koreanName]) => {
+      translatedContent = replaceMappedTerm(
+        translatedContent,
+        englishName,
+        koreanName
+      );
+    });
+
   return translatedContent;
 }
