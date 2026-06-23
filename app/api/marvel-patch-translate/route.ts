@@ -7,6 +7,7 @@ import {
   applyProtectedTermPlaceholders,
   extractUnmappedSkillLikeTerms,
 } from "../../utils/translationProtection";
+import { systemGlossary } from "../../utils/systemGlossary";
 import { postProcessTranslation } from "../../utils/postProcessTranslation";
 import { convertUtcDateTimesToKorean } from "../../utils/utcDateFormatter";
 
@@ -85,8 +86,12 @@ export async function POST(request: Request) {
 
         // 나무위키(skillMap)에 없는 스킬명/팀업명은 영문 그대로 유지하도록 보호
         const unmappedTerms = extractUnmappedSkillLikeTerms(contentToTranslate, skillMap);
+        const systemTerms = Object.keys(systemGlossary);
+        const termsToProtect = Array.from(
+          new Set([...unmappedTerms, ...systemTerms])
+        ).sort((a, b) => b.length - a.length);
         const { protectedContent, placeholders: protectedTerms } =
-          applyProtectedTermPlaceholders(contentToTranslate, unmappedTerms);
+          applyProtectedTermPlaceholders(contentToTranslate, termsToProtect);
         contentToTranslate = protectedContent;
 
         // skillMap을 프롯트에 추가
