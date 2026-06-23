@@ -48,7 +48,7 @@ export const heroMap: Record<string, string> = {
   "White Fox": "화이트 폭스",
   Blade: "블레이드",
   Cyclops: "사이클롭스",
-  Daredevil: "데어데블",
+  Daredevil: "데어데빌",
   Venom: "베놈",
   "X-Men": "엑스맨",
   "Peter Parker": "피터 파커",
