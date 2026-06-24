@@ -68,7 +68,13 @@ function classAttrIncludes(tag: string, cls: string): boolean {
   return m[1].split(/\s+/).includes(cls);
 }
 
-function removeDivBlocks(content: string, classNames: string[]): string {
+function classAttrIncludesAll(tag: string, classes: string[]): boolean {
+  return classes.every((cls) => classAttrIncludes(tag, cls));
+}
+
+type ClassSelector = string | string[];
+
+function removeDivBlocks(content: string, classNames: ClassSelector[]): string {
   const result: string[] = [];
   let i = 0;
   while (i < content.length) {
@@ -79,7 +85,11 @@ function removeDivBlocks(content: string, classNames: string[]): string {
         break;
       }
       const tag = content.slice(i, tagEnd + 1);
-      const shouldRemove = classNames.some((cls) => classAttrIncludes(tag, cls));
+      const shouldRemove = classNames.some((selector) =>
+        Array.isArray(selector)
+          ? classAttrIncludesAll(tag, selector)
+          : classAttrIncludes(tag, selector)
+      );
       if (shouldRemove) {
         let depth = 1;
         let j = tagEnd + 1;
@@ -118,16 +128,16 @@ function cleanContent(content: string): string {
       const sources: string[] = [];
       if (hdUrl) sources.push(`<source src="${hdUrl}" type="video/mp4" />`);
       if (sdUrl && sdUrl !== hdUrl) sources.push(`<source src="${sdUrl}" type="video/mp4" />`);
-      return `<video controls poster="${poster}" width="${width}" height="${height}" style="max-width:100%;height:auto;border-radius:0.875rem;margin:2rem 0;">${sources.join("")}</video>`;
+      return `<video controls poster="${poster}" width="${width}" height="${height}" style="max-width:100%;height:auto;border-radius:0.875rem;margin:2rem auto;display:block;">${sources.join("")}</video>`;
     }
   );
 
-  // 2) 푸터, 팝업, 드롭용 바 등 제거
+  // 2) 푸터, 팝업, 드롤용 바 등 제거
   content = removeDivBlocks(content, [
     "footer",
-    "popup popup-email",
+    ["popup", "popup-email"],
     "Layer",
-    "commig-pop pop",
+    ["commig-pop", "pop"],
     "line",
     "go-top",
   ]);
