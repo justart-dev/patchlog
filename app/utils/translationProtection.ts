@@ -16,8 +16,30 @@ const STORE_MARKETING_KEYWORDS = [
   "Emote",
 ];
 
+const STORE_CONTEXT_KEYWORDS = [
+  ...STORE_MARKETING_KEYWORDS,
+  "Accessory",
+  "번들",
+  "코스튬",
+  "크로마",
+  "감정표현",
+  "액세서리",
+  "네임플레이트",
+  "스프레이",
+  "이모지",
+];
+
 function looksLikeStoreMarketingLabel(term: string) {
   return STORE_MARKETING_KEYWORDS.some((keyword) => term.includes(keyword));
+}
+
+function isInStoreContext(content: string, term: string): boolean {
+  const index = content.indexOf(term);
+  if (index === -1) return false;
+  const before = content.slice(Math.max(0, index - 60), index);
+  const after = content.slice(index + term.length, index + term.length + 60);
+  const context = before + " " + after;
+  return STORE_CONTEXT_KEYWORDS.some((kw) => context.includes(kw));
 }
 
 export function extractUnmappedSkillLikeTerms(
@@ -50,6 +72,7 @@ export function extractUnmappedSkillLikeTerms(
       if (knownSkills.has(term) || knownHeroes.has(term)) return;
       if (blockedTerms.has(term)) return;
       if (looksLikeStoreMarketingLabel(term)) return;
+      if (isInStoreContext(content, term)) return;
       if (term.length < 4) return;
       candidates.add(term);
     });
