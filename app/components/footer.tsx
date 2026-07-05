@@ -17,17 +17,31 @@ export default function Footer() {
             {[
               { label: "소개", href: "/" },
               { label: "패치노트", href: "/patch" },
-              { label: "사이트 통계", href: "https://cloud.umami.is/share/X4DLIuA7E54r6Fi9" },
-            ].map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                prefetch={link.href === "/patch" ? false : undefined}
-                className="px-5 py-2.5 text-xs font-black tracking-tight rounded-full bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 hover:scale-105 transition-transform"
-              >
-                {link.label}
-              </Link>
-            ))}
+              { label: "사이트 통계", href: "https://cloud.umami.is/share/X4DLIuA7E54r6Fi9", external: true },
+              { label: "후원하기", href: "https://ctee.kr/place/justart", external: true },
+            ].map((link) => {
+              const className = "px-5 py-2.5 text-xs font-black tracking-tight rounded-full bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 hover:scale-105 transition-transform";
+              return link.external ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={className}
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  prefetch={link.href === "/patch" ? false : undefined}
+                  className={className}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </div>

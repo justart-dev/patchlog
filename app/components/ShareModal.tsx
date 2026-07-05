@@ -76,19 +76,30 @@ export default function ShareModal() {
           </p>
         </div>
 
-        <div className="mt-6 flex flex-col sm:flex-row gap-3">
-          <button
-            onClick={handleDismiss}
-            className="flex-1 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-zinc-800 transition-colors"
-          >
-            7일간 보지 않기
-          </button>
-          <button
+        <div className="mt-6 flex flex-col gap-3">
+          <a
+            href="https://ctee.kr/place/justart"
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={handleClose}
-            className="flex-1 rounded-lg border border-zinc-300 px-4 py-2.5 text-sm font-medium text-zinc-700 hover:border-zinc-400 hover:text-zinc-900 transition-colors"
+            className="rounded-lg bg-zinc-900 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-zinc-800 transition-colors"
           >
-            닫기
-          </button>
+            ☕ 크티에서 후원하기
+          </a>
+          <div className="flex gap-3">
+            <button
+              onClick={handleDismiss}
+              className="flex-1 rounded-lg bg-zinc-100 px-4 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-200 transition-colors"
+            >
+              7일간 보지 않기
+            </button>
+            <button
+              onClick={handleClose}
+              className="flex-1 rounded-lg border border-zinc-300 px-4 py-2.5 text-sm font-medium text-zinc-700 hover:border-zinc-400 hover:text-zinc-900 transition-colors"
+            >
+              닫기
+            </button>
+          </div>
         </div>
       </div>
     </div>
