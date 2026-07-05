@@ -55,7 +55,9 @@ export default function ShareModal() {
         </button>
 
         <h2 className="text-lg font-semibold mb-4 pr-6 text-zinc-900">
-          라이벌 여러분, <span className="whitespace-nowrap">Patchlog를 이용해주셔서 감사합니다.</span>
+          라이벌 여러분,
+          <br />
+          Patchlog를 이용해주셔서 감사합니다.
         </h2>
 
         <div className="space-y-3 text-sm text-zinc-600 leading-relaxed">
@@ -68,7 +70,7 @@ export default function ShareModal() {
             사이트 운영에 소소한 비용이 발생하고 있어요.
           </p>
           <p>
-            Patchlog가 유용하셨다면 주변 마븐 라이벨즈
+            Patchlog가 유용하셨다면 주변 마블 라이벌즈
             플레이어들에게 한 번 소개해주세요.
             여러분의 공유가 서비스를 더 나아지게 만듭니다.
           </p>
