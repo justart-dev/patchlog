@@ -32,10 +32,10 @@ export default function ShareModal() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="relative w-full max-w-md rounded-2xl bg-zinc-900 border border-zinc-700 p-6 shadow-2xl text-zinc-100">
+      <div className="relative w-full max-w-md rounded-2xl bg-white border border-zinc-200 p-6 shadow-2xl text-zinc-900">
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-100 transition-colors"
+          className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 transition-colors"
           aria-label="닫기"
         >
           <svg
@@ -54,13 +54,13 @@ export default function ShareModal() {
           </svg>
         </button>
 
-        <h2 className="text-lg font-semibold mb-4 pr-6">
-          라이벌 여러분, Patchlog를 이용해주셔서 감사합니다.
+        <h2 className="text-lg font-semibold mb-4 pr-6 text-zinc-900">
+          라이벌 여러분, <span className="whitespace-nowrap">Patchlog를 이용해주셔서 감사합니다.</span>
         </h2>
 
-        <div className="space-y-3 text-sm text-zinc-300 leading-relaxed">
+        <div className="space-y-3 text-sm text-zinc-600 leading-relaxed">
           <p>
-            지금까지 누적 <strong className="text-zinc-100">5,000뷰를 넘겼어요</strong>.
+            지금까지 누적 <strong className="text-zinc-900">5,000뷰를 넘겼어요</strong>.
             작지만 의미 있는 성과입니다! 🎉
           </p>
           <p>
@@ -77,13 +77,13 @@ export default function ShareModal() {
         <div className="mt-6 flex flex-col sm:flex-row gap-3">
           <button
             onClick={handleDismiss}
-            className="flex-1 rounded-lg bg-zinc-100 px-4 py-2.5 text-sm font-medium text-zinc-900 hover:bg-white transition-colors"
+            className="flex-1 rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-zinc-800 transition-colors"
           >
             7일간 보지 않기
           </button>
           <button
             onClick={handleClose}
-            className="flex-1 rounded-lg border border-zinc-600 px-4 py-2.5 text-sm font-medium text-zinc-300 hover:border-zinc-500 hover:text-zinc-100 transition-colors"
+            className="flex-1 rounded-lg border border-zinc-300 px-4 py-2.5 text-sm font-medium text-zinc-700 hover:border-zinc-400 hover:text-zinc-900 transition-colors"
           >
             닫기
           </button>
