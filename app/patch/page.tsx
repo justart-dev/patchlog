@@ -1,5 +1,6 @@
 import { PatchCollectionStructuredData } from "../components/StructuredData";
 import PatchPageClient from "./PatchPageClient";
+import ShareModal from "../components/ShareModal";
 import { getLatestMarvelVideo, type LatestVideo } from "@/lib/marvel-latest-video";
 import { getPatches } from "@/lib/patches";
 import type { PatchLog } from "../components/patchList";
@@ -16,6 +17,7 @@ export default async function PatchPage() {
     <>
       <PatchCollectionStructuredData patches={patchLogs} />
       <PatchPageClient patchLogs={patchLogs} latestVideo={latestVideo} />
+      <ShareModal />
     </>
   );
 }
