@@ -223,10 +223,10 @@ export function addStylesToHtml(html: string): string {
     (_, oldValue, newValue) => `${oldValue}를 ${formatChangeSegment(oldValue, newValue)}로`
   );
 
-  // 증가/감소/상향/하향 어간 색상 처리 (활용형 포함)
+  // 증가/감소/상향/하향 어간 색상 처리 (HTML 태그 내부는 제외)
   html = html.replace(
-    /(증가|감소|상향|하향)(?=(?:시|했|합|되|됐|됩))/g,
-    (_, direction) => formatDirectionWord(direction)
+    /(<[^>]+>)|(증가|감소|상향|하향)/g,
+    (match, tag, direction) => (tag ? match : formatDirectionWord(direction))
   );
 
   return html;
