@@ -165,13 +165,13 @@ export default function Page() {
               prefetch={false}
               className="w-full sm:w-auto px-8 py-4 bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 font-black text-sm tracking-tight rounded-full hover:scale-[1.02] transition-transform active:scale-[0.98] shadow-xl shadow-black/10 dark:shadow-white/5"
             >
-              ARCHIVE ACCESS
+              패치노트 보기
             </Link>
             <a
               href="#process"
               className="w-full sm:w-auto px-8 py-4 border border-archive-zinc-900/10 dark:border-white/10 bg-white/50 dark:bg-archive-zinc-900/50 backdrop-blur-sm text-archive-zinc-900 dark:text-white font-black text-sm tracking-tight rounded-full hover:bg-white dark:hover:bg-archive-zinc-800 hover:border-archive-zinc-900/20 dark:hover:border-white/20 transition-all shadow-sm active:scale-95 hover:scale-[1.02]"
             >
-              HOW IT WORKS
+              서비스 소개
             </a>
           </div>
         </div>
