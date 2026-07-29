@@ -171,6 +171,18 @@ function cleanContent(content: string): string {
   // 5) 빈 &nbsp; 문단 정리
   content = content.replace(/<p[^>]*>\s*&nbsp;\s*<\/p>/gi, "");
 
+    // 6) 이미지 alt 텍스트를 번역 대상으로 추출 — 빈 섹션 방지
+  //    상점, 트위치 드롭 등 이미지 위주 섹션의 alt 영문이 빈 본문을 채움
+  content = content.replace(
+    /<img([^>]*)>/gi,
+    (match: string, attrs: string) => {
+      const altMatch = attrs.match(/alt=["'](.*?)["']/i);
+      const alt = altMatch?.[1]?.trim();
+      if (!alt || /^(patch\s*image|image|img)$/i.test(alt)) return match;
+      return `${match}<p class="img-caption">${alt}</p>`;
+    }
+  );
+
   return content.trim();
 }
 

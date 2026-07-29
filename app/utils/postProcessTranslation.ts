@@ -117,7 +117,17 @@ export function postProcessTranslation(options: PostProcessOptions): string {
     protectedTerms
   );
 
-  // 8) 복원된 원문 영어에 대해 heroMap/systemGlossary 치환 재적용
+  // 8) 복원된 원문 영어에 대해 skillMap / heroMap / systemGlossary 치환 재적용
+  // 8a) skillMap 재적용 (step 1에서 치환되었더라도 복원 과정에서 영문이 돌아올 수 있음)
+  const sortedSkillEntries2 = Object.entries(skillMap).sort(
+    ([a], [b]) => b.length - a.length
+  );
+  sortedSkillEntries2.forEach(([englishName, koreanName]) => {
+    const englishPattern = new RegExp(escapeRegex(englishName), "g");
+    translatedContent = translatedContent.replace(englishPattern, koreanName);
+  });
+
+  // 8b) heroMap 재적용
   const sortedHeroEntries2 = Object.entries(heroMap).sort(
     ([a], [b]) => b.length - a.length
   );
@@ -135,6 +145,7 @@ export function postProcessTranslation(options: PostProcessOptions): string {
     translatedContent = translatedContent.replace(heroPattern, koreanName);
   });
 
+  // 8c) systemGlossary 재적용
   Object.entries(systemGlossary)
     .sort(([a], [b]) => b.length - a.length)
     .forEach(([englishName, koreanName]) => {
