@@ -16,7 +16,10 @@ export default function ShareModal() {
         return;
       }
     }
-    setIsOpen(true);
+    const timer = setTimeout(() => {
+      setIsOpen(true);
+    }, 1500);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleDismiss = () => {
