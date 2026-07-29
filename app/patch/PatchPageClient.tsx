@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { PatchList, type PatchLog } from "../components/patchList";
 import StatusDisplay from "../components/StatusDisplay";
 import { useUser, SignInButton } from "@clerk/nextjs";
@@ -71,12 +71,6 @@ export default function PatchPageClient({
   loadError,
 }: PatchPageClientProps) {
   const { isSignedIn, isLoaded } = useUser();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    window.scrollTo({ top: 0, behavior: "auto" });
-  }, []);
 
   const latestDate = useMemo(() => {
     if (!patchLogs || patchLogs.length === 0) return new Date();
@@ -109,26 +103,18 @@ export default function PatchPageClient({
           <>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-hero-enter [animation-delay:100ms]">
               <article className="glass-card p-8 relative flex flex-col justify-between overflow-hidden min-h-[320px]">
-                {!(mounted && isLoaded && isSignedIn) && (
+                {isLoaded && !isSignedIn && (
                   <div className="absolute inset-0 z-20 flex items-center justify-center bg-archive-zinc-50/95 dark:bg-archive-zinc-950/95 backdrop-blur-[20px]">
                     <div className="text-center p-6">
                       <p className="text-[10px] font-black tracking-widest uppercase mb-3 opacity-50">Data Encrypted</p>
-                      {!mounted ? (
-                        <div className="space-y-3">
-                          <div className="h-4 w-48 mx-auto bg-archive-zinc-200 dark:bg-archive-zinc-800 animate-pulse rounded-full" />
-                          <div className="h-4 w-32 mx-auto bg-archive-zinc-200 dark:bg-archive-zinc-800 animate-pulse rounded-full" />
-                          <div className="h-9 w-32 mx-auto bg-archive-zinc-200 dark:bg-archive-zinc-800 animate-pulse rounded-full mt-6" />
-                        </div>
-                      ) : (
-                        <>
-                          <p className="text-[11px] font-bold text-archive-zinc-500 dark:text-archive-zinc-400 mb-6 uppercase tracking-tight">상세 업데이트 주기 분석 데이터는<br />로그인 후 열람 가능합니다.</p>
-                          <SignInButton mode="modal">
-                            <button className="px-8 py-2.5 bg-hero-red-500 hover:bg-hero-red-600 text-white text-[10px] font-black tracking-widest uppercase rounded-full hover:scale-105 transition-transform shadow-lg shadow-hero-red-500/20">
-                              Login to Access
-                            </button>
-                          </SignInButton>
-                        </>
-                      )}
+                      <>
+                        <p className="text-[11px] font-bold text-archive-zinc-500 dark:text-archive-zinc-400 mb-6 uppercase tracking-tight">상세 업데이트 주기 분석 데이터는<br />로그인 후 열람 가능합니다.</p>
+                        <SignInButton mode="modal">
+                          <button className="px-8 py-2.5 bg-hero-red-500 hover:bg-hero-red-600 text-white text-[10px] font-black tracking-widest uppercase rounded-full hover:scale-105 transition-transform shadow-lg shadow-hero-red-500/20">
+                            Login to Access
+                          </button>
+                        </SignInButton>
+                      </>
                     </div>
                   </div>
                 )}
@@ -138,7 +124,7 @@ export default function PatchPageClient({
                   <h3 className="text-xl font-black tracking-tight">업데이트 주기 분석</h3>
                 </div>
 
-                {mounted && isLoaded && isSignedIn ? (
+                {isLoaded && isSignedIn ? (
                   <PatternAnalysisContent patchLogs={patchLogs} />
                 ) : (
                   <div className="flex flex-col">

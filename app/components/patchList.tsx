@@ -24,7 +24,7 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
   const formattedPatchLogs = useMemo(() => {
     const threeDaysMs = 3 * 24 * 60 * 60 * 1000;
 
-    return patchLogs.map((log, index) => {
+    return patchLogs.map((log) => {
       const publishedDate = new Date(log.published_at);
       const ageMs = Date.now() - publishedDate.getTime();
       const formattedDate = formatDateKST(log.published_at, {
@@ -52,14 +52,13 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
         ...log,
         dateLabel: relativeDateLabel,
         formattedDate,
-        animationDelay: `${index * 50}ms`,
       };
     });
   }, [patchLogs]);
 
   return (
     <div className="grid grid-cols-1 gap-6">
-      {formattedPatchLogs.map((log, index) => {
+      {formattedPatchLogs.map((log) => {
         const headerImage = log.capsule_image
           ? `https://cdn.akamai.steamstatic.com/steam/apps/${log.capsule_image.match(/\/apps\/(\d+)\//)?.[1]}/header.jpg`
           : null;
@@ -68,8 +67,7 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
           <a
             key={log.id}
             href={`/patch/${log.id}`}
-            className="group block animate-hero-enter opacity-0"
-            style={{ animationDelay: log.animationDelay, animationFillMode: 'forwards' }}
+            className="group block animate-hero-enter"
           >
             <article className="glass-card hover:border-hero-red-500/50 transition-all duration-300 group-hover:-translate-y-1 group-active:scale-[0.99] border-archive-zinc-200 dark:border-archive-zinc-800">
               <div className="flex flex-col sm:flex-row">
