@@ -25,7 +25,7 @@ type Step = {
 };
 
 const stats = [
-  { label: "TOTAL SEGMENTS", value: "20+" },
+  { label: "TOTAL SEGMENTS", value: "70+" },
   { label: "CORE ADAPTATION", value: "AI-POWERED" },
   { label: "AUTO REFRESH", value: "12H CYCLE" },
 ] as const;
@@ -122,7 +122,7 @@ export default function Page() {
   const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
-    const target = 20;
+    const target = 70;
     const duration = 1000;
     let startTime = 0;
 
