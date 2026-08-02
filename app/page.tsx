@@ -25,7 +25,7 @@ type Step = {
 };
 
 const stats = [
-  { label: "TOTAL SEGMENTS", value: "60+" },
+  { label: "TOTAL SEGMENTS", value: "20+" },
   { label: "CORE ADAPTATION", value: "AI-POWERED" },
   { label: "AUTO REFRESH", value: "12H CYCLE" },
 ] as const;
@@ -46,7 +46,7 @@ const problems = [
     title: "맥락 없는 단순 번역",
     summary: "일반 번역기는 게임 내 용어와 플레이어들만의 언어를 이해하지 못합니다.",
     pain: "글자로만 된 패치노트는 이제 그만. 실제 플레이에 직결되는 핵심 포인트만 골라냈습니다.",
-    solution: ["게임 용어 사전(Glossary) 연동", "스킬 및 키 입력 최적화"],
+    solution: ["게임 용어 사전(Glossary) 연동", "영문 잔류 자동 검증 및 재번역"],
   },
 ] as const;
 
@@ -54,24 +54,24 @@ const steps: Step[] = [
   {
     step: "01",
     title: "SIGNAL DETECTION",
-    description: "Steam API를 통한 실시간 패치 데이터 감지",
+    description: "Steam API를 통한 신규 패치 메타데이터 감지",
     trackTitle: "Steam 공지 스캔",
-    detail: "매일 지정된 간격으로 Steam 서버의 신규 패치 데이터를 크롤링하여 데이터베이스에 적재합니다.",
+    detail: "12시간마다 Steam API로 신규 패치의 제목·날짜·URL을 감지하여 DB에 적재합니다. 이후 공식 홈페이지의 4개 카테고리(업데이트·개발자 비전·밸런스·공지)를 순회하며 본문을 크롤링합니다.",
   },
   {
     step: "02",
     title: "CORE EXTRACTION",
-    description: "불필요한 정보를 제외한 핵심 변경점 추출",
-    trackTitle: "원문 파싱 및 필터링",
-    detail: "이미 처리된 로그를 제외하고, 실제 밸런스에 영향을 주는 핵심 내용만을 정제하여 번역 파이프라인에 전달합니다.",
+    description: "공홈 본문 크롤링 및 HTML 정제",
+    trackTitle: "원문 파싱 및 정제",
+    detail: "Steam 감지된 제목과 공홈 게시글을 매칭한 후, 본문 HTML에서 푸터·스크립트·광고를 제거하고 비디오를 HTML5로 변환합니다. 이미지 alt 텍스트도 번역 대상에 포함시켜 빈 섹션을 방지합니다.",
   },
   {
     step: "03",
     title: "ADAPTIVE TRANSLATION",
-    description: "GPT-4o 기반의 맥락형 게임 번역",
+    description: "GPT-5.6 Luna 기반의 맥락형 게임 번역",
     trackTitle: "맥락 기반 번역 처리",
-    detail: "단순 직역이 아닌, '마블 라이벌즈' 전용 용어 사전과 매핑 규칙을 적용하여 플레이어 친화적인 언어로 변환합니다.",
-    tags: ["한국시간 변환", "용어 매핑", "조사 보정"],
+    detail: "GPT-5.6 Luna가 '마블 라이벌즈' 전용 용어 사전과 매핑 규칙을 적용하여 플레이어 친화적인 언어로 변환합니다. 번역 후 영문 잔류를 자동 검증하여, 5개 이상 잔류 시 재번역까지 수행합니다.",
+    tags: ["한국시간 변환", "용어 매핑", "조사 보정", "영문 잔류 검증"],
   },
   {
     step: "04",
@@ -110,9 +110,9 @@ const steps: Step[] = [
   {
     step: "05",
     title: "LIVE DEPLOY",
-    description: "최종 검수된 데이터를 실시간 웹 배포",
-    trackTitle: "시스템 실시간 배포",
-    detail: "모든 처리가 완료된 패치노트는 자동으로 아카이브에 등록되어 누구나 즉시 확인할 수 있는 상태가 됩니다.",
+    description: "DB 저장 후 캐시 무효화로 즉시 반영",
+    trackTitle: "실시간 자동 배포",
+    detail: "번역 완료된 패치노트는 DB에 저장 후 revalidatePath로 페이지 캐시를 무효화하여, 별도 수동 검수 없이 아카이브에 즉시 반영됩니다.",
   },
 ];
 
@@ -122,7 +122,7 @@ export default function Page() {
   const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
-    const target = 60;
+    const target = 20;
     const duration = 1000;
     let startTime = 0;
 
