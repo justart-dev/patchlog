@@ -54,31 +54,31 @@ const steps: Step[] = [
   {
     step: "01",
     title: "SIGNAL DETECTION",
-    description: "Steam API를 통한 신규 패치 메타데이터 감지",
+    description: "Steam에서 새 패치 감지",
     trackTitle: "Steam 공지 스캔",
-    detail: "12시간마다 Steam API로 신규 패치의 제목·날짜·URL을 감지하여 DB에 적재합니다. 이후 공식 홈페이지의 4개 카테고리(업데이트·개발자 비전·밸런스·공지)를 순회하며 본문을 크롤링합니다.",
+    detail: "12시간마다 Steam과 공식 홈페이지를 확인해서 새 패치가 올라왔는지 자동으로 찾아냅니다. 패치노트, 개발자 비전, 밸런스 변경, 공지사항까지 빠짐없이 수집합니다.",
   },
   {
     step: "02",
     title: "CORE EXTRACTION",
-    description: "공홈 본문 크롤링 및 HTML 정제",
-    trackTitle: "원문 파싱 및 정제",
-    detail: "Steam 감지된 제목과 공홈 게시글을 매칭한 후, 본문 HTML에서 푸터·스크립트·광고를 제거하고 비디오를 HTML5로 변환합니다. 이미지 alt 텍스트도 번역 대상에 포함시켜 빈 섹션을 방지합니다.",
+    description: "패치노트 본문 수집 및 정리",
+    trackTitle: "원문 수집 및 정리",
+    detail: "공식 홈페이지에서 패치노트 원문을 그대로 가져온 뒤, 광고나 불필요한 요소를 제거하고 깔끔하게 정리합니다. 이미지 설명도 함께 수집해서 빠지는 내용이 없도록 합니다.",
   },
   {
     step: "03",
     title: "ADAPTIVE TRANSLATION",
-    description: "GPT-5.6 Luna 기반의 맥락형 게임 번역",
+    description: "게임에 맞춘 자연스러운 한국어 번역",
     trackTitle: "맥락 기반 번역 처리",
-    detail: "GPT-5.6 Luna가 '마블 라이벌즈' 전용 용어 사전과 매핑 규칙을 적용하여 플레이어 친화적인 언어로 변환합니다. 번역 후 영문 잔류를 자동 검증하여, 5개 이상 잔류 시 재번역까지 수행합니다.",
+    detail: "최신 AI 모델인 GPT-5.6 Luna가 마블 라이벌즈 전용 용어 사전과 영웅 이름을 참고하며, 게임에 익숙한 한국어로 번역합니다. 번역 후 영어가 섞여 있지 않은지 자동으로 확인하고, 필요하면 다시 번역합니다.",
     tags: ["한국시간 변환", "용어 매핑", "조사 보정", "영문 잔류 검증"],
   },
   {
     step: "04",
     title: "VISUAL OPTIMIZATION",
-    description: "수치 변화 가독성을 위한 레이아웃 보정",
-    trackTitle: "데이터 시각화 정리",
-    detail: "증가/감소 수치를 시각적으로 명확히 구분하고, 스킬 단축키 등 핵심 정보를 하이라이트 처리합니다.",
+    description: "수치 변화를 한눈에",
+    trackTitle: "수치 변화 시각화",
+    detail: "증가·감소 수치를 색상으로 구분하고, 스킬 단축키 등 핵심 정보를 강조하여 읽기 편하게 만들어줍니다.",
     examples: [
       {
         label: "수치 변화",
@@ -110,9 +110,9 @@ const steps: Step[] = [
   {
     step: "05",
     title: "LIVE DEPLOY",
-    description: "DB 저장 후 캐시 무효화로 즉시 반영",
-    trackTitle: "실시간 자동 배포",
-    detail: "번역 완료된 패치노트는 DB에 저장 후 revalidatePath로 페이지 캐시를 무효화하여, 별도 수동 검수 없이 아카이브에 즉시 반영됩니다.",
+    description: "번역 완료 즉시 사이트에 반영",
+    trackTitle: "즉시 배포",
+    detail: "번역이 끝나면 바로 사이트에 올라갑니다. 별도 대기 시간 없이 누구나 즉시 확인할 수 있습니다.",
   },
 ];
 
