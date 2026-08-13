@@ -160,6 +160,8 @@ function cleanContent(content: string): string {
     "트위치",
   ];
   content = content.replace(/<p[^>]*>([\s\S]*?)<\/p>/gi, (match, inner) => {
+    // 이미지가 포함된 문단은 그대로 보존 (이미지 전용 <p>가 빈 문단으로 오인되어 삭제되는 것 방지)
+    if (/<img\b/i.test(inner)) return match;
     const textOnly = inner.replace(/<[^>]+>/g, "").replace(/[\s|]+/g, "");
     if (textOnly === "") return "";
     const hasSocial = socialLinks.some((platform) =>

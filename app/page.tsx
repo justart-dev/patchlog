@@ -116,25 +116,30 @@ const steps: Step[] = [
   },
 ];
 
-export default function Page() {
-  const [patchCount, setPatchCount] = useState(0);
-  const [activeProblem, setActiveProblem] = useState(0);
-  const [activeStep, setActiveStep] = useState(0);
+function AnimatedPatchCount({ target = 70, duration = 1000 }: { target?: number; duration?: number }) {
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
-    const target = 70;
-    const duration = 1000;
     let startTime = 0;
+    let frameId = 0;
 
     const animate = (time: number) => {
       if (!startTime) startTime = time;
       const progress = Math.min((time - startTime) / duration, 1);
-      setPatchCount(Math.floor(progress * target));
-      if (progress < 1) requestAnimationFrame(animate);
+      setCount(Math.floor(progress * target));
+      if (progress < 1) frameId = requestAnimationFrame(animate);
     };
 
-    requestAnimationFrame(animate);
-  }, []);
+    frameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frameId);
+  }, [target, duration]);
+
+  return <>{count}+</>;
+}
+
+export default function Page() {
+  const [activeProblem, setActiveProblem] = useState(0);
+  const [activeStep, setActiveStep] = useState(0);
 
   const currentProblem = problems[activeProblem] ?? problems[0];
   const currentStep = steps[activeStep] ?? steps[0];
@@ -184,7 +189,7 @@ export default function Page() {
             <div key={stat.label} className="glass-card p-8 group hover:border-hero-red-500/50 transition-colors">
               <p className="text-[10px] font-black tracking-widest text-archive-zinc-500 mb-2">{stat.label}</p>
               <p className="text-4xl font-black tracking-tighter">
-                {stat.label === "TOTAL SEGMENTS" ? `${patchCount}+` : stat.value}
+                {stat.label === "TOTAL SEGMENTS" ? <AnimatedPatchCount /> : stat.value}
               </p>
             </div>
           ))}

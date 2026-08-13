@@ -114,6 +114,17 @@ export async function POST(request: Request) {
           }
         );
 
+        // 이미지 태그를 플레이스홀더로 치환하여 보존 (YouTube와 동일 방식)
+        const imageTags: string[] = [];
+        contentToTranslate = contentToTranslate.replace(
+          /\[img\s+src=["']([^"']+)["']\s*\]|\[img\]([\s\S]*?)\[\/img\]|<img\b[^>]*>/gi,
+          (match) => {
+            const placeholder = `__IMAGE_PLACEHOLDER_${imageTags.length}__`;
+            imageTags.push(match);
+            return placeholder;
+          }
+        );
+
         // skillMap을 프롬프트에 추가
         const skillMappings = Object.entries(skillMap)
           .map(([key, value]) => `        "${key}": "${value}"`)
@@ -193,6 +204,12 @@ export async function POST(request: Request) {
         // YouTube 플레이스홀더 복원
         youtubeTags.forEach((tag, index) => {
           const placeholder = `__YOUTUBE_PLACEHOLDER_${index}__`;
+          translatedContent = translatedContent.replace(placeholder, tag);
+        });
+
+        // 이미지 플레이스홀더 복원 (YouTube 복원 직후, 후처리 전)
+        imageTags.forEach((tag, index) => {
+          const placeholder = `__IMAGE_PLACEHOLDER_${index}__`;
           translatedContent = translatedContent.replace(placeholder, tag);
         });
 
