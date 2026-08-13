@@ -50,7 +50,7 @@ function detectRemainingEnglish(text: string): string[] {
 }
 
 /** 영문 잔류 재시도 임계값 */
-const ENGLISH_RETRY_THRESHOLD = 5;
+const ENGLISH_RETRY_THRESHOLD = 2;
 const MAX_RETRIES = 1;
 
 export async function POST(request: Request) {
@@ -228,11 +228,11 @@ export async function POST(request: Request) {
           console.warn(`Retranslating ${log.id}: ${remainingEnglish.length} English words remain`);
 
           const retryInstruction =
-            `CRITICAL: The previous translation contained ${remainingEnglish.length} untranslated English words. ` +
-            `You MUST translate ALL of the following English words into natural Korean transliterations:\n` +
+            `CRITICAL: The previous translation left these English words untranslated. ` +
+            `Transliterate EVERY one into natural Korean (e.g. "Sacred Skies" → "세이크리드 스카이즈", "Blue Breaker" → "블루 브레이커"). ` +
+            `Even proper nouns like skin names, costume names, event titles, and ability names MUST be written in Korean, not left in English:\n` +
             remainingEnglish.map((w) => `  - "${w}"`).join("\n") + "\n" +
-            `Do NOT leave any of these in English. Translate the entire content again ensuring zero English remains ` +
-            `(except acronyms like PvE, PvP, MVP, PC and URLs/placeholders).`;
+            `Translate the entire content again so these appear in Korean. Keep only acronyms (PvE, PvP, MVP, PC) and URLs/placeholders.`;
 
           const retryBody = buildRequestBody(contentToTranslate, retryInstruction);
           const retryStartTime = Date.now();
