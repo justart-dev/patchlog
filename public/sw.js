@@ -1,4 +1,4 @@
-const CACHE_VERSION = "patchlog-pwa-v1";
+const CACHE_VERSION = "patchlog-pwa-v2";
 const APP_SHELL_CACHE = `${CACHE_VERSION}-shell`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -47,11 +47,6 @@ self.addEventListener("fetch", (event) => {
 
   if (request.mode === "navigate") {
     event.respondWith(networkFirst(request, "/offline.html"));
-    return;
-  }
-
-  if (url.origin === self.location.origin && url.pathname.startsWith("/_next/static/")) {
-    event.respondWith(cacheFirst(request));
     return;
   }
 

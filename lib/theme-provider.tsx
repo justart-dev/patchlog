@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { getStorageItem, setStorageItem } from './storage'
 
 type Theme = 'dark' | 'light' | 'system'
@@ -62,15 +62,15 @@ export function ThemeProvider({
     root.classList.add(theme)
   }, [theme])
 
-  const setTheme = (newTheme: Theme) => {
+  const setTheme = useCallback((newTheme: Theme) => {
     setStorageItem(storageKey, newTheme)
     setThemeState(newTheme)
-  }
+  }, [storageKey])
 
-  const value = {
+  const value = useMemo(() => ({
     theme,
     setTheme,
-  }
+  }), [theme, setTheme])
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
