@@ -1,7 +1,5 @@
 import Image from "next/image";
 import { memo, useMemo } from "react";
-import { formatDistanceToNow } from "date-fns";
-import { ko } from "date-fns/locale";
 import { replaceEnglishTitles } from "../utils/textReplacer";
 import { formatDateKST } from "../utils/dateFormatter";
 
@@ -22,11 +20,7 @@ interface PatchListProps {
 
 export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) {
   const formattedPatchLogs = useMemo(() => {
-    const threeDaysMs = 3 * 24 * 60 * 60 * 1000;
-
     return patchLogs.map((log) => {
-      const publishedDate = new Date(log.published_at);
-      const ageMs = Date.now() - publishedDate.getTime();
       const formattedDate = formatDateKST(log.published_at, {
         year: "numeric",
         month: "2-digit",
@@ -40,17 +34,10 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
         month: "short",
         day: "numeric",
       });
-      const relativeDateLabel =
-        ageMs <= threeDaysMs
-          ? formatDistanceToNow(publishedDate, {
-              addSuffix: true,
-              locale: ko,
-            })
-          : dateLabel;
 
       return {
         ...log,
-        dateLabel: relativeDateLabel,
+        dateLabel,
         formattedDate,
       };
     });

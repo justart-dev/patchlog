@@ -115,18 +115,6 @@ export default function RootLayout({
           <link rel="manifest" href="/manifest.json" />
           <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
           <WebSiteStructuredData />
-          <Script id="theme-init" strategy="beforeInteractive">
-            {`
-              try {
-                const theme = localStorage.getItem('patchlog-ui-theme') || 'system';
-                const actualTheme =
-                  theme === 'system'
-                    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-                    : theme;
-                document.documentElement.classList.toggle('dark', actualTheme === 'dark');
-              } catch (e) {}
-            `}
-          </Script>
         </head>
         <body className="antialiased flex flex-col min-h-screen bg-archive-zinc-50 dark:bg-archive-zinc-950 text-archive-zinc-900 dark:text-archive-zinc-50 overflow-x-clip selection:bg-hero-red-500 selection:text-white" suppressHydrationWarning>
           <ThemeProvider>
