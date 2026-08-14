@@ -258,6 +258,10 @@ export async function POST(request: Request) {
                 const placeholder = `__YOUTUBE_PLACEHOLDER_${index}__`;
                 retryContent = retryContent.replace(placeholder, tag);
               });
+              imageTags.forEach((tag, index) => {
+                const placeholder = `__IMAGE_PLACEHOLDER_${index}__`;
+                retryContent = retryContent.replace(placeholder, tag);
+              });
               retryContent = postProcessTranslation({
                 translatedContent: retryContent,
                 skillMap,
