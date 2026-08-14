@@ -49,14 +49,8 @@ module.exports = {
         }
       },
       animation: {
-        'hero-enter': 'heroEnter 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
-        'power-pulse': 'powerPulse 2s ease-in-out infinite',
-        'glow-pulse': 'glowPulse 1.5s ease-in-out infinite',
+        'hero-enter': 'heroEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
         'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-        'slide-down': 'slideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-        'float': 'float 3s ease-in-out infinite',
-        'comic-pop': 'comicPop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-        'reveal': 'reveal 0.8s cubic-bezier(0.77, 0, 0.175, 1)',
       },
       keyframes: {
         heroEnter: {
@@ -69,24 +63,6 @@ module.exports = {
             transform: 'scale(1) translateY(0)'
           },
         },
-        powerPulse: {
-          '0%, 100%': {
-            opacity: '1',
-            transform: 'scale(1)',
-          },
-          '50%': {
-            opacity: '0.8',
-            transform: 'scale(1.02)',
-          },
-        },
-        glowPulse: {
-          '0%, 100%': {
-            boxShadow: '0 0 20px rgba(248, 61, 84, 0.2), 0 0 40px rgba(37, 99, 235, 0.1)',
-          },
-          '50%': {
-            boxShadow: '0 0 30px rgba(248, 61, 84, 0.4), 0 0 60px rgba(37, 99, 235, 0.3)',
-          },
-        },
         slideUp: {
           '0%': {
             opacity: '0',
@@ -97,39 +73,6 @@ module.exports = {
             transform: 'translateY(0)'
           },
         },
-        slideDown: {
-          '0%': {
-            opacity: '0',
-            transform: 'translateY(-20px)'
-          },
-          '100%': {
-            opacity: '1',
-            transform: 'translateY(0)'
-          },
-        },
-        float: {
-          '0%, 100%': {
-            transform: 'translateY(0px)'
-          },
-          '50%': {
-            transform: 'translateY(-6px)'
-          },
-        },
-        comicPop: {
-          '0%': {
-            transform: 'scale(0.95) rotate(-1deg)'
-          },
-          '50%': {
-            transform: 'scale(1.02) rotate(0.5deg)'
-          },
-          '100%': {
-            transform: 'scale(1) rotate(0deg)'
-          },
-        },
-        reveal: {
-          '0%': { transform: 'translateY(100%)' },
-          '100%': { transform: 'translateY(0)' },
-        }
       },
       backgroundImage: {
         'hero-gradient': 'linear-gradient(135deg, #f83d54 0%, #2563eb 100%)',

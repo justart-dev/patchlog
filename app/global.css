@@ -2,37 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 테마 전환 애니메이션은 상호작용 요소 중심으로 제한 */
-html,
-body,
-button,
-a,
-input,
-textarea,
-select,
-article,
-section,
-nav,
-footer {
+/* 테마 전환 트랜지션은 body로 제한해 전체 문서 리페인트를 방지 */
+body {
   transition:
-    background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-    color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html,
-  body,
-  button,
-  a,
-  input,
-  textarea,
-  select,
-  article,
-  section,
-  nav,
-  footer {
+  body {
     transition: none !important;
   }
 }
@@ -72,9 +50,9 @@ samp {
 /* ==================== UTILITIES ==================== */
 @layer utilities {
   .glass {
-    @apply backdrop-blur-md bg-white/70 border border-white/20 dark:bg-archive-zinc-900/70 dark:border-archive-zinc-800/50;
+    @apply bg-white/60 border border-white/30 dark:bg-archive-zinc-900/50 dark:border-archive-zinc-800/40;
   }
-  
+
   .glass-card {
     @apply glass shadow-ambient rounded-2xl overflow-hidden;
   }

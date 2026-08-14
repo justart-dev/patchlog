@@ -114,15 +114,21 @@ export default function RootLayout({
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <link rel="manifest" href="/manifest.json" />
           <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+          {/* 페인트 전에 테마 클래스를 적용해 다크모드 플래시와 마운트 후 재렌더를 방지 */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html:
+                "(function(){try{var t=localStorage.getItem('patchlog-ui-theme');var d=t==='dark'||((!t||t==='system')&&window.matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.add(d?'dark':'light');}catch(e){}})();",
+            }}
+          />
           <WebSiteStructuredData />
         </head>
-        <body className="antialiased flex flex-col min-h-screen bg-archive-zinc-50 dark:bg-archive-zinc-950 text-archive-zinc-900 dark:text-archive-zinc-50 overflow-x-clip selection:bg-hero-red-500 selection:text-white" suppressHydrationWarning>
+        <body className="antialiased flex flex-col min-h-screen bg-archive-zinc-50 dark:bg-archive-zinc-950 text-archive-zinc-900 dark:text-archive-zinc-50 overflow-x-clip selection:bg-hero-red-500 selection:text-white">
           <ThemeProvider>
-            {/* Global Background Elements */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10 transform-gpu will-change-transform" aria-hidden="true">
-              <div className="absolute top-[-5%] left-[-10%] w-[50%] h-[50%] rounded-full bg-hero-blue-500/10 blur-[80px] dark:bg-hero-blue-500/15" />
-              <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-hero-red-500/10 blur-[80px] dark:bg-hero-red-500/15" />
-              <div className="absolute inset-0 opacity-[0.015] dark:opacity-[0.03] pointer-events-none bg-noise" />
+            {/* Global Background Elements — 비싼 blur 필터 대신 저비용 그라디언트만 사용 */}
+            <div className="fixed inset-0 pointer-events-none -z-10" aria-hidden="true">
+              <div className="absolute inset-0 bg-comic-radial" />
+              <div className="absolute inset-0 opacity-[0.015] dark:opacity-[0.03] bg-noise" />
             </div>
 
             {/* Floating Navbar Container */}
@@ -131,7 +137,7 @@ export default function RootLayout({
             </div>
 
             {/* The single, definitive semantic main tag for the entire site */}
-            <main className="flex-grow pt-24 sm:pt-28 relative z-10" suppressHydrationWarning>
+            <main className="flex-grow pt-24 sm:pt-28 relative z-10">
               {children}
             </main>
 
