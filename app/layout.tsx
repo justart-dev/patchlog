@@ -9,7 +9,6 @@ import Script from "next/script";
 import Footer from "./components/footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { WebSiteStructuredData } from "./components/StructuredData";
-import PWARegister from "./components/PWARegister";
 import { ThemeProvider } from "@/lib/theme-provider";
 import { buildCanonicalUrl, DEFAULT_OG_IMAGE, SITE_BRAND_NAME, SITE_URL } from "@/lib/site";
 
@@ -154,7 +153,6 @@ export default function RootLayout({
               </div>
             </footer>
           </ThemeProvider>
-          <PWARegister />
           <Analytics />
           <SpeedInsights />
           <Script
