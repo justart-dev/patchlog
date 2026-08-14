@@ -13,7 +13,7 @@ const nextConfig = {
         hostname: "cdn.akamai.steamstatic.com",
       },
     ],
-    unoptimized: true,
+    unoptimized: false,
   },
   async redirects() {
     return [

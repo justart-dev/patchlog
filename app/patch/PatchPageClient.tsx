@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PatchList, type PatchLog } from "../components/patchList";
 import StatusDisplay from "../components/StatusDisplay";
 import { useUser, SignInButton } from "@clerk/nextjs";
@@ -72,8 +72,18 @@ export default function PatchPageClient({
 }: PatchPageClientProps) {
   const { isSignedIn, isLoaded } = useUser();
 
+  // Clerk의 isLoaded는 서버(false)와 클라이언트 첫 렌더(true 가능)가 달라질 수 있어
+  // hydration 불일치를 유발한다. mounted 가드로 첫 렌더를 서버와 일치시킨다.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const showAnalysis = mounted && isLoaded && isSignedIn;
+  const showLockOverlay = mounted && isLoaded && !isSignedIn;
+
   const latestDate = useMemo(() => {
-    if (!patchLogs || patchLogs.length === 0) return new Date();
+    if (!patchLogs || patchLogs.length === 0) return null;
     return new Date(Math.max(...patchLogs.map((log) => new Date(log.published_at).getTime())));
   }, [patchLogs]);
 
@@ -103,8 +113,8 @@ export default function PatchPageClient({
           <>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-hero-enter [animation-delay:100ms]">
               <article className="glass-card p-8 relative flex flex-col justify-between overflow-hidden min-h-[320px]">
-                {isLoaded && !isSignedIn && (
-                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-archive-zinc-50/95 dark:bg-archive-zinc-950/95 backdrop-blur-[20px]">
+                {showLockOverlay && (
+                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-archive-zinc-50/95 dark:bg-archive-zinc-950/95">
                     <div className="text-center p-6">
                       <p className="text-[10px] font-black tracking-widest uppercase mb-3 opacity-50">Data Encrypted</p>
                       <>
@@ -124,7 +134,7 @@ export default function PatchPageClient({
                   <h3 className="text-xl font-black tracking-tight">업데이트 주기 분석</h3>
                 </div>
 
-                {isLoaded && isSignedIn ? (
+                {showAnalysis ? (
                   <PatternAnalysisContent patchLogs={patchLogs} />
                 ) : (
                   <div className="flex flex-col">
@@ -163,8 +173,8 @@ export default function PatchPageClient({
                 </div>
                 <div className="px-4 py-2 glass rounded-full flex items-center gap-3">
                   <span className="text-[10px] font-black text-archive-zinc-400 uppercase tracking-widest">마지막 업데이트</span>
-                  <span className="text-xs font-black tracking-tight">
-                    {formatDateKST(latestDate, { year: "numeric", month: "2-digit", day: "2-digit" })}
+                  <span className="text-xs font-black tracking-tighter">
+                    {latestDate && formatDateKST(latestDate, { year: "numeric", month: "2-digit", day: "2-digit" })}
                   </span>
                 </div>
               </div>

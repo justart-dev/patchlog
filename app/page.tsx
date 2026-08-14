@@ -160,24 +160,18 @@ export default function Page() {
           </h1>
           
           <p className="max-w-xl mx-auto text-archive-zinc-600 dark:text-archive-zinc-400 text-base sm:text-lg mb-10 leading-relaxed animate-hero-enter [animation-delay:100ms]">
-            수동적인 번역을 넘어 핵심 변경사항을 추출하고 아카이빙합니다.<br />
-            영문 패치의 모든 변화를 가장 정교한 한국어로 확인하세요.
+            수동적인 번역을 넘어, 밸런스 변화의 핵심을 데이터로 추출해 정리합니다.<br />
+            영문 패치를 가장 정교한 한국어로, 게임 의미 그대로 확인하세요.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-hero-enter [animation-delay:200ms]">
+          <div className="flex justify-center animate-hero-enter [animation-delay:200ms]">
             <Link
               href="/patch"
               prefetch={false}
-              className="w-full sm:w-auto px-8 py-4 bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 font-black text-sm tracking-tight rounded-full hover:scale-[1.02] transition-transform active:scale-[0.98] shadow-xl shadow-black/10 dark:shadow-white/5"
+              className="inline-flex items-center gap-3 px-10 py-5 bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 font-black tracking-[0.2em] uppercase text-xs rounded-full hover:scale-105 transition-all shadow-xl"
             >
               패치노트 보기
             </Link>
-            <a
-              href="#process"
-              className="w-full sm:w-auto px-8 py-4 border border-archive-zinc-900/10 dark:border-white/10 bg-white/50 dark:bg-archive-zinc-900/50 backdrop-blur-sm text-archive-zinc-900 dark:text-white font-black text-sm tracking-tight rounded-full hover:bg-white dark:hover:bg-archive-zinc-800 hover:border-archive-zinc-900/20 dark:hover:border-white/20 transition-all shadow-sm active:scale-95 hover:scale-[1.02]"
-            >
-              서비스 소개
-            </a>
           </div>
         </div>
       </section>

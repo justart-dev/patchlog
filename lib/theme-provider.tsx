@@ -29,25 +29,18 @@ export function ThemeProvider({
   storageKey = 'patchlog-ui-theme',
   ...props
 }: ThemeProviderProps) {
-  // SSR/CSR 초기 렌더를 동일하게 맞추기 위해 기본 테마로 시작
-  const [theme, setThemeState] = useState<Theme>(defaultTheme)
-
-  // 마운트 후 저장된 테마를 복원
-  useEffect(() => {
+  // 클라이언트 첫 렌더에서 저장된 테마를 동기적으로 읽어 마운트 후 재렌더를 방지.
+  // 서버에서는 defaultTheme으로 렌더되지만, 유일한 consumer(theme-toggle)가
+  // mounted 가드로 감싸져 있어 hydration 불일치가 발생하지 않는다.
+  const [theme, setThemeState] = useState<Theme>(() => {
     const storedTheme = getStorageItem(storageKey) as Theme | null
-    if (storedTheme && storedTheme !== theme) {
-      setThemeState(storedTheme)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storageKey])
+    return storedTheme ?? defaultTheme
+  })
 
+  // 초기 클래스 적용은 layout.tsx <head>의 인라인 스크립트가 페인트 전에 처리하므로
+  // 여기서는 사용자가 테마를 변경했을 때만 DOM을 갱신한다.
   useEffect(() => {
     const root = window.document.documentElement
-
-    // 부드러운 전환을 위한 transition 클래스 추가
-    root.classList.add('transition-colors', 'duration-300', 'ease-in-out')
-    root.style.transition = 'background-color 0.3s ease-in-out, color 0.3s ease-in-out'
-
     root.classList.remove('light', 'dark')
 
     if (theme === 'system') {
