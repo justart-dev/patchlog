@@ -19,40 +19,6 @@ interface PatchLog {
   translated_ko?: string;
 }
 
-/**
- * 번역 결과에서 영문 잔류 단어를 검출한다.
- * HTML 태그, URL, 플레이스홀더, 허용 약어를 제외한 3글자 이상 영단어 목록을 반환.
- */
-function detectRemainingEnglish(text: string): string[] {
-  const plainText = text
-    .replace(/<[^>]+>/g, " ")        // HTML 태그 제거
-    .replace(/https?:\/\/[^\s<>"']+/g, " ") // URL 제거
-    .replace(/__\w+_PLACEHOLDER_\d+__/g, " ") // 플레이스홀더 제거
-    .replace(/\[[^\]]+\]/g, " ");      // BBCode 잔여 제거
-
-  // 허용 약어 (대문자 2~4글자 또는 알려진 게임 약어)
-  const allowedAcronyms = new Set([
-    "PvE", "PvP", "MVP", "PC", "PSN", "Xbox", "NSW",
-    "UI", "UX", "API", "DPS", "AOE", "CC", "HUD",
-    "FPS", "GG", "AFK", "DC", "XP", "HP",
-    "KST", "UTC", "ET", "PT",
-  ]);
-
-  const words = plainText.match(/[A-Za-z]{3,}/g) || [];
-  const filtered = words.filter((w) => {
-    // 모두 대문자 2~4글자면 약어로 간주하여 제외
-    if ( /^[A-Z]{2,4}$/.test(w) && allowedAcronyms.has(w)) return false;
-    // 약어 목록에 있으면 제외
-    if (allowedAcronyms.has(w)) return false;
-    return true;
-  });
-  return Array.from(new Set(filtered));
-}
-
-/** 영문 잔류 재시도 임계값 */
-const ENGLISH_RETRY_THRESHOLD = 2;
-const MAX_RETRIES = 1;
-
 export async function POST(request: Request) {
   const authHeader = request.headers.get("authorization");
   const expectedAuth = `Bearer ${process.env.CRON_SECRET}`;
@@ -91,8 +57,6 @@ export async function POST(request: Request) {
       model?: string;
       tokens?: number;
       duration_ms?: number;
-      english_remaining?: number;
-      retried?: boolean;
       error?: string;
     }> = [];
 
@@ -141,31 +105,23 @@ export async function POST(request: Request) {
           `Do NOT leave unmapped proper nouns in English — always Koreanize them. ` +
           `Keep all placeholders like __YOUTUBE_PLACEHOLDER_N__ exactly as they are without translating them.`;
 
-        const buildRequestBody = (content: string, extraInstruction?: string) => {
-          const systemContent = extraInstruction
-            ? enhancedSystemPrompt + "\n\n" + extraInstruction
-            : enhancedSystemPrompt;
-          return {
-            ...marvelPrompt,
-            reasoning_effort: "low",
-            messages: [
-              {
-                role: "system",
-                content: systemContent,
-              },
-              {
-                role: "user",
-                content: content,
-              },
-            ],
-          };
+        const requestBody = {
+          ...marvelPrompt,
+          reasoning_effort: "low",
+          messages: [
+            {
+              role: "system",
+              content: enhancedSystemPrompt,
+            },
+            {
+              role: "user",
+              content: contentToTranslate,
+            },
+          ],
         };
 
-        // ─── 1차 번역 ───
         const apiStartTime = Date.now();
-        const requestBody = buildRequestBody(contentToTranslate);
-
-        let openaiResponse = await fetch(
+        const openaiResponse = await fetch(
           "https://api.openai.com/v1/chat/completions",
           {
             method: "POST",
@@ -176,7 +132,7 @@ export async function POST(request: Request) {
             body: JSON.stringify(requestBody),
           }
         );
-        let apiDuration = Date.now() - apiStartTime;
+        const apiDuration = Date.now() - apiStartTime;
 
         if (!openaiResponse.ok) {
           const errorText = await openaiResponse.text();
@@ -189,7 +145,7 @@ export async function POST(request: Request) {
           continue;
         }
 
-        let openaiData = await openaiResponse.json();
+        const openaiData = await openaiResponse.json();
         let translatedContent = openaiData.choices?.[0]?.message?.content;
 
         if (!translatedContent) {
@@ -220,64 +176,6 @@ export async function POST(request: Request) {
           protectedTerms: [],
         });
 
-        // ─── 영문 잔류 검증 + 재시도 ───
-        let remainingEnglish = detectRemainingEnglish(translatedContent);
-        let retried = false;
-
-        if (remainingEnglish.length >= ENGLISH_RETRY_THRESHOLD && MAX_RETRIES > 0) {
-          console.warn(`Retranslating ${log.id}: ${remainingEnglish.length} English words remain`);
-
-          const retryInstruction =
-            `CRITICAL: The previous translation left these English words untranslated. ` +
-            `Transliterate EVERY one into natural Korean (e.g. "Sacred Skies" → "세이크리드 스카이즈", "Blue Breaker" → "블루 브레이커"). ` +
-            `Even proper nouns like skin names, costume names, event titles, and ability names MUST be written in Korean, not left in English:\n` +
-            remainingEnglish.map((w) => `  - "${w}"`).join("\n") + "\n" +
-            `Translate the entire content again so these appear in Korean. Keep only acronyms (PvE, PvP, MVP, PC) and URLs/placeholders.`;
-
-          const retryBody = buildRequestBody(contentToTranslate, retryInstruction);
-          const retryStartTime = Date.now();
-          openaiResponse = await fetch(
-            "https://api.openai.com/v1/chat/completions",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${openaiApiKey}`,
-              },
-              body: JSON.stringify(retryBody),
-            }
-          );
-          apiDuration += Date.now() - retryStartTime;
-
-          if (openaiResponse.ok) {
-            const retryData = await openaiResponse.json();
-            let retryContent = retryData.choices?.[0]?.message?.content;
-            if (retryContent) {
-              retryContent = retryContent.replace(/```html\n?/g, '').replace(/```\n?/g, '');
-              youtubeTags.forEach((tag, index) => {
-                const placeholder = `__YOUTUBE_PLACEHOLDER_${index}__`;
-                retryContent = retryContent.replace(placeholder, tag);
-              });
-              imageTags.forEach((tag, index) => {
-                const placeholder = `__IMAGE_PLACEHOLDER_${index}__`;
-                retryContent = retryContent.replace(placeholder, tag);
-              });
-              retryContent = postProcessTranslation({
-                translatedContent: retryContent,
-                skillMap,
-                protectedTerms: [],
-              });
-              const retryRemaining = detectRemainingEnglish(retryContent);
-              // 재시도 결과가 더 나으면 교체
-              if (retryRemaining.length < remainingEnglish.length) {
-                translatedContent = retryContent;
-                remainingEnglish = retryRemaining;
-              }
-              retried = true;
-            }
-          }
-        }
-
         // DB에 번역 결과 업데이트
         const { error: updateError } = await supabase
           .from("steam_patch_logs")
@@ -302,8 +200,6 @@ export async function POST(request: Request) {
           model: openaiData.model,
           tokens: openaiData.usage?.total_tokens,
           duration_ms: apiDuration,
-          english_remaining: remainingEnglish.length,
-          retried,
         });
 
         await new Promise((resolve) => setTimeout(resolve, 1000));
