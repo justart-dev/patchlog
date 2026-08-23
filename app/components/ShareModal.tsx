@@ -22,6 +22,17 @@ export default function ShareModal() {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (isOpen) {
+      const scrollStyle = getComputedStyle(document.documentElement).overflow;
+      document.documentElement.style.overflow = "hidden";
+      return () => {
+        document.documentElement.style.overflow = scrollStyle;
+      };
+    }
+  }, [isOpen]);
+
   const handleDismiss = () => {
     localStorage.setItem(DISMISS_KEY, Date.now().toString());
     setIsOpen(false);
