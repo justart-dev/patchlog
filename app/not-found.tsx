@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+    <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-6">
       <h2 className="text-2xl font-bold mb-4">페이지를 찾을 수 없습니다</h2>
       <p className="mb-4">
         요청하신 페이지가 존재하지 않거나 삭제되었을 수 있습니다.
@@ -13,6 +13,11 @@ export default function NotFound() {
       >
         홈으로 돌아가기
       </Link>
+      <div className="mt-6 flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm text-archive-zinc-500">
+        <Link href="/patch" className="underline underline-offset-4 hover:text-archive-zinc-900 dark:hover:text-white">패치노트 목록</Link>
+        <Link href="/sitemap.xml" className="underline underline-offset-4 hover:text-archive-zinc-900 dark:hover:text-white">사이트맵</Link>
+        <Link href="/" className="underline underline-offset-4 hover:text-archive-zinc-900 dark:hover:text-white">홈</Link>
+      </div>
     </div>
   );
 }

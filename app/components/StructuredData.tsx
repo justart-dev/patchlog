@@ -5,8 +5,8 @@ export function WebSiteStructuredData() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "패치로그 - 마블 라이벌즈 한글 패치노트",
-    alternateName: [SITE_NAME, "Patchlog"],
+    name: "패치로그 Patchlog - 마블 라이벌즈 한글 패치노트",
+    alternateName: ["Patchlog", "패치로그"],
     url: SITE_URL,
     description: "마블 라이벌즈 최신 패치노트를 한국어로 정리해 제공하는 Patchlog",
     potentialAction: {
@@ -19,7 +19,7 @@ export function WebSiteStructuredData() {
     },
     publisher: {
       "@type": "Organization",
-      name: SITE_NAME,
+      name: "Patchlog",
       url: SITE_URL,
     },
   };

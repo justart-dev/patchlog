@@ -29,8 +29,8 @@ export const metadata: Metadata = {
     canonical: buildCanonicalUrl("/"),
   },
   title: {
-    default: "마블 라이벌즈 한글 패치노트 | 패치로그",
-    template: "%s | 패치로그",
+    default: "마블 라이벌즈 한글 패치노트 | 패치로그 Patchlog",
+    template: "%s | 패치로그 Patchlog",
   },
   description: "마블 라이벌즈 최신 패치노트를 한국어로 빠르게 확인하세요. 히어로 밸런스 조정, 시즌 업데이트, 맵 변경, 핵심 수치 변화를 읽기 쉽게 정리해 제공합니다.",
   keywords: [

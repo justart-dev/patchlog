@@ -31,19 +31,23 @@ const nextConfig = {
         value: "index, follow",
       },
     ];
+    const varyAcceptHeaders = [
+      ...indexableHeaders,
+      { key: "Vary", value: "Accept, Accept-Encoding" },
+    ];
 
     return [
       {
         source: "/",
-        headers: indexableHeaders,
+        headers: varyAcceptHeaders,
       },
       {
         source: "/patch",
-        headers: indexableHeaders,
+        headers: varyAcceptHeaders,
       },
       {
         source: "/patch/:path*",
-        headers: indexableHeaders,
+        headers: varyAcceptHeaders,
       },
       {
         source: "/sitemap.xml",
