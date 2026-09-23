@@ -295,7 +295,7 @@ export default function LandingClient() {
                 <p className="text-archive-zinc-600 dark:text-archive-zinc-400 leading-relaxed mb-6">{currentStep.description}</p>
                 
                 <div className="p-6 rounded-2xl bg-archive-zinc-100/50 dark:bg-archive-zinc-900/50 border border-archive-zinc-200 dark:border-archive-zinc-800 mb-8">
-                  <p className="text-sm font-medium leading-relaxed text-archive-zinc-700 dark:text-archive-zinc-300">{currentStep.detail}</p>
+                  <p className="text-sm font-medium leading-relaxed text-archive-zinc-700 dark:text-archive-zinc-300" dangerouslySetInnerHTML={{ __html: currentStep.detail }}></p>
                 </div>
 
                 {currentStep.examples && (
