@@ -137,9 +137,10 @@ function AnimatedPatchCount({ target = 70, duration = 1000 }: { target?: number;
   return <>{count}+</>;
 }
 
-export default function LandingClient() {
+export default function LandingClient({ untranslatedCount = 0 }: { untranslatedCount?: number }) {
   const [activeProblem, setActiveProblem] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
+  const syncAlert = untranslatedCount > 3;
 
   const currentProblem = problems[activeProblem] ?? problems[0];
   const currentStep = steps[activeStep] ?? steps[0];
@@ -149,7 +150,7 @@ export default function LandingClient() {
       <section className="relative pt-10 pb-20 px-6 sm:px-10 lg:px-20">
         <div className="max-w-[1200px] mx-auto text-center">
           <div className="inline-flex items-center gap-2.5 rounded-full border border-archive-zinc-200 dark:border-archive-zinc-800 bg-white dark:bg-archive-zinc-900 px-3.5 py-2 mb-8 animate-hero-enter shadow-ambient">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-glow-green animate-pulse" />
+            <div className={`w-2 h-2 rounded-full animate-pulse ${syncAlert ? "bg-hero-red-500 shadow-glow-red" : "bg-emerald-500 shadow-glow-green"}`} />
             <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-archive-zinc-500 leading-none">Sync Status</span>
           </div>
           
