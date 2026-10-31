@@ -32,7 +32,7 @@ export async function getPatches(limit = 10) {
         .from("steam_patch_logs")
         .select(
           `
-          id, title, app_id, app_gid, app_name, published_at, content, translated_ko,
+          id, title, app_id, app_gid, app_name, published_at,
           steam_app_metadata (
             capsule_image
           )
@@ -51,6 +51,23 @@ export async function getPatches(limit = 10) {
       }));
     },
     ["patch-list", String(limit)],
+    { revalidate: 300, tags: ["patch-list"] }
+  )();
+}
+
+export async function getUntranslatedCount() {
+  return unstable_cache(
+    async () => {
+      const { count, error } = await supabase
+        .from("steam_patch_logs")
+        .select("id", { count: "exact", head: true })
+        .not("content", "is", null)
+        .is("translated_ko", null);
+
+      if (error) return 0;
+      return count ?? 0;
+    },
+    ["untranslated-count"],
     { revalidate: 300, tags: ["patch-list"] }
   )();
 }

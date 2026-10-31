@@ -9,7 +9,7 @@ export const revalidate = 1800;
 
 export default async function PatchPage() {
   const [patchLogs, latestVideo] = await Promise.all([
-    getPatches(30),
+    getPatches(100),
     getLatestMarvelVideo().catch(() => null),
   ]);
 
