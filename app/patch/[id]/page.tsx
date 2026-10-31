@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       canonical: canonicalUrl,
     },
     title: `${title} | 마블 라이벌즈 패치로그`,
-    description: `${description} 아이언맨, 토르, 스파이더맨, 헐크, 캡틴 아메리카 등 히어로의 스킬 변경, 맵 업데이트, 메타 변화를 상세히 확인하세요.`,
+    description,
     keywords: [
       "마블 라이벌즈 패치", "Marvel Rivals patch", "히어로 밸런스", "스킬 버프", "스킬 너프",
       "아이언맨", "토르", "스파이더맨", "헐크", "캡틴 아메리카",
@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ],
     openGraph: {
       title: `${title} | 마블 라이벌즈 패치로그`,
-      description: `${description} 히어로 스킬 변경, 맵 업데이트, 메타 변화 확인.`,
+      description,
       url: canonicalUrl,
       type: 'article',
       publishedTime: patch.published_at,
@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     twitter: {
       card: 'summary_large_image',
       title: `${title} | 마블 라이벌즈 패치로그`,
-      description: `${description} 히어로 업데이트 확인.`,
+      description,
     }
   };
 }
