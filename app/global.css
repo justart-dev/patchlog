@@ -90,6 +90,37 @@ samp {
   border-left-color: theme('colors.hero-blue.500') !important;
 }
 
+/* 본문에 인라인으로 박힌 라이트 전용 색상을 다크모드에서 보정 */
+.dark article strong {
+  color: theme('colors.archive-zinc.50') !important;
+}
+
+.dark article code {
+  background-color: theme('colors.archive-zinc.800') !important;
+  color: theme('colors.archive-zinc.100') !important;
+}
+
+.dark article pre {
+  background-color: theme('colors.archive-zinc.900') !important;
+  color: theme('colors.archive-zinc.200') !important;
+  border-color: theme('colors.archive-zinc.800') !important;
+}
+
+.dark article th {
+  color: theme('colors.archive-zinc.100') !important;
+  background-color: theme('colors.archive-zinc.900') !important;
+  border-bottom-color: theme('colors.archive-zinc.800') !important;
+}
+
+.dark article td {
+  color: theme('colors.archive-zinc.300') !important;
+  border-bottom-color: theme('colors.archive-zinc.800') !important;
+}
+
+.dark article hr {
+  border-top-color: theme('colors.archive-zinc.800') !important;
+}
+
 /* Syntax highlighting */
 :root {
   --sh-class: #2d5e9d;

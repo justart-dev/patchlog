@@ -86,12 +86,13 @@ export default function ShareModal() {
           <p>
             Patchlog가 유용하셨다면 주변 마블 라이벌즈
             플레이어들에게 한 번 소개해주세요.
-            여러분의 공유가 서비스를 더 나아지게 만듭니다.
           </p>
+          <p>여러분의 공유가 서비스를 더 나아지게 만듭니다.</p>
+          <p>😢 사실 한글 유저는 많이 줄어든 것 같아 지속을 해야 할지 고민입니다.</p>
         </div>
 
         <div className="mt-6 flex flex-col gap-3">
-          <a
+          {/* <a
             href="https://ctee.kr/place/justart"
             target="_blank"
             rel="noopener noreferrer"
@@ -99,7 +100,7 @@ export default function ShareModal() {
             className="rounded-lg bg-zinc-900 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-zinc-800 transition-colors"
           >
             ☕ 크티에서 후원하기
-          </a>
+          </a> */}
           <div className="flex gap-3">
             <button
               onClick={handleDismiss}
