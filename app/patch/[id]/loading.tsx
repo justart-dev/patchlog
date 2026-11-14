@@ -4,8 +4,8 @@ export default function PatchDetailLoading() {
       <div className="relative mx-auto w-full max-w-[900px] px-6">
         {/* Header Skeleton */}
         <header className="mb-10 text-center">
-          <div className="h-10 w-3/4 mx-auto rounded-xl bg-archive-zinc-200 dark:bg-archive-zinc-800 mb-6" />
-          <div className="h-4 w-48 mx-auto rounded-full bg-archive-zinc-200 dark:bg-archive-zinc-800" />
+          <div className="h-10 w-3/4 mx-auto rounded-sm bg-archive-zinc-200 dark:bg-archive-zinc-800 mb-6" />
+          <div className="h-4 w-48 mx-auto rounded-sm bg-archive-zinc-200 dark:bg-archive-zinc-800" />
         </header>
 
         {/* Content Skeleton */}

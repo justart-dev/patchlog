@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useEffect } from "react";
 import { addStylesToHtml } from "../../utils/htmlUtils";
 import {
@@ -14,7 +15,7 @@ import { formatDateKST } from "../../utils/dateFormatter";
 
 const CommentSection = dynamic(() => import("../../components/CommentSection"), {
   loading: () => (
-    <div className="h-32 animate-pulse rounded-2xl bg-archive-zinc-100 dark:bg-archive-zinc-800" />
+    <div className="h-32 animate-pulse rounded-sm bg-archive-zinc-100 dark:bg-archive-zinc-800" />
   ),
   ssr: false,
 });
@@ -52,13 +53,13 @@ export default function PatchDetailClient({
   return (
     <div className="pb-20">
       <div className="relative mx-auto w-full max-w-[900px] px-6">
-        <header className="mb-10 text-center animate-hero-enter">
+        <header className="mb-10 animate-hero-enter">
           <h1 className="text-3xl sm:text-5xl font-black tracking-tighter leading-[1.05] text-archive-zinc-950 dark:text-white mb-6">
             {replaceEnglishTitles(patchDetail.title)}
           </h1>
 
-          <div className="flex items-center justify-center gap-4 text-xs font-bold text-archive-zinc-500 uppercase tracking-widest">
-            <span>RECORDED ON</span>
+          <div className="flex items-center gap-4 font-mono text-xs text-archive-zinc-400">
+            <span className="uppercase tracking-widest">Recorded on</span>
             <span className="h-px w-8 bg-archive-zinc-200 dark:bg-archive-zinc-800" />
             <time>
               {formatDateKST(patchDetail.published_at, {
@@ -70,7 +71,7 @@ export default function PatchDetailClient({
           </div>
         </header>
 
-        <article className="glass-card p-6 sm:p-12 mb-10 animate-hero-enter [animation-delay:100ms] border-archive-zinc-200 dark:border-archive-zinc-800">
+        <article className="border-t border-b border-archive-zinc-200 dark:border-archive-zinc-800 py-8 sm:py-12 mb-10 animate-hero-enter [animation-delay:100ms]">
           <div className="patch-content prose prose-zinc dark:prose-invert max-w-none prose-h1:text-2xl prose-h1:font-black prose-h2:text-xl prose-h2:font-black prose-p:leading-relaxed prose-li:leading-relaxed prose-strong:text-hero-red-500 dark:prose-strong:text-hero-red-400">
             {patchDetail.translated_ko ? (
               <div
@@ -98,18 +99,19 @@ export default function PatchDetailClient({
           </div>
 
           <div className="mt-20 pt-10 border-t border-archive-zinc-200 dark:border-archive-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <button
-              onClick={() => router.push("/patch")}
+            <Link
+              href="/patch"
+              prefetch={false}
               className="group flex items-center gap-2 text-xs font-black tracking-widest uppercase text-archive-zinc-500 hover:text-archive-zinc-950 dark:hover:text-white transition-colors"
             >
               <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
               </svg>
               <span>RETURN TO DIRECTORY</span>
-            </button>
+            </Link>
             <button
               onClick={() => window.open(patchDetail.url, "_blank")}
-              className="px-6 py-3 bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 text-xs font-black tracking-widest uppercase rounded-full hover:scale-105 transition-transform shadow-xl"
+              className="px-6 py-3 bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 text-xs font-black tracking-widest uppercase rounded-sm transition-colors"
             >
               VIEW RAW DATA SOURCE
             </button>
@@ -117,20 +119,20 @@ export default function PatchDetailClient({
         </article>
 
         {/* Navigation */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10 animate-hero-enter [animation-delay:200ms]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-px mb-10 border border-archive-zinc-200 dark:border-archive-zinc-800 bg-archive-zinc-200 dark:bg-archive-zinc-800 animate-hero-enter [animation-delay:200ms]">
           {navigation.newer ? (
             <button
               onClick={() => router.push(`/patch/${navigation.newer!.id}`)}
-              className="glass-card p-6 text-left group hover:border-hero-blue-500/50 transition-colors"
+              className="group bg-white dark:bg-archive-zinc-950 p-5 text-left transition-colors hover:bg-archive-zinc-100/70 dark:hover:bg-archive-zinc-900/60"
             >
-              <p className="text-[10px] font-black text-archive-zinc-400 mb-2 uppercase tracking-widest">NEXT RECORD</p>
-              <p className="font-black text-sm tracking-tight line-clamp-1 group-hover:text-hero-blue-500 transition-colors">
+              <p className="text-[10px] font-mono font-bold text-archive-zinc-400 mb-2 uppercase tracking-widest">Next record</p>
+              <p className="font-bold text-sm tracking-tight truncate group-hover:text-hero-red-500 transition-colors">
                 {replaceEnglishTitles(navigation.newer.title)}
               </p>
             </button>
           ) : (
-            <div className="glass-card p-6 opacity-50 bg-archive-zinc-100 dark:bg-archive-zinc-900 border-dashed">
-              <p className="text-[10px] font-black text-archive-zinc-400 mb-2 uppercase tracking-widest">LATEST DATA REACHED</p>
+            <div className="bg-white dark:bg-archive-zinc-950 p-5 opacity-50">
+              <p className="text-[10px] font-mono font-bold text-archive-zinc-400 mb-2 uppercase tracking-widest">Latest record</p>
               <p className="font-bold text-sm tracking-tight">No newer updates available.</p>
             </div>
           )}
@@ -138,23 +140,23 @@ export default function PatchDetailClient({
           {navigation.older ? (
             <button
               onClick={() => router.push(`/patch/${navigation.older!.id}`)}
-              className="glass-card p-6 text-right group hover:border-hero-red-500/50 transition-colors"
+              className="group bg-white dark:bg-archive-zinc-950 p-5 text-left transition-colors hover:bg-archive-zinc-100/70 dark:hover:bg-archive-zinc-900/60"
             >
-              <p className="text-[10px] font-black text-archive-zinc-400 mb-2 uppercase tracking-widest">PREVIOUS RECORD</p>
-              <p className="font-black text-sm tracking-tight line-clamp-1 group-hover:text-hero-red-500 transition-colors">
+              <p className="text-[10px] font-mono font-bold text-archive-zinc-400 mb-2 uppercase tracking-widest">Previous record</p>
+              <p className="font-bold text-sm tracking-tight truncate group-hover:text-hero-red-500 transition-colors">
                 {replaceEnglishTitles(navigation.older.title)}
               </p>
             </button>
           ) : (
-            <div className="glass-card p-6 opacity-50 bg-archive-zinc-100 dark:bg-archive-zinc-900 border-dashed">
-              <p className="text-[10px] font-black text-archive-zinc-400 mb-2 uppercase tracking-widest">ORIGIN REACHED</p>
+            <div className="bg-white dark:bg-archive-zinc-950 p-5 opacity-50">
+              <p className="text-[10px] font-mono font-bold text-archive-zinc-400 mb-2 uppercase tracking-widest">Oldest record</p>
               <p className="font-bold text-sm tracking-tight">No older updates available.</p>
             </div>
           )}
         </div>
 
         {/* Comments Section */}
-        <section id="comments" className="glass-card p-8 animate-hero-enter [animation-delay:300ms] border-archive-zinc-200 dark:border-archive-zinc-800">
+        <section id="comments" className="border-t border-b border-archive-zinc-200 dark:border-archive-zinc-800 py-8 animate-hero-enter [animation-delay:300ms]">
           <div className="flex items-center gap-3 mb-8">
             <span className="h-2 w-2 rounded-full bg-hero-red-500" />
             <h3 className="text-lg font-black tracking-tighter uppercase">ARCHIVE DISCUSSION</h3>
@@ -165,7 +167,7 @@ export default function PatchDetailClient({
                 <p className="mb-6 font-bold uppercase tracking-widest text-xs">Synchronization Error</p>
                 <button
                   onClick={() => window.location.reload()}
-                  className="px-6 py-3 glass rounded-full text-xs font-black uppercase tracking-widest hover:bg-archive-zinc-100 transition-colors"
+                  className="px-6 py-3 glass rounded-sm text-xs font-black uppercase tracking-widest hover:bg-archive-zinc-100 transition-colors"
                 >
                   RETRY SYNC
                 </button>

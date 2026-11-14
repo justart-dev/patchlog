@@ -26,14 +26,6 @@ module.exports = {
           600: '#1d4ed8',
           900: '#1e3a8a',
         },
-        'electric-yellow': {
-          400: '#facc15',
-          500: '#eab308',
-        },
-        'comic-purple': {
-          400: '#c084fc',
-          500: '#a855f7',
-        },
         'archive-zinc': {
           50: '#fafafa',
           100: '#f4f4f5',
@@ -49,49 +41,30 @@ module.exports = {
         }
       },
       animation: {
-        'hero-enter': 'heroEnter 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
-        'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+        'hero-enter': 'heroEnter 0.3s cubic-bezier(0.2, 0, 0, 1)',
+        'slide-up': 'slideUp 0.25s cubic-bezier(0.2, 0, 0, 1)',
       },
       keyframes: {
         heroEnter: {
           '0%': {
             opacity: '0',
-            transform: 'scale(0.98) translateY(10px)'
-          },
-          '100%': {
-            opacity: '1',
-            transform: 'scale(1) translateY(0)'
-          },
-        },
-        slideUp: {
-          '0%': {
-            opacity: '0',
-            transform: 'translateY(20px)'
+            transform: 'translateY(8px)'
           },
           '100%': {
             opacity: '1',
             transform: 'translateY(0)'
           },
         },
-      },
-      backgroundImage: {
-        'hero-gradient': 'linear-gradient(135deg, #f83d54 0%, #2563eb 100%)',
-        'hero-gradient-dark': 'linear-gradient(135deg, #c1122d 0%, #1e3a8a 100%)',
-        'power-gradient': 'linear-gradient(45deg, #facc15 0%, #a855f7 100%)',
-        'comic-radial': 'radial-gradient(circle at 50% 50%, rgba(248, 61, 84, 0.05) 0%, transparent 70%)',
-        'noise': "url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWDg4N3dy95eXl6enqBgYGHh4d8fHx9fX1+fn6AgIB/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f3wAAAAMWHRSTlMGP0y3uL9XmMSZKNz9M9L998KAobCAgP40989VAAAAaklEQVQ4y2NgYAz8n4gwAi0vRE6Yn69gdXQWIifD6vgsRE6S1fFZDJyYnK9gdXQWIifD6vgsRE6S1fFZDJyYnK9gdXQWIifD6vgsRE6S1fFZDJyYnK9gdXQWIifD6vgsRE6S1fFZDJyYnK9gdXQWIn8AGv0Uf6vC43QAAAAASUVORK5CYII=\")",
-      },
-      boxShadow: {
-        'hero': '0 10px 40px rgba(0, 0, 0, 0.1), 0 0 20px rgba(37, 99, 235, 0.05)',
-        'hero-hover': '0 20px 60px rgba(0, 0, 0, 0.15), 0 0 40px rgba(37, 99, 235, 0.1)',
-        'comic': '2px 2px 0px rgba(0, 0, 0, 0.8)',
-        'comic-lg': '4px 4px 0px rgba(0, 0, 0, 0.8)',
-        'glow-red': '0 0 20px rgba(248, 61, 84, 0.3)',
-        'glow-blue': '0 0 20px rgba(37, 99, 235, 0.3)',
-        'glow-yellow': '0 0 20px rgba(250, 204, 21, 0.3)',
-        'soft-inner': 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.1)',
-        'glow-green': '0 0 15px rgba(16, 185, 129, 0.6)',
-        'ambient': '0 8px 32px -4px rgba(0, 0, 0, 0.1), 0 4px 12px -2px rgba(0, 0, 0, 0.05)',
+        slideUp: {
+          '0%': {
+            opacity: '0',
+            transform: 'translateY(6px)'
+          },
+          '100%': {
+            opacity: '1',
+            transform: 'translateY(0)'
+          },
+        },
       },
     },
   },

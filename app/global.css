@@ -9,15 +9,16 @@ body {
     color 0.2s ease;
 }
 
+/* Reduced motion: keep functional signals (focus, state change), drop movement */
 @media (prefers-reduced-motion: reduce) {
-  body {
-    transition: none !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
-}
-/* ==================== GLOBAL TEXTURE ==================== */
-.bg-noise {
-  background-image: theme('backgroundImage.noise');
-  background-repeat: repeat;
 }
 
 ::selection {
@@ -49,12 +50,13 @@ samp {
 
 /* ==================== UTILITIES ==================== */
 @layer utilities {
+  /* Flat hairline surface. Depth comes from borders, not blur or shadows. */
   .glass {
-    @apply bg-white/60 border border-white/30 dark:bg-archive-zinc-900/50 dark:border-archive-zinc-800/40;
+    @apply bg-white border border-archive-zinc-200 dark:bg-archive-zinc-950 dark:border-archive-zinc-800;
   }
 
   .glass-card {
-    @apply glass shadow-ambient rounded-2xl overflow-hidden;
+    @apply glass rounded-sm overflow-hidden;
   }
 
   .text-shadow-sm {
@@ -65,6 +67,22 @@ samp {
     background-image: radial-gradient(circle at 1px 1px, currentColor 0.5px, transparent 0);
     background-size: 8px 8px;
     opacity: 0.1;
+  }
+}
+
+/* Hero visual: transform-only float, opt-in so reduced motion stays static */
+@keyframes hero-float {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-float {
+    animation: hero-float 5s ease-in-out infinite alternate;
   }
 }
 

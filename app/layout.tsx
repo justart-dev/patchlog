@@ -125,19 +125,13 @@ export default function RootLayout({
         </head>
         <body className="antialiased flex flex-col min-h-screen bg-archive-zinc-50 dark:bg-archive-zinc-950 text-archive-zinc-900 dark:text-archive-zinc-50 overflow-x-clip selection:bg-hero-red-500 selection:text-white">
           <ThemeProvider>
-            {/* Global Background Elements — 비싼 blur 필터 대신 저비용 그라디언트만 사용 */}
-            <div className="fixed inset-0 pointer-events-none -z-10" aria-hidden="true">
-              <div className="absolute inset-0 bg-comic-radial" />
-              <div className="absolute inset-0 opacity-[0.015] dark:opacity-[0.03] bg-noise" />
-            </div>
-
-            {/* Floating Navbar Container */}
-            <div className="fixed top-0 left-0 right-0 z-[100] flex justify-center p-4 sm:p-6 pointer-events-none">
+            {/* Site Navbar */}
+            <div className="relative z-[100] flex justify-center p-4 sm:p-6 pointer-events-none">
               <Navbar />
             </div>
 
             {/* The single, definitive semantic main tag for the entire site */}
-            <main className="flex-grow pt-24 sm:pt-28 relative z-10">
+            <main className="flex-grow">
               {children}
             </main>
 

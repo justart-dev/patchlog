@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import Image from "next/image";
 
 type Step = {
   step: string;
@@ -11,7 +11,6 @@ type Step = {
   trackTitle: string;
   detail: string;
   tags?: string[];
-  note?: string;
   examples?: {
     label: string;
     lines: {
@@ -24,7 +23,7 @@ type Step = {
   }[];
 };
 
-const stats = [
+const facts = [
   { label: "TOTAL SEGMENTS", value: "70+" },
   { label: "CORE ADAPTATION", value: "AI-POWERED" },
   { label: "AUTO REFRESH", value: "12H CYCLE" },
@@ -137,143 +136,184 @@ function AnimatedPatchCount({ target = 70, duration = 1000 }: { target?: number;
   return <>{count}+</>;
 }
 
+const HERO_VISUAL =
+  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2767030/a42d038cf0add8028021781bd18c3a7452220236/ss_a42d038cf0add8028021781bd18c3a7452220236.1920x1080.jpg?t=1792140776";
+
+const CTA_IMAGE =
+  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/2767030/page_bg_raw.jpg?t=1792140776";
+
 export default function LandingClient({ untranslatedCount = 0 }: { untranslatedCount?: number }) {
   const [activeProblem, setActiveProblem] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
+  const visualRef = useRef<HTMLDivElement>(null);
   const syncAlert = untranslatedCount > 3;
 
   const currentProblem = problems[activeProblem] ?? problems[0];
   const currentStep = steps[activeStep] ?? steps[0];
 
+  // 60fps mouse parallax: transform only, direct style writes (no re-render)
+  useEffect(() => {
+    const el = visualRef.current;
+    if (!el) return;
+    const section = el.closest("section");
+    if (!section) return;
+
+    const onMove = (e: PointerEvent) => {
+      const r = section.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      el.style.transform = `translate3d(${(x * 10).toFixed(2)}px, ${(y * 8).toFixed(2)}px, 0)`;
+    };
+
+    section.addEventListener("pointermove", onMove);
+    return () => section.removeEventListener("pointermove", onMove);
+  }, []);
+
   return (
     <>
-      <section className="relative pt-10 pb-20 px-6 sm:px-10 lg:px-20">
-        <div className="max-w-[1200px] mx-auto text-center">
-          <div className="inline-flex items-center gap-2.5 rounded-full border border-archive-zinc-200 dark:border-archive-zinc-800 bg-white dark:bg-archive-zinc-900 px-3.5 py-2 mb-8 animate-hero-enter shadow-ambient">
-            <div className={`w-2 h-2 rounded-full animate-pulse ${syncAlert ? "bg-hero-red-500 shadow-glow-red" : "bg-emerald-500 shadow-glow-green"}`} />
-            <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-archive-zinc-500 leading-none">Sync Status</span>
-          </div>
-          
-          <h1 className="text-5xl sm:text-7xl font-black tracking-tighter leading-[0.95] mb-8 animate-hero-enter">
-            영문 패치노트를<br />
-            <span className="text-hero-red-500 italic">CORE </span>로 읽다
-          </h1>
-          
-          <p className="max-w-xl mx-auto text-archive-zinc-600 dark:text-archive-zinc-400 text-base sm:text-lg mb-10 leading-relaxed animate-hero-enter [animation-delay:100ms]">
-            수동적인 번역을 넘어, 밸런스 변화의 핵심을 데이터로 추출해 정리합니다.<br />
-            영문 패치를 가장 정교한 한국어로, 게임 의미 그대로 확인하세요.
-          </p>
+      <section className="pt-10 pb-16 px-6 sm:px-10 lg:px-20">
+        <div className="max-w-[1200px] mx-auto grid lg:grid-cols-[1.05fr_1fr] gap-12 items-center">
+          <div>
+            <div className="inline-flex items-center gap-2.5 rounded-sm border border-archive-zinc-200 dark:border-archive-zinc-800 bg-white dark:bg-archive-zinc-950 px-3 py-1.5 mb-8 animate-hero-enter">
+              <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${syncAlert ? "bg-hero-red-500" : "bg-emerald-500"}`} />
+              <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-archive-zinc-500 leading-none">Sync Status</span>
+            </div>
 
-          <div className="flex justify-center animate-hero-enter [animation-delay:200ms]">
-            <Link
-              href="/patch"
-              prefetch={false}
-              className="inline-flex items-center gap-3 px-10 py-5 bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 font-black tracking-[0.2em] uppercase text-xs rounded-full hover:scale-105 transition-all shadow-xl"
-            >
-              패치노트 보기
-            </Link>
+            <h1 className="text-5xl sm:text-7xl font-black tracking-tighter leading-[0.95] mb-6 animate-hero-enter [animation-delay:100ms]">
+              영문 패치노트를<br />
+              <span className="text-hero-red-500 italic">CORE </span>로 읽다
+            </h1>
+
+            <p className="max-w-xl text-archive-zinc-600 dark:text-archive-zinc-400 text-base sm:text-lg mb-10 leading-relaxed animate-hero-enter [animation-delay:200ms]">
+              수동적인 번역을 넘어, 밸런스 변화의 핵심을 데이터로 추출해 정리합니다.<br />
+              영문 패치를 게임 의미 그대로 읽기 쉬운 한국어로 확인하세요.
+            </p>
+
+            <div className="animate-hero-enter [animation-delay:300ms]">
+              <Link
+                href="/patch"
+                prefetch={false}
+                className="inline-flex items-center gap-3 px-8 py-4 bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 font-black tracking-[0.15em] uppercase text-xs rounded-sm hover:bg-hero-red-500 dark:hover:bg-hero-red-500 dark:hover:text-white transition-colors"
+              >
+                패치노트 보기
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+
+          <div className="relative animate-hero-enter [animation-delay:200ms]">
+            <div ref={visualRef} className="will-change-transform transition-transform duration-150 ease-out">
+              <div className="border border-archive-zinc-200 dark:border-archive-zinc-800 rounded-sm overflow-hidden bg-white dark:bg-archive-zinc-950">
+                <Image
+                  src={HERO_VISUAL}
+                  alt="Marvel Rivals"
+                  width={1280}
+                  height={576}
+                  priority
+                  className="w-full aspect-[16/9] object-cover hero-float"
+                />
+              </div>
+            </div>
+            <p className="mt-3 font-mono text-[10px] uppercase tracking-widest text-archive-zinc-400">
+              Source: Steam · App 2767030
+            </p>
           </div>
         </div>
       </section>
 
-      <section className="px-6 py-12">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
-          {stats.map((stat) => (
-            <div key={stat.label} className="glass-card p-8 group hover:border-hero-red-500/50 transition-colors">
-              <p className="text-[10px] font-black tracking-widest text-archive-zinc-500 mb-2">{stat.label}</p>
-              <p className="text-4xl font-black tracking-tighter">
-                {stat.label === "TOTAL SEGMENTS" ? <AnimatedPatchCount /> : stat.value}
+      {/* INDEX STRIP */}
+      <section className="border-t border-archive-zinc-200 dark:border-archive-zinc-800">
+        <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-20 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-archive-zinc-200 dark:divide-archive-zinc-800">
+          {facts.map((fact) => (
+            <div key={fact.label} className="py-8 sm:py-10 sm:px-8">
+              <p className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase text-archive-zinc-400 mb-2">{fact.label}</p>
+              <p className="text-3xl font-black tracking-tighter">
+                {fact.label === "TOTAL SEGMENTS" ? <AnimatedPatchCount /> : fact.value}
               </p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="px-6 py-24 relative overflow-hidden">
-        <div className="max-w-[1200px] mx-auto relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <p className="text-[10px] font-black tracking-[0.3em] text-hero-red-500 mb-4 uppercase">Operational Objective</p>
-              <h2 className="text-4xl sm:text-5xl font-black tracking-tighter leading-[1.1] mb-8">
-                읽는 시간은 줄이고,<br />변화의 핵심에만 집중하세요
-              </h2>
-              
-              <div className="space-y-3">
-                {problems.map((item, index) => {
-                  const isActive = activeProblem === index;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => setActiveProblem(index)}
-                      className={`group w-full p-6 text-left rounded-2xl border transition-all duration-300 relative ${
-                        isActive 
-                        ? "bg-white dark:bg-archive-zinc-900 border-archive-zinc-200 dark:border-archive-zinc-800 shadow-xl" 
-                        : "border-transparent opacity-50 hover:opacity-100 hover:bg-archive-zinc-50 dark:hover:bg-white/5"
-                      }`}
-                    >
-                      {isActive && (
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-hero-red-500 rounded-r-full" />
-                      )}
-                      <div className="flex gap-4 items-start">
-                        <span className={`font-mono text-xs font-bold ${isActive ? "text-hero-red-500" : "text-archive-zinc-400"}`}>
-                          0{index + 1}
-                        </span>
-                        <div>
-                          <h4 className={`font-black text-lg mb-1 transition-colors ${isActive ? "text-archive-zinc-950 dark:text-white" : "text-archive-zinc-600 dark:text-archive-zinc-400"}`}>
-                            {item.title}
-                          </h4>
-                          <p className="text-sm text-archive-zinc-500 dark:text-archive-zinc-400 leading-relaxed">{item.summary}</p>
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+      <section className="px-6 sm:px-10 lg:px-20 py-20 border-t border-archive-zinc-200 dark:border-archive-zinc-800">
+        <div className="max-w-[1200px] mx-auto grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <p className="text-[10px] font-mono font-bold tracking-[0.3em] text-hero-red-500 mb-4 uppercase animate-hero-enter">Operational Objective</p>
+            <h2 className="text-3xl sm:text-5xl font-black tracking-tighter leading-[1.1] mb-8 animate-hero-enter [animation-delay:100ms]">
+              읽는 시간은 줄이고,<br />변화의 핵심에만 집중하세요
+            </h2>
 
-            <div className="glass-card p-10 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-hero-red-500/5 blur-3xl rounded-full" />
-              <div className="relative z-10">
-                <span className="inline-block px-3 py-1 rounded-md bg-hero-red-500/10 text-hero-red-500 text-[10px] font-black tracking-widest mb-6 uppercase">Tactical Solution</span>
-                <p className="text-xl font-bold leading-relaxed mb-8">{currentProblem.pain}</p>
-                <div className="h-px bg-archive-zinc-200 dark:bg-archive-zinc-800 mb-8" />
-                <ul className="space-y-4">
-                  {currentProblem.solution.map((item) => (
-                    <li key={item} className="flex items-center gap-3 text-sm font-bold">
-                      <svg className="w-5 h-5 text-hero-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="space-y-3 animate-hero-enter [animation-delay:200ms]">
+              {problems.map((item, index) => {
+                const isActive = activeProblem === index;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveProblem(index)}
+                    className={`group w-full p-5 text-left rounded-sm border transition-colors ${
+                      isActive
+                        ? "bg-white dark:bg-archive-zinc-950 border-archive-zinc-950 dark:border-white"
+                        : "border-transparent hover:bg-archive-zinc-100/60 dark:hover:bg-archive-zinc-900/40"
+                    }`}
+                  >
+                    <div className="flex gap-4 items-start">
+                      <span className={`font-mono text-xs font-bold ${isActive ? "text-hero-red-500" : "text-archive-zinc-400"}`}>
+                        0{index + 1}
+                      </span>
+                      <div>
+                        <h4 className={`font-black text-lg mb-1 transition-colors ${isActive ? "text-archive-zinc-950 dark:text-white" : "text-archive-zinc-600 dark:text-archive-zinc-400"}`}>
+                          {item.title}
+                        </h4>
+                        <p className="text-sm text-archive-zinc-500 dark:text-archive-zinc-400 leading-relaxed">{item.summary}</p>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
+          </div>
+
+          <div className="border border-archive-zinc-200 dark:border-archive-zinc-800 rounded-sm bg-white dark:bg-archive-zinc-950 p-8 sm:p-10 animate-hero-enter [animation-delay:300ms]">
+            <span className="inline-block px-3 py-1 rounded-sm bg-hero-red-500/10 text-hero-red-500 text-[10px] font-black tracking-widest mb-6 uppercase">Tactical Solution</span>
+            <p className="text-xl font-bold leading-relaxed mb-8">{currentProblem.pain}</p>
+            <div className="h-px bg-archive-zinc-200 dark:bg-archive-zinc-800 mb-8" />
+            <ul className="space-y-4">
+              {currentProblem.solution.map((item) => (
+                <li key={item} className="flex items-center gap-3 text-sm font-bold">
+                  <svg className="w-5 h-5 text-hero-red-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
 
-      <section id="process" className="px-6 py-24 relative">
+      <section id="process" className="px-6 sm:px-10 lg:px-20 py-20 border-t border-archive-zinc-200 dark:border-archive-zinc-800">
         <div className="max-w-[1200px] mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[10px] font-black tracking-[0.3em] text-hero-blue-500 mb-4 uppercase">Technical Workflow</p>
-            <h2 className="text-4xl sm:text-5xl font-black tracking-tighter">데이터 처리 아키텍처</h2>
+          <div className="mb-16">
+            <p className="text-[10px] font-mono font-bold tracking-[0.3em] text-hero-blue-500 mb-4 uppercase animate-hero-enter">Technical Workflow</p>
+            <h2 className="text-3xl sm:text-5xl font-black tracking-tighter animate-hero-enter [animation-delay:100ms]">데이터 처리 아키텍처</h2>
           </div>
 
           <div className="grid lg:grid-cols-[1fr_2fr] gap-8">
-            <div className="space-y-2">
+            <div className="space-y-2 animate-hero-enter [animation-delay:200ms]">
               {steps.map((step, index) => (
                 <button
                   key={step.step}
                   onClick={() => setActiveStep(index)}
-                  className={`w-full p-5 text-left rounded-xl transition-all flex items-center justify-between group ${
-                    activeStep === index 
-                    ? "bg-archive-zinc-950 text-white shadow-lg" 
-                    : "hover:bg-archive-zinc-100 dark:hover:bg-white/5"
+                  className={`w-full p-4 text-left rounded-sm transition-colors flex items-center justify-between group ${
+                    activeStep === index
+                      ? "bg-archive-zinc-950 text-white dark:bg-white dark:text-archive-zinc-950"
+                      : "hover:bg-archive-zinc-100/60 dark:hover:bg-archive-zinc-900/40"
                   }`}
                 >
                   <div className="flex items-center gap-4">
-                    <span className={`text-[10px] font-mono font-bold transition-none ${activeStep === index ? "text-hero-blue-400" : "text-archive-zinc-400"}`}>
+                    <span className={`text-[10px] font-mono font-bold transition-none ${activeStep === index ? "text-hero-red-400" : "text-archive-zinc-400"}`}>
                       PHASE 0{index + 1}
                     </span>
                     <span className="font-black text-sm tracking-tight">{step.title}</span>
@@ -285,31 +325,27 @@ export default function LandingClient({ untranslatedCount = 0 }: { untranslatedC
               ))}
             </div>
 
-            <div className="glass-card p-10 min-h-[450px] flex flex-col justify-between relative group">
-              <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                <span className="text-[120px] font-black leading-none pointer-events-none tracking-tighter select-none">0{activeStep + 1}</span>
-              </div>
-              
-              <div className="relative z-10">
-                <p className="text-[10px] font-black tracking-widest text-hero-blue-500 mb-2 uppercase">{currentStep.trackTitle}</p>
+            <div className="border border-archive-zinc-200 dark:border-archive-zinc-800 rounded-sm bg-white dark:bg-archive-zinc-950 p-8 sm:p-10 min-h-[450px] flex flex-col justify-between animate-hero-enter [animation-delay:300ms]">
+              <div>
+                <p className="text-[10px] font-mono font-bold tracking-widest text-hero-blue-500 mb-2 uppercase">{currentStep.trackTitle}</p>
                 <h3 className="text-3xl font-black mb-4">{currentStep.title}</h3>
                 <p className="text-archive-zinc-600 dark:text-archive-zinc-400 leading-relaxed mb-6">{currentStep.description}</p>
-                
-                <div className="p-6 rounded-2xl bg-archive-zinc-100/50 dark:bg-archive-zinc-900/50 border border-archive-zinc-200 dark:border-archive-zinc-800 mb-8">
+
+                <div className="p-6 rounded-sm bg-archive-zinc-100/60 dark:bg-archive-zinc-900/60 border border-archive-zinc-200 dark:border-archive-zinc-800 mb-8">
                   <p className="text-sm font-medium leading-relaxed text-archive-zinc-700 dark:text-archive-zinc-300" dangerouslySetInnerHTML={{ __html: currentStep.detail }}></p>
                 </div>
 
                 {currentStep.examples && (
                   <div className="grid sm:grid-cols-2 gap-4">
                     {currentStep.examples.map((ex) => (
-                      <div key={ex.label} className="p-4 rounded-xl border border-archive-zinc-200 dark:border-archive-zinc-800 bg-white/50 dark:bg-archive-zinc-900/50">
-                        <p className="text-[10px] font-black text-archive-zinc-400 mb-2 uppercase">{ex.label}</p>
+                      <div key={ex.label} className="p-4 rounded-sm border border-archive-zinc-200 dark:border-archive-zinc-800 bg-white dark:bg-archive-zinc-950">
+                        <p className="text-[10px] font-mono font-bold text-archive-zinc-400 mb-2 uppercase">{ex.label}</p>
                         {ex.lines.map((line, index) => {
                           const toneStyle =
                             line.tone === "increase"
                               ? {
                                   background: "linear-gradient(180deg, transparent 38%, rgba(219, 234, 254, 0.78) 38%)",
-                                  boxShadow: "inset 0 -0.07em 0 rgba(191, 219, 254, 0.42)",
+                                  boxShadow: "inset 0 -0.07em 0 rgba(191, 219, 251, 0.42)",
                                   color: "#1d4ed8",
                                   fontWeight: 700,
                                 }
@@ -325,7 +361,7 @@ export default function LandingClient({ untranslatedCount = 0 }: { untranslatedC
                           return (
                             <div key={index} className="text-sm font-bold">
                               {line.prefix}
-                              <span 
+                              <span
                                 className={line.style === "underline" ? "underline decoration-2 underline-offset-4" : ""}
                                 style={toneStyle}
                               >
@@ -343,7 +379,7 @@ export default function LandingClient({ untranslatedCount = 0 }: { untranslatedC
 
               <div className="mt-8 flex gap-2">
                 {currentStep.tags?.map(tag => (
-                  <span key={tag} className="text-[10px] font-black px-2 py-1 rounded bg-archive-zinc-900/5 dark:bg-white/5 text-archive-zinc-500">#{tag}</span>
+                  <span key={tag} className="text-[10px] font-black px-2 py-1 rounded-sm bg-archive-zinc-100 dark:bg-archive-zinc-900 text-archive-zinc-500">#{tag}</span>
                 ))}
               </div>
             </div>
@@ -351,23 +387,35 @@ export default function LandingClient({ untranslatedCount = 0 }: { untranslatedC
         </div>
       </section>
 
-      <section className="px-4 sm:px-6 py-24">
-        <div className="group max-w-[1000px] mx-auto px-4 py-12 sm:p-20 text-center relative overflow-hidden transition-all duration-500">
-          <div className="relative z-10">
-            <p className="text-[10px] font-black tracking-[0.4em] text-hero-red-500 mb-8 uppercase">Daily Patchlog</p>
-            <h2 className="text-4xl sm:text-7xl font-black tracking-tighter mb-8 leading-[0.95] break-keep">
-              최신 패치노트를<br />
-              한눈에 확인하세요
-            </h2>
-            <p className="max-w-lg mx-auto text-archive-zinc-600 dark:text-archive-zinc-400 text-sm mb-12 leading-relaxed">
-              변경사항을 한국어로 읽기 쉽게 정리해 제공합니다.<br />
-              단순 번역이 아니라, 게임 맥락에 맞게 핵심을 이해하기 쉽게 정리합니다.
-            </p>
-            
+      <section className="px-4 sm:px-6 py-14">
+        <div className="max-w-[1200px] mx-auto">
+          <div className="relative h-52 sm:h-64 overflow-hidden rounded-sm border border-archive-zinc-200 dark:border-archive-zinc-800 bg-white dark:bg-archive-zinc-950">
+            <Image
+              src={CTA_IMAGE}
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 1152px, 100vw"
+              className="object-cover"
+            />
+          </div>
+        </div>
+
+        <div className="max-w-[1000px] mx-auto px-4 py-12 sm:py-16 text-center">
+          <p className="text-[10px] font-mono font-black tracking-[0.4em] text-hero-red-500 mb-8 uppercase animate-hero-enter">Daily Patchlog</p>
+          <h2 className="text-4xl sm:text-7xl font-black tracking-tighter mb-8 leading-[0.95] break-keep animate-hero-enter [animation-delay:100ms]">
+            최신 패치노트를<br />
+            한눈에 확인하세요
+          </h2>
+          <p className="max-w-lg mx-auto text-archive-zinc-600 dark:text-archive-zinc-400 text-sm mb-12 leading-relaxed animate-hero-enter [animation-delay:200ms]">
+            변경사항을 한국어로 읽기 쉽게 정리해 제공합니다.<br />
+            단순 번역이 아니라, 게임 맥락에 맞게 핵심을 이해하기 쉽게 정리합니다.
+          </p>
+
+          <div className="animate-hero-enter [animation-delay:300ms]">
             <Link
               href="/patch"
               prefetch={false}
-              className="inline-flex items-center gap-3 px-10 py-5 bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 font-black tracking-[0.2em] uppercase text-xs rounded-full hover:scale-105 transition-all shadow-xl"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 font-black tracking-[0.15em] uppercase text-xs rounded-sm hover:bg-hero-red-500 dark:hover:bg-hero-red-500 dark:hover:text-white transition-colors"
             >
               <span>최신 패치노트 보기</span>
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { memo, useMemo } from "react";
 import { replaceEnglishTitles } from "../utils/textReplacer";
 import { formatDateKST } from "../utils/dateFormatter";
@@ -31,8 +30,8 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
       });
       const dateLabel = formatDateKST(log.published_at, {
         year: "numeric",
-        month: "short",
-        day: "numeric",
+        month: "2-digit",
+        day: "2-digit",
       });
 
       return {
@@ -44,57 +43,40 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
   }, [patchLogs]);
 
   return (
-    <div className="grid grid-cols-1 gap-6">
-      {formattedPatchLogs.map((log) => {
-        const headerImage = log.capsule_image
-          ? `https://cdn.akamai.steamstatic.com/steam/apps/${log.capsule_image.match(/\/apps\/(\d+)\//)?.[1]}/header.jpg`
-          : null;
-
-        return (
+    <ol className="border-t border-archive-zinc-200 dark:border-archive-zinc-800">
+      {formattedPatchLogs.map((log) => (
+        <li key={log.id} className="border-b border-archive-zinc-200 dark:border-archive-zinc-800">
           <a
-            key={log.id}
             href={`/patch/${log.id}`}
-            className="group block animate-hero-enter"
+            className="group flex items-center gap-4 sm:gap-6 py-4 transition-colors hover:bg-archive-zinc-100/70 dark:hover:bg-archive-zinc-900/50"
           >
-            <article className="glass-card hover:border-hero-red-500/50 transition-all duration-300 group-hover:-translate-y-1 group-active:scale-[0.99] border-archive-zinc-200 dark:border-archive-zinc-800">
-              <div className="flex flex-col sm:flex-row">
-                <div className="relative w-full aspect-video sm:aspect-auto sm:w-60 flex-shrink-0 overflow-hidden bg-transparent border-b sm:border-b-0 sm:border-r border-archive-zinc-200 dark:border-archive-zinc-800">
-                  {log.capsule_image ? (
-                    <Image
-                      src={headerImage || log.capsule_image}
-                      alt={log.app_name}
-                      fill
-                      className="object-contain p-2 bg-transparent transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 640px) 100vw, 240px"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center">
-                      <span className="text-archive-zinc-300 dark:text-archive-zinc-700 font-black text-xs">NO DATA</span>
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-transparent transition-opacity" />
-                </div>
+            <time
+              className="w-24 sm:w-28 shrink-0 font-mono text-[10px] sm:text-xs whitespace-nowrap text-archive-zinc-400"
+              title={log.formattedDate}
+            >
+              {log.dateLabel}
+            </time>
 
-                <div className="flex-1 p-6 sm:p-8">
-                  <div className="flex items-center justify-between gap-4 mb-3">
-                    <span className="inline-flex px-2 py-0.5 rounded bg-hero-red-500/10 text-hero-red-600 dark:text-hero-red-400 text-[10px] font-black tracking-widest uppercase">
-                      {log.app_name}
-                    </span>
-                    <time className="text-[10px] font-bold text-archive-zinc-500 tracking-tighter" title={log.formattedDate}>
-                      {log.dateLabel}
-                    </time>
-                  </div>
+            <span className="min-w-0 flex-1">
+              <span className="block font-bold text-sm sm:text-base tracking-tight truncate group-hover:text-hero-red-500 transition-colors">
+                {replaceEnglishTitles(log.title)}
+              </span>
+              <span className="block mt-0.5 font-mono text-[10px] uppercase tracking-widest text-archive-zinc-400">
+                {log.app_name}
+              </span>
+            </span>
 
-                  <h3 className="text-xl sm:text-2xl font-black tracking-tighter leading-tight mb-3 group-hover:text-hero-red-500 transition-colors line-clamp-2">
-                    {replaceEnglishTitles(log.title)}
-                  </h3>
-
-                </div>
-              </div>
-            </article>
+            <svg
+              className="w-4 h-4 shrink-0 text-archive-zinc-300 dark:text-archive-zinc-700 transition-transform group-hover:translate-x-1 group-hover:text-hero-red-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+            </svg>
           </a>
-        );
-      })}
-    </div>
+        </li>
+      ))}
+    </ol>
   );
 });

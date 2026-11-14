@@ -120,7 +120,7 @@ export default function PatchPageClient({
                       <>
                         <p className="text-[11px] font-bold text-archive-zinc-500 dark:text-archive-zinc-400 mb-6 uppercase tracking-tight">상세 업데이트 주기 분석 데이터는<br />로그인 후 열람 가능합니다.</p>
                         <SignInButton mode="modal">
-                          <button className="px-8 py-2.5 bg-hero-red-500 hover:bg-hero-red-600 text-white text-[10px] font-black tracking-widest uppercase rounded-full hover:scale-105 transition-transform shadow-lg shadow-hero-red-500/20">
+                          <button className="px-8 py-2.5 bg-hero-red-500 hover:bg-hero-red-600 text-white text-[10px] font-black tracking-widest uppercase rounded-sm transition-colors">
                             Login to Access
                           </button>
                         </SignInButton>
@@ -154,11 +154,11 @@ export default function PatchPageClient({
                   <h3 className="text-xl font-black tracking-tight">공식 하이라이트</h3>
                 </div>
                 {latestVideo ? (
-                  <div className="aspect-video w-full rounded-xl overflow-hidden ring-1 ring-black/5 dark:ring-white/10 shadow-2xl">
+                  <div className="aspect-video w-full rounded-sm overflow-hidden ring-1 ring-black/5 dark:ring-white/10">
                     <iframe className="h-full w-full" src={`${latestVideo.embedUrl}?rel=0`} title={latestVideo.title} loading="lazy" allowFullScreen />
                   </div>
                 ) : (
-                  <div className="aspect-video w-full flex items-center justify-center bg-archive-zinc-100 dark:bg-archive-zinc-900 rounded-xl">
+                  <div className="aspect-video w-full flex items-center justify-center bg-archive-zinc-100 dark:bg-archive-zinc-900 rounded-sm">
                     <span className="text-[10px] font-black text-archive-zinc-400 tracking-widest uppercase">Video Signal Lost</span>
                   </div>
                 )}
@@ -171,16 +171,16 @@ export default function PatchPageClient({
                   <h2 className="text-2xl font-black tracking-tighter uppercase">패치 로그 아카이브</h2>
                   <p className="text-xs font-bold text-archive-zinc-500 mt-1 uppercase tracking-widest">밸런스 변경점부터 업데이트 내역까지 모두 기록합니다</p>
                 </div>
-                <div className="px-4 py-2 glass rounded-full flex items-center gap-3">
-                  <span className="text-[10px] font-black text-archive-zinc-400 uppercase tracking-widest">마지막 업데이트</span>
-                  <span className="text-xs font-black tracking-tighter">
+                <div className="flex items-center gap-3 font-mono text-xs text-archive-zinc-400">
+                  <span className="text-[10px] uppercase tracking-widest">마지막 업데이트</span>
+                  <span className="text-archive-zinc-950 dark:text-white font-bold">
                     {latestDate && formatDateKST(latestDate, { year: "numeric", month: "2-digit", day: "2-digit" })}
                   </span>
                 </div>
               </div>
               <PatchList patchLogs={patchLogs} />
               <div className="flex justify-center pt-10">
-                <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="px-8 py-3 glass rounded-full text-xs font-black uppercase tracking-widest hover:scale-105 transition-transform">Return to Top</button>
+                <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="px-8 py-3 glass rounded-sm text-xs font-black uppercase tracking-widest transition-colors">Return to Top</button>
               </div>
             </section>
           </>
