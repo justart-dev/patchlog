@@ -45,11 +45,17 @@ export default function ShareModal() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
-      <div className="relative w-full max-w-md rounded-2xl bg-white border border-zinc-200 p-6 shadow-2xl text-zinc-900">
+    <div
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60"
+      onClick={handleClose}
+    >
+      <div
+        className="relative w-full max-w-md rounded-sm bg-white dark:bg-archive-zinc-950 border border-archive-zinc-200 dark:border-archive-zinc-800 p-6 shadow-2xl text-archive-zinc-900 dark:text-white animate-hero-enter"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 transition-colors"
+          className="absolute top-4 right-4 text-archive-zinc-400 hover:text-archive-zinc-950 dark:hover:text-white transition-colors"
           aria-label="닫기"
         >
           <svg
@@ -68,15 +74,15 @@ export default function ShareModal() {
           </svg>
         </button>
 
-        <h2 className="text-lg font-semibold mb-4 pr-6 text-zinc-900">
+        <h2 className="text-lg font-semibold mb-4 pr-6">
           라이벌 여러분,
           <br />
           Patchlog를 이용해주셔서 감사합니다.
         </h2>
 
-        <div className="space-y-3 text-sm text-zinc-600 leading-relaxed">
+        <div className="space-y-3 text-sm text-archive-zinc-600 dark:text-archive-zinc-400 leading-relaxed">
           <p>
-            지금까지 누적 <strong className="text-zinc-900">5,000뷰를 넘겼어요</strong>.
+            지금까지 누적 <strong className="text-archive-zinc-950 dark:text-white">5,000뷰를 넘겼어요</strong>.
             작지만 의미 있는 성과입니다! 🎉
           </p>
           <p>
@@ -88,7 +94,7 @@ export default function ShareModal() {
             플레이어들에게 한 번 소개해주세요.
           </p>
           <p>여러분의 공유가 서비스를 더 나아지게 만듭니다.</p>
-          <p>😢 사실 한글 유저는 많이 줄어든 것 같아 지속을 해야 할지 고민입니다.</p>
+          <p>😢 사실 한글 유저는 많이 줄어든 것 같아 지속을 해야 할지 고민합니다.</p>
         </div>
 
         <div className="mt-6 flex flex-col gap-3">
@@ -97,20 +103,20 @@ export default function ShareModal() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleClose}
-            className="rounded-lg bg-zinc-900 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-zinc-800 transition-colors"
+            className="rounded-sm bg-archive-zinc-950 dark:bg-white px-4 py-2.5 text-center text-sm font-medium text-white dark:text-archive-zinc-950 transition-colors"
           >
             ☕ 크티에서 후원하기
           </a> */}
           <div className="flex gap-3">
             <button
               onClick={handleDismiss}
-              className="flex-1 rounded-lg bg-zinc-100 px-4 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-200 transition-colors"
+              className="flex-1 rounded-sm border border-archive-zinc-300 dark:border-archive-zinc-700 px-4 py-2.5 text-sm font-medium text-archive-zinc-700 dark:text-archive-zinc-300 hover:border-archive-zinc-400 dark:hover:border-archive-zinc-600 hover:text-archive-zinc-950 dark:hover:text-white transition-colors"
             >
               7일간 보지 않기
             </button>
             <button
               onClick={handleClose}
-              className="flex-1 rounded-lg border border-zinc-300 px-4 py-2.5 text-sm font-medium text-zinc-700 hover:border-zinc-400 hover:text-zinc-900 transition-colors"
+              className="flex-1 rounded-sm bg-archive-zinc-950 dark:bg-white px-4 py-2.5 text-sm font-medium text-white dark:text-archive-zinc-950 transition-colors"
             >
               닫기
             </button>

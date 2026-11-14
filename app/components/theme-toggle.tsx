@@ -35,14 +35,14 @@ export function ThemeToggle() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex h-8 w-8 items-center justify-center rounded-full text-archive-zinc-500 hover:text-archive-zinc-950 dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.03] transition-all"
+        className="flex h-8 w-8 items-center justify-center rounded-sm text-archive-zinc-500 hover:text-archive-zinc-950 dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.03] transition-all"
         aria-label="Toggle theme"
       >
         <CurrentIcon className="h-4 w-4" />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-3 w-32 glass p-1.5 rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10 z-[110] animate-slide-up">
+        <div className="absolute right-0 mt-3 w-32 glass p-1.5 rounded-sm shadow-xl ring-1 ring-black/5 dark:ring-white/10 z-[110] animate-slide-up">
           {themes.map((t) => (
             <button
               key={t.id}
@@ -50,7 +50,7 @@ export function ThemeToggle() {
                 setTheme(t.id)
                 setIsOpen(false)
               }}
-              className={`flex w-full items-center gap-2 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-colors ${
+              className={`flex w-full items-center gap-2 px-3 py-1.5 rounded-sm text-[11px] font-bold transition-colors ${
                 theme === t.id
                   ? 'bg-archive-zinc-950 text-white dark:bg-white dark:text-archive-zinc-950'
                   : 'text-archive-zinc-600 dark:text-archive-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03]'

@@ -20,7 +20,7 @@ export default function Footer() {
               { label: "사이트 통계", href: "https://cloud.umami.is/share/X4DLIuA7E54r6Fi9", external: true },
               { label: "후원하기", href: "https://ctee.kr/place/justart", external: true },
             ].map((link) => {
-              const className = "px-5 py-2.5 text-xs font-black tracking-tight rounded-full bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 hover:scale-105 transition-transform";
+              const className = "px-5 py-2.5 text-xs font-black tracking-tight rounded-sm bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 transition-colors";
               return link.external ? (
                 <a
                   key={link.label}

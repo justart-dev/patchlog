@@ -37,7 +37,7 @@ export function Navbar() {
 
   return (
     <nav className="relative pointer-events-auto transition-all duration-300" ref={navRef}>
-      <div className="flex items-center gap-2 glass px-2.5 py-1.5 rounded-full shadow-ambient ring-1 ring-black/5 dark:ring-white/10">
+      <div className="flex items-center gap-2 glass px-2.5 py-1.5 rounded-sm ring-1 ring-black/5 dark:ring-white/10">
         <div className="flex items-center gap-1 sm:gap-2 px-1">
           <Link href="/" className="inline-flex items-center min-w-0 px-3 py-1.5">
             <p className="text-xs font-black tracking-tighter text-archive-zinc-950 dark:text-white">
@@ -55,7 +55,7 @@ export function Navbar() {
                   target={item.blank ? "_blank" : "_self"}
                   rel={item.blank ? "noopener noreferrer" : undefined}
                   prefetch={item.href === "/patch" ? false : undefined}
-                  className={`px-4 py-2 text-[11px] font-bold tracking-tight rounded-full transition-all ${
+                  className={`px-4 py-2 text-[11px] font-bold tracking-tight rounded-sm transition-colors ${
                     isActive
                       ? "text-archive-zinc-950 dark:text-white bg-black/[0.04] dark:bg-white/[0.06]"
                       : "text-archive-zinc-500 dark:text-archive-zinc-400 hover:text-archive-zinc-950 dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.03]"
@@ -77,7 +77,7 @@ export function Navbar() {
             <div className="min-w-[70px] flex items-center justify-center">
               <SignedOut>
                 <SignInButton mode="modal">
-                  <button className="h-8 px-4 text-[10px] font-black tracking-widest uppercase text-white bg-hero-red-500 hover:bg-hero-red-600 rounded-full transition-all active:scale-95 shadow-sm shadow-hero-red-500/20">
+                  <button className="h-8 px-4 text-[10px] font-black tracking-widest uppercase text-white bg-hero-red-500 hover:bg-hero-red-600 rounded-sm transition-all active:scale-95">
                     Login
                   </button>
                 </SignInButton>
@@ -97,14 +97,14 @@ export function Navbar() {
               </SignedIn>
             </div>
           ) : (
-            <div className="h-8 min-w-[70px] rounded-full bg-archive-zinc-100 dark:bg-archive-zinc-800 animate-pulse" />
+            <div className="h-8 min-w-[70px] rounded-sm bg-archive-zinc-100 dark:bg-archive-zinc-800 animate-pulse" />
           )}
 
           <div className="relative md:hidden flex items-center">
             <button
               type="button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full text-archive-zinc-500 hover:text-archive-zinc-950 dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.03] transition-all"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-sm text-archive-zinc-500 hover:text-archive-zinc-950 dark:hover:text-white hover:bg-black/[0.03] dark:hover:bg-white/[0.03] transition-all"
               aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,7 +117,7 @@ export function Navbar() {
             </button>
 
             {isMenuOpen && (
-              <div className="absolute right-0 top-full mt-3 w-32 glass p-1.5 rounded-2xl shadow-xl ring-1 ring-black/5 dark:ring-white/10 z-[110] animate-slide-up">
+              <div className="absolute right-0 top-full mt-3 w-32 glass p-1.5 rounded-sm ring-1 ring-black/5 dark:ring-white/10 z-[110] animate-slide-up">
                 {navItems.map((item) => {
                   const isActive = pathname === item.href;
                   return (
@@ -127,7 +127,7 @@ export function Navbar() {
                       target={item.blank ? "_blank" : "_self"}
                       rel={item.blank ? "noopener noreferrer" : undefined}
                       prefetch={item.href === "/patch" ? false : undefined}
-                      className={`flex w-full items-center px-3 py-1.5 rounded-xl text-[11px] font-bold transition-colors ${
+                      className={`flex w-full items-center px-3 py-1.5 rounded-sm text-[11px] font-bold transition-colors ${
                         isActive
                           ? "bg-archive-zinc-950 text-white dark:bg-white dark:text-archive-zinc-950"
                           : "text-archive-zinc-600 dark:text-archive-zinc-400 hover:bg-black/[0.03] dark:hover:bg-white/[0.03]"

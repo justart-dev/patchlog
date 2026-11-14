@@ -79,7 +79,7 @@ export default function StatusDisplay({
     <div
       className={`flex flex-col items-center justify-center p-6 ${className}`}
     >
-      <div className={`${variantStyle.bg} p-4 rounded-full mb-6`}>
+      <div className={`${variantStyle.bg} p-4 rounded-sm mb-6`}>
         {icon || variantStyle.icon}
       </div>
 
@@ -90,7 +90,7 @@ export default function StatusDisplay({
         {showHomeButton && (
           <Link
             href={homePath}
-            className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-center"
+            className="px-6 py-2 bg-blue-500 text-white rounded-sm hover:bg-blue-600 transition-colors text-center"
           >
             {homeButtonText}
           </Link>
@@ -99,7 +99,7 @@ export default function StatusDisplay({
         {showRetryButton && onRetry && (
           <button
             onClick={onRetry}
-            className="px-6 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors"
+            className="px-6 py-2 bg-white border border-slate-200 text-slate-700 rounded-sm hover:bg-slate-50 transition-colors"
           >
             {retryButtonText}
           </button>

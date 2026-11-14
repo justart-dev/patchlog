@@ -113,36 +113,36 @@ export function addStylesToHtml(html: string): string {
   // 제목 스타일 (다크모드 대응)
   html = addStyle(
     "h1",
-    "font-weight: 800; font-size: 2rem; line-height: 1.3; margin: 2.5rem 0 1.25rem; color: #111827; letter-spacing: -0.02em;"
+    "font-weight: 800; font-size: 2rem; line-height: 1.3; margin: 2rem 0 1rem; color: #111827; letter-spacing: -0.02em;"
   );
   html = addStyle(
     "h2",
-    "font-weight: 800; font-size: 1.625rem; line-height: 1.35; margin: 2.25rem 0 1rem; color: #1f2937; letter-spacing: -0.015em;"
+    "font-weight: 800; font-size: 1.625rem; line-height: 1.35; margin: 1.5rem 0 0.5rem; color: #1f2937; letter-spacing: -0.015em;"
   );
 
   html = addStyle(
     "h3",
-    "font-weight: 700; font-size: 1.25rem; line-height: 1.45; margin: 1.75rem 0 0.85rem; color: #374151; letter-spacing: -0.01em;"
+    "font-weight: 700; font-size: 1.25rem; line-height: 1.45; margin: 1.25rem 0 0.5rem; color: #374151; letter-spacing: -0.01em;"
   );
 
   // 문단 스타일 (더 나은 가독성)
   html = addStyle(
     "p",
-    "margin: 0 0 1.25rem; font-size: 1.0625rem; line-height: 1.85; color: #4b5563; word-break: keep-all; letter-spacing: -0.003em; text-align: left; word-spacing: normal; white-space: normal;"
+    "margin: 0 0 0.625rem; font-size: 1.0625rem; line-height: 1.6; color: #4b5563; word-break: keep-all; letter-spacing: -0.003em; text-align: left; word-spacing: normal; white-space: normal;"
   );
 
   // 목록 스타일
   html = addStyle(
     "ul",
-    "list-style-type: disc; padding-left: 1.75rem; margin: 1rem 0 1.5rem;"
+    "list-style-type: disc; padding-left: 1.75rem; margin: 0.5rem 0 1rem;"
   );
   html = addStyle(
     "ol",
-    "list-style-type: decimal; padding-left: 1.75rem; margin: 1rem 0 1.5rem;"
+    "list-style-type: decimal; padding-left: 1.75rem; margin: 0.5rem 0 1rem;"
   );
   html = addStyle(
     "li",
-    "margin-bottom: 0.625rem; font-size: 1.0625rem; line-height: 1.8; color: #4b5563; padding-left: 0.25rem;"
+    "margin-bottom: 0.375rem; font-size: 1.0625rem; line-height: 1.55; color: #4b5563; padding-left: 0.25rem;"
   );
 
   // 링크 스타일 (더 현대적인 스타일)
@@ -158,24 +158,24 @@ export function addStylesToHtml(html: string): string {
   );
   html = addStyle(
     "pre",
-    "background-color: #f9fafb; color: #374151; border: 1px solid #e5e7eb; padding: 1.25rem 1.5rem; border-radius: 0.875rem; overflow-x: auto; margin: 1.5rem 0 2rem; font-size: 0.9375rem; line-height: 1.75; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);"
+    "background-color: #f9fafb; color: #374151; border: 1px solid #e5e7eb; padding: 1rem 1.25rem; border-radius: 0.875rem; overflow-x: auto; margin: 1.25rem 0 1.5rem; font-size: 0.9375rem; line-height: 1.65; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);"
   );
 
   // 이미지 스타일 (더 세련된 그림자)
   html = addStyle(
     "img",
-    "margin: 2rem 0; border-radius: 0.875rem; max-width: 100%; height: auto; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);"
+    "margin: 1.5rem 0; border-radius: 0.875rem; max-width: 100%; height: auto; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);"
   );
 
   // 인용구 스타일 (더 현대적인 디자인)
   html = addStyle(
     "blockquote",
-    "border-left: 4px solid #3b82f6; background: linear-gradient(to right, #eff6ff, #f9fafb); padding: 1.25rem 1.5rem; margin: 1.5rem 0 2rem; color: #4b5563; font-style: normal; border-radius: 0 0.75rem 0.75rem 0; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);"
+    "border-left: 4px solid #3b82f6; background: linear-gradient(to right, #eff6ff, #f9fafb); padding: 1rem 1.25rem; margin: 1.25rem 0 1.5rem; color: #4b5563; font-style: normal; border-radius: 0 0.75rem 0.75rem 0; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);"
   );
 
   // 구분선 및 표 스타일
-  html = addStyle("hr", "border: 0; border-top: 2px solid #e5e7eb; margin: 2.5rem 0;");
-  html = addStyle("table", "width: 100%; border-collapse: collapse; margin: 1.5rem 0 2rem; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden;");
+  html = addStyle("hr", "border: 0; border-top: 2px solid #e5e7eb; margin: 2rem 0;");
+  html = addStyle("table", "width: 100%; border-collapse: collapse; margin: 1.25rem 0 1.5rem; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden;");
   html = addStyle("th", "text-align: left; font-weight: 700; color: #1f2937; background-color: #f9fafb; border-bottom: 2px solid #e5e7eb; padding: 0.875rem 1rem; font-size: 0.9375rem;");
   html = addStyle("td", "border-bottom: 1px solid #f3f4f6; padding: 0.875rem 1rem; color: #4b5563; font-size: 1rem;");
 

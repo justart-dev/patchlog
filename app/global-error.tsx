@@ -52,21 +52,21 @@ export default function GlobalError({
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={reset}
-                className="px-6 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                className="px-6 py-3 text-white bg-blue-600 rounded-sm hover:bg-blue-700 transition-colors font-medium"
               >
                 다시 시도
               </button>
               
               <a
                 href="/"
-                className="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                className="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-sm hover:bg-gray-50 transition-colors font-medium"
               >
                 홈으로 이동
               </a>
             </div>
 
             {process.env.NODE_ENV === 'development' && (
-              <details className="mt-8 text-left bg-white rounded-lg p-4 border">
+              <details className="mt-8 text-left bg-white rounded-sm p-4 border">
                 <summary className="cursor-pointer text-sm font-medium text-gray-700 hover:text-gray-900">
                   개발자 정보 보기
                 </summary>

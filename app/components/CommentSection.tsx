@@ -387,7 +387,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
 
       {feedback ? (
         <div
-          className={`mb-4 rounded-lg border px-3 py-2 text-sm ${
+          className={`mb-4 rounded-sm border px-3 py-2 text-sm ${
             feedback.type === "success"
               ? "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/60 dark:bg-emerald-950/40 dark:text-emerald-300"
               : feedback.type === "error"
@@ -410,7 +410,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
               onChange={(e) => setNewComment(e.target.value)}
               placeholder="패치에 대한 의견을 남겨보세요."
               aria-label="댓글 내용 입력"
-              className="w-full p-3 border border-slate-300 dark:border-gray-600 rounded-lg resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-gray-500 focus:border-slate-300 dark:focus:border-gray-500 bg-white dark:bg-gray-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-gray-400"
+              className="w-full p-3 border border-slate-300 dark:border-gray-600 rounded-sm resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-gray-500 focus:border-slate-300 dark:focus:border-gray-500 bg-white dark:bg-gray-800 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-gray-400"
               rows={3}
             />
             <div className="flex justify-end">
@@ -425,12 +425,12 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
           </div>
         </form>
       ) : (
-        <div className="text-center py-10 bg-archive-zinc-100/50 dark:bg-archive-zinc-900/50 border border-archive-zinc-200 dark:border-archive-zinc-800 rounded-2xl mb-8">
+        <div className="text-center py-10 bg-archive-zinc-100/50 dark:bg-archive-zinc-900/50 border border-archive-zinc-200 dark:border-archive-zinc-800 rounded-sm mb-8">
           <p className="text-archive-zinc-600 dark:text-archive-zinc-400 mb-4 font-bold">
             로그인하고 커뮤니티에 참여해보세요!
           </p>
           <SignInButton mode="modal">
-            <button className="px-8 py-2.5 bg-hero-red-500 hover:bg-hero-red-600 text-white rounded-full text-xs font-black tracking-widest uppercase transition-all hover:scale-105 shadow-lg shadow-hero-red-500/20">
+            <button className="px-8 py-2.5 bg-hero-red-500 hover:bg-hero-red-600 text-white rounded-sm text-xs font-black tracking-widest uppercase transition-colors">
               Login to Comment
             </button>
           </SignInButton>
@@ -452,7 +452,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                   {renderUserAvatar(comment.user, "medium")}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="bg-slate-50 dark:bg-gray-800 rounded-lg p-3">
+                  <div className="bg-slate-50 dark:bg-gray-800 rounded-sm p-3">
                     <div className="flex items-center space-x-2 mb-1">
                       <span className="text-sm font-medium text-slate-900 dark:text-white">
                         {getDisplayName(comment)}
@@ -474,7 +474,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                           value={editContent}
                           onChange={(e) => setEditContent(e.target.value)}
                           aria-label="댓글 수정 내용 입력"
-                          className="w-full p-2 text-sm border border-slate-300 dark:border-gray-600 rounded-lg resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-gray-500 focus:border-slate-300 dark:focus:border-gray-500 bg-white dark:bg-gray-700 text-slate-900 dark:text-white"
+                          className="w-full p-2 text-sm border border-slate-300 dark:border-gray-600 rounded-sm resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-gray-500 focus:border-slate-300 dark:focus:border-gray-500 bg-white dark:bg-gray-700 text-slate-900 dark:text-white"
                           rows={3}
                         />
                         <div className="mt-2 flex justify-end space-x-2">
@@ -573,7 +573,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                             onChange={(e) => setReplyContent(e.target.value)}
                             placeholder={`@${getDisplayName(comment)} `}
                             aria-label="답글 내용 입력"
-                            className="w-full p-2 text-sm border border-slate-300 dark:border-gray-600 rounded-lg resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-gray-500 focus:border-slate-300 dark:focus:border-gray-500 bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-gray-400"
+                            className="w-full p-2 text-sm border border-slate-300 dark:border-gray-600 rounded-sm resize-none focus:outline-none focus:ring-1 focus:ring-slate-300 dark:focus:ring-gray-500 focus:border-slate-300 dark:focus:border-gray-500 bg-white dark:bg-gray-700 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-gray-400"
                             rows={2}
                             onFocus={(e) => {
                               if (!replyContent) {
@@ -620,7 +620,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
                                 {renderUserAvatar(reply.user, "small")}
                               </div>
                               <div className="flex-1 min-w-0">
-                                <div className="bg-slate-50 dark:bg-gray-800 rounded-lg p-2">
+                                <div className="bg-slate-50 dark:bg-gray-800 rounded-sm p-2">
                                   <div className="flex items-center space-x-2 mb-1">
                                     <span className="text-xs font-medium text-slate-900 dark:text-white">
                                       {getDisplayName(reply)}

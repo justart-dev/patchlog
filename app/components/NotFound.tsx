@@ -12,7 +12,7 @@ export default function NotFound({
   return (
     <div className={`flex flex-col items-center justify-center ${className}`}>
       <div className="relative w-24 h-24 mb-6">
-        <div className="absolute inset-0 rounded-full bg-red-100 flex items-center justify-center">
+        <div className="absolute inset-0 rounded-sm bg-red-100 flex items-center justify-center">
           <svg
             className="w-12 h-12 text-red-500"
             fill="none"
@@ -32,7 +32,7 @@ export default function NotFound({
       <p className="text-slate-600 text-center max-w-md">{message}</p>
       <a
         href="/patch"
-        className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+        className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-sm hover:bg-blue-600 transition-colors"
       >
         목록으로 돌아가기
       </a>
