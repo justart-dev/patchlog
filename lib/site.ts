@@ -4,6 +4,7 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_SITE_URL).r
 export const SITE_NAME = "패치로그";
 export const SITE_BRAND_NAME = "Patchlog";
 export const DEFAULT_OG_IMAGE = "/images/thumbnail.png";
+export const DEFAULT_OG_IMAGE_SIZE = { width: 1200, height: 600 } as const;
 
 export function buildCanonicalUrl(path = "/") {
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;

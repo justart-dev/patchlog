@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { DEFAULT_OG_IMAGE, DEFAULT_OG_IMAGE_SIZE } from "@/lib/site";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -15,6 +16,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: "패치로그 | 마블 라이벌즈 패치노트",
       description: "마블 라이벌즈 패치노트 - 한글 번역",
       type: "article",
+      images: [
+        {
+          url: DEFAULT_OG_IMAGE,
+          ...DEFAULT_OG_IMAGE_SIZE,
+          alt: "마블 라이벌즈 한글 패치노트 - 패치로그",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",

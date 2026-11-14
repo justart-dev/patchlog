@@ -10,7 +10,7 @@ import Footer from "./components/footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { WebSiteStructuredData } from "./components/StructuredData";
 import { ThemeProvider } from "@/lib/theme-provider";
-import { buildCanonicalUrl, DEFAULT_OG_IMAGE, SITE_BRAND_NAME, SITE_URL } from "@/lib/site";
+import { buildCanonicalUrl, DEFAULT_OG_IMAGE, DEFAULT_OG_IMAGE_SIZE, SITE_BRAND_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -78,8 +78,7 @@ export const metadata: Metadata = {
     images: [
       {
         url: DEFAULT_OG_IMAGE,
-        width: 1200,
-        height: 630,
+        ...DEFAULT_OG_IMAGE_SIZE,
         alt: "마블 라이벌즈 한글 패치노트 - 패치로그",
       },
     ],

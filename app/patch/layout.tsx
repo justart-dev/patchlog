@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { buildCanonicalUrl } from "@/lib/site";
+import { buildCanonicalUrl, DEFAULT_OG_IMAGE, DEFAULT_OG_IMAGE_SIZE } from "@/lib/site";
 
 export const metadata: Metadata = {
   robots: {
@@ -37,6 +37,13 @@ export const metadata: Metadata = {
       "마블 라이벌즈 패치 히스토리를 한국어로 빠르게 확인하세요. 최신 패치부터 핵심 밸런스 조정까지 정리했습니다.",
     url: buildCanonicalUrl("/patch"),
     type: "website",
+    images: [
+      {
+        url: DEFAULT_OG_IMAGE,
+        ...DEFAULT_OG_IMAGE_SIZE,
+        alt: "마블 라이벌즈 패치노트 목록 - 패치로그",
+      },
+    ],
   },
 };
 

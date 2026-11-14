@@ -5,7 +5,7 @@ import PatchDetailClient from './PatchDetailClient';
 import { ArticleStructuredData, BreadcrumbStructuredData } from '../../components/StructuredData';
 import { replaceEnglishTitles } from '../../utils/textReplacer';
 import { getSkillMap } from '../../utils/skillMapService';
-import { buildCanonicalUrl, stripHtml } from '@/lib/site';
+import { buildCanonicalUrl, DEFAULT_OG_IMAGE, DEFAULT_OG_IMAGE_SIZE, stripHtml } from '@/lib/site';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -63,9 +63,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       siteName: "패치로그",
       images: [
         {
-          url: `/api/og?title=${encodeURIComponent(title)}&date=${encodeURIComponent(patch.published_at)}`,
-          width: 1200,
-          height: 630,
+          url: DEFAULT_OG_IMAGE,
+          ...DEFAULT_OG_IMAGE_SIZE,
+          alt: `${title} | 마블 라이벌즈 패치로그`,
         }
       ]
     },

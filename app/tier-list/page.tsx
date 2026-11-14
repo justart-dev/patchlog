@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { buildCanonicalUrl } from "@/lib/site";
+import { buildCanonicalUrl, DEFAULT_OG_IMAGE, DEFAULT_OG_IMAGE_SIZE } from "@/lib/site";
 import { TIER_SOURCE_URL } from "@/lib/tier-list";
 import { getTierList } from "@/lib/tier-list-source";
 import TierList from "./TierList";
@@ -41,6 +41,13 @@ export const metadata: Metadata = {
       "승률과 픽률로 정리한 마블 라이벌즈 54영웅 티어 리스트. 역할별 필터로 지금 메타를 확인하세요.",
     url: buildCanonicalUrl("/tier-list"),
     type: "website",
+    images: [
+      {
+        url: DEFAULT_OG_IMAGE,
+        ...DEFAULT_OG_IMAGE_SIZE,
+        alt: "마블 라이벌즈 티어 리스트 - 패치로그",
+      },
+    ],
   },
 };
 
