@@ -17,6 +17,7 @@ export default function Footer() {
             {[
               { label: "소개", href: "/" },
               { label: "패치노트", href: "/patch" },
+              { label: "티어표", href: "/tier-list" },
               { label: "사이트 통계", href: "https://cloud.umami.is/share/X4DLIuA7E54r6Fi9", external: true },
             ].map((link) => {
               const className = "px-5 py-2.5 text-xs font-black tracking-tight rounded-sm bg-archive-zinc-950 dark:bg-white text-white dark:text-archive-zinc-950 transition-colors";
