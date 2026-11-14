@@ -77,71 +77,81 @@ export default function TierList({ tiers: source }: { tiers: Tier[] }) {
         })}
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-5">
         {tiers.map((tier) => (
           <section
             key={tier.id}
             className="overflow-hidden rounded-sm border border-archive-zinc-200 bg-white dark:border-archive-zinc-800 dark:bg-archive-zinc-950"
           >
             <div
-              className="flex items-center gap-4 border-l-[3px] px-4 py-3 sm:px-6"
+              className="flex items-center gap-4 border-l-[3px] px-5 py-4 sm:px-6"
               style={{ borderLeftColor: tier.color }}
             >
               <span
-                className="font-mono text-2xl font-black leading-none tracking-tighter"
+                className="font-mono text-3xl font-black leading-none tracking-tighter"
                 style={{ color: tier.color }}
               >
                 {tier.id}
               </span>
-              <div className="min-w-0">
-                <p className="text-xs font-black tracking-tight text-archive-zinc-950 dark:text-white">
+              <div className="flex min-w-0 flex-1 items-baseline gap-2">
+                <p className="text-sm font-black tracking-tight text-archive-zinc-950 dark:text-white">
                   {tier.label}
                 </p>
-                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-archive-zinc-400">
-                  {tier.heroes.length} heroes
-                </p>
               </div>
+              <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-archive-zinc-400">
+                {tier.heroes.length} heroes
+              </span>
             </div>
 
-            <div className="-mb-px -mr-px grid grid-cols-3 border-t border-archive-zinc-200 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 dark:border-archive-zinc-800">
+            <div className="-mb-px -mr-px grid grid-cols-2 border-t border-archive-zinc-200 sm:grid-cols-3 lg:grid-cols-4 dark:border-archive-zinc-800">
               {tier.heroes.map((hero) => (
                 <div
                   key={hero.slug}
-                  className="flex flex-col gap-2 border-b border-r border-archive-zinc-200 bg-white p-3 dark:border-archive-zinc-800 dark:bg-archive-zinc-950"
+                  className="flex h-full flex-col gap-3 border-b border-r border-archive-zinc-200 bg-white p-4 transition-colors hover:bg-archive-zinc-50 dark:border-archive-zinc-800 dark:bg-archive-zinc-950 dark:hover:bg-archive-zinc-900/40"
                 >
-                  <div className="flex items-start gap-2.5">
+                  <div className="flex items-center gap-3">
                     {HERO_ICONS[hero.slug] ? (
                       <img
                         src={HERO_ICONS[hero.slug]}
                         alt=""
-                        width={40}
-                        height={40}
+                        width={56}
+                        height={56}
                         loading="lazy"
                         decoding="async"
                         referrerPolicy="no-referrer"
-                        className="h-10 w-10 shrink-0 rounded-sm bg-archive-zinc-100 object-cover dark:bg-archive-zinc-900"
+                        className="h-14 w-14 shrink-0 rounded-sm bg-archive-zinc-100 object-cover dark:bg-archive-zinc-900"
                       />
                     ) : (
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-archive-zinc-100 font-mono text-sm font-black text-archive-zinc-400 dark:bg-archive-zinc-900">
+                      <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-sm bg-archive-zinc-100 font-mono text-lg font-black text-archive-zinc-400 dark:bg-archive-zinc-900">
                         {hero.name.slice(0, 1)}
                       </div>
                     )}
                     <div className="min-w-0">
-                      <p className="truncate text-[11px] font-bold leading-tight text-archive-zinc-950 dark:text-white">
+                      <p className="truncate text-[15px] font-bold leading-snug tracking-tight text-archive-zinc-950 dark:text-white">
                         {hero.koName}
                       </p>
-                      <p className="truncate font-mono text-[9px] uppercase tracking-wider text-archive-zinc-400">
+                      <p className="truncate font-mono text-[10px] uppercase tracking-wider text-archive-zinc-400">
                         {hero.role ? ROLE_LABELS[hero.role] : ""}
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-baseline justify-between font-mono">
-                    <span className="text-xs font-bold text-archive-zinc-950 dark:text-white">
-                      {hero.winRate.toFixed(1)}%
-                    </span>
-                    <span className="text-[9px] text-archive-zinc-400">
-                      PICK {hero.pickRate.toFixed(1)}%
-                    </span>
+                  <div className="mt-auto grid grid-cols-2 items-end gap-2 border-t border-archive-zinc-200/70 pt-3 dark:border-archive-zinc-800/70">
+                    <div className="min-w-0">
+                      <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-archive-zinc-400">
+                        win rate
+                      </p>
+                      <p className="mt-1 font-mono text-lg font-black leading-none tracking-tighter tabular-nums text-archive-zinc-950 dark:text-white">
+                        {hero.winRate.toFixed(1)}%
+                      </p>
+                    </div>
+                    <div className="min-w-0 text-right">
+                      <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-archive-zinc-400">
+                        pick rate
+                      </p>
+                      <p className="mt-1 font-mono text-sm font-bold leading-none tracking-tight tabular-nums text-archive-zinc-500 dark:text-archive-zinc-400">
+                        {hero.pickRate.toFixed(1)}%
+                      </p>
+                    </div>
                   </div>
                 </div>
               ))}
