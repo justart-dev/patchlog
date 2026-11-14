@@ -11,6 +11,7 @@ export interface PatchLog {
   content?: string;
   translated_ko?: string;
   capsule_image: string;
+  view_count?: number;
 }
 
 interface PatchListProps {
@@ -63,6 +64,9 @@ export const PatchList = memo(function PatchList({ patchLogs }: PatchListProps) 
               </span>
               <span className="block mt-0.5 font-mono text-[10px] uppercase tracking-widest text-archive-zinc-400">
                 {log.app_name}
+                {typeof log.view_count === "number" ? (
+                  <span className="ml-3 text-archive-zinc-400">VIEWS {log.view_count.toLocaleString("ko-KR")}</span>
+                ) : null}
               </span>
             </span>
 

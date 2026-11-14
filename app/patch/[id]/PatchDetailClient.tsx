@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { addStylesToHtml } from "../../utils/htmlUtils";
 import {
   wrapSkillsWithUnderline,
@@ -28,6 +28,7 @@ interface PatchDetail {
   published_at: string;
   translated_ko: string;
   content: string;
+  view_count?: number;
 }
 
 interface PatchNavigation {
@@ -45,10 +46,29 @@ export default function PatchDetailClient({
   skillMap: Record<string, string>;
 }) {
   const router = useRouter();
+  const [viewCount, setViewCount] = useState<number | null>(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
+
+  useEffect(() => {
+    const key = `patchlog-viewed:${patchDetail.id}`;
+    if (localStorage.getItem(key)) {
+      setViewCount(patchDetail.view_count ?? 0);
+      return;
+    }
+
+    localStorage.setItem(key, new Date().toISOString());
+    setViewCount((c) => (c ?? patchDetail.view_count ?? 0) + 1);
+    fetch("/api/views", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ patchId: patchDetail.id }),
+    }).catch(() => {
+      // 뷰 집계 실패는 사용자 경험에 영향이 없도록 조용히 무시
+    });
+  }, [patchDetail.id, patchDetail.view_count]);
 
   return (
     <div className="pb-20">
@@ -68,6 +88,12 @@ export default function PatchDetailClient({
                 day: "numeric",
               })}
             </time>
+          </div>
+
+          <div className="flex items-center gap-4 font-mono text-xs text-archive-zinc-400 mt-4">
+            <span className="uppercase tracking-widest">Views</span>
+            <span className="h-px w-8 bg-archive-zinc-200 dark:bg-archive-zinc-800" />
+            <span className="text-archive-zinc-950 dark:text-white font-bold tabular-nums">{viewCount !== null ? viewCount.toLocaleString("ko-KR") : "-"}</span>
           </div>
         </header>
 

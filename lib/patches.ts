@@ -8,7 +8,7 @@ export async function getPatch(id: string) {
         .from("steam_patch_logs")
         .select(
           `
-        id, title, app_id, app_gid, app_name, published_at, url, content, translated_ko,
+        id, title, app_id, app_gid, app_name, published_at, url, content, translated_ko, view_count,
         steam_app_metadata (
           capsule_image
         )
@@ -32,7 +32,7 @@ export async function getPatches(limit = 10) {
         .from("steam_patch_logs")
         .select(
           `
-          id, title, app_id, app_gid, app_name, published_at,
+          id, title, app_id, app_gid, app_name, published_at, view_count,
           steam_app_metadata (
             capsule_image
           )
