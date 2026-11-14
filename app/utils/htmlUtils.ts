@@ -30,6 +30,11 @@ export function addStylesToHtml(html: string): string {
   html = html
     .replace(/&nbsp;|&#160;/gi, " ")
     .replace(/\u00A0/g, " ");
+
+  // 페이지 헤더에 제목·날짜가 이미 표시되므로 본문 선두의 원문 머리말 제거
+  html = html
+    .replace(/<h1[^>]*class=["'][^"']*artTitle[^"']*["'][^>]*>[\s\S]*?<\/h1>/gi, "")
+    .replace(/<p[^>]*class=["'][^"']*\bdate\b[^"']*["'][^>]*>[\s\S]*?<\/p>/gi, "");
   html = html.replace(/>([^<]+)</g, (full, textContent) => {
     const normalized = textContent
       .replace(/[ \t]{2,}/g, " ")
