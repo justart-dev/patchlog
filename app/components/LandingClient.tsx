@@ -24,7 +24,7 @@ type Step = {
 };
 
 const facts = [
-  { label: "TOTAL SEGMENTS", value: "70+" },
+  { label: "TOTAL SEGMENTS", value: "40+" },
   { label: "CORE ADAPTATION", value: "AI-POWERED" },
   { label: "AUTO REFRESH", value: "12H CYCLE" },
 ] as const;
@@ -115,7 +115,7 @@ const steps: Step[] = [
   },
 ];
 
-function AnimatedPatchCount({ target = 70, duration = 1000 }: { target?: number; duration?: number }) {
+function AnimatedPatchCount({ target = 40, duration = 1000 }: { target?: number; duration?: number }) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {

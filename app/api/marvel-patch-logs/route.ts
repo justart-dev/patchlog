@@ -32,7 +32,7 @@ export async function GET() {
       `
       )
       .order("published_at", { ascending: false })
-      .limit(10);
+      .limit(20);
 
     if (error) {
       throw error;
