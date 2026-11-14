@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { BatchLogger } from "@/lib/batch-logger";
 
-// Vercel 서버리스 함수 타임아웃 확장 (번역 배치에 충분한 시간 확보)
-export const maxDuration = 60;
+// Vercel 서버리스 함수 타임아웃 확장 (Fluid Compute: Hobby 최대 300초)
+// 코드의 maxDuration이 대시보드 설정보다 우선하므로 여기서 300으로 명시한다.
+export const maxDuration = 300;
 
 async function runBatch(request: Request) {
   // Vercel Cron Job 검증 (공식 Authorization 헤더 방식)

@@ -4,7 +4,7 @@ import { getSkillMap, upsertSkillMap } from "../../utils/skillMapService";
 import { currentUser } from "@clerk/nextjs/server";
 
 export const runtime = "nodejs";
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 const DEFAULT_NAMU_URL =
   "https://namu.wiki/w/%EB%A7%88%EB%B8%94%20%EB%9D%BC%EC%9D%B4%EB%B2%8C%EC%A6%88/%EC%98%81%EC%9B%85";
