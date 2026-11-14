@@ -60,6 +60,10 @@ Next.js Frontend             ← 패치 목록 / 상세 / 댓글
 ```env
 # App
 API_BASE_URL=https://your-domain.vercel.app
+NEXT_PUBLIC_SITE_URL=https://your-domain.vercel.app
+
+# 검색엔진 소유 확인 / 인덱싱
+NAVER_SITE_VERIFICATION=...
 
 # Clerk (인증)
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
@@ -104,6 +108,7 @@ pnpm start
 | `/api/marvel-patch-translate` | POST | 미번역 패치 번역 | CRON_SECRET |
 | `/api/marvel-skillmap-sync` | POST | 요청 기반 수동 스킬 맵 반영 | 없음 |
 | `/api/marvel-batch` | GET/POST | 배치 파이프라인 실행 | CRON_SECRET |
+| `/api/indexnow` | POST | IndexNow(네이버·Bing) 인덱싱 제출 | CRON_SECRET |
 | `/api/batch-status` | GET | 배치 실행 상태 조회 | 없음 |
 | `/api/comments` | GET/POST | 댓글 조회/작성 | POST는 Clerk |
 | `/api/comments/[id]` | PATCH/DELETE | 댓글 수정/삭제 | Clerk |

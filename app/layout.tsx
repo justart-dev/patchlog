@@ -92,6 +92,11 @@ export const metadata: Metadata = {
   },
   verification: {
     google: "vhwJw57Gjn2GqP4ls2gFNnU2QPZLp9OwT6g7aOxP3yM",
+    other: {
+      "naver-site-verification":
+        process.env.NAVER_SITE_VERIFICATION ||
+        "6da8ca3cc9c97abec1b6c6912c970500784d96e7",
+    },
   },
 };
 

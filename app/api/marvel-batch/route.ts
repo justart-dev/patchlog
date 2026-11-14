@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { BatchLogger } from "@/lib/batch-logger";
+import { submitToIndexNow } from "@/lib/indexnow";
 
 // Vercel 서버리스 함수 타임아웃 확장 (Fluid Compute: Hobby 최대 300초)
 // 코드의 maxDuration이 대시보드 설정보다 우선하므로 여기서 300으로 명시한다.
@@ -108,6 +109,21 @@ async function runBatch(request: Request) {
       );
     }
 
+    // 4단계: 새로 번역된 패치를 검색엔진에 즉시 알린다 (패치 당일 인덱싱)
+    const translatedIds: string[] = Array.isArray(translateResult.results)
+      ? translateResult.results
+          .filter((item: { status?: string }) => item?.status === "success")
+          .map((item: { id: string }) => item.id)
+      : [];
+
+    const indexNowResult =
+      translatedIds.length > 0
+        ? await submitToIndexNow([
+            "/patch",
+            ...translatedIds.map((id) => `/patch/${id}`),
+          ])
+        : { submitted: 0, ok: true };
+
     // 배치 성공 로그
     if (logId) {
       await BatchLogger.logSuccess(logId, {
@@ -119,6 +135,7 @@ async function runBatch(request: Request) {
           update: updateResult,
           crawl: crawlResult,
           translate: translateResult,
+          indexnow: indexNowResult,
         },
       });
     }
@@ -130,6 +147,7 @@ async function runBatch(request: Request) {
         update: updateResult,
         crawl: crawlResult,
         translate: translateResult,
+        indexnow: indexNowResult,
       },
     });
   } catch (error) {
