@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     alternates: {
       canonical: canonicalUrl,
     },
-    title: `${title} | 마블 라이벌즈 패치로그`,
+    title: { absolute: `${title} | 패치로그` },
     description,
     keywords: [
       "마블 라이벌즈 패치", "Marvel Rivals patch", "히어로 밸런스", "스킬 버프", "스킬 너프",
