@@ -1,6 +1,6 @@
+import "./fonts/gothic-a1.css";
 import "./global.css";
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Navbar } from "./components/nav";
 import { Analytics } from "@vercel/analytics/react";
@@ -100,8 +100,6 @@ export const metadata: Metadata = {
   },
 };
 
-const cx = (...classes: (string | undefined | false)[]) => classes.filter(Boolean).join(" ");
-
 export default function RootLayout({
   children,
 }: {
@@ -111,7 +109,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html
         lang="ko"
-        className={cx(GeistSans.variable, GeistMono.variable)}
+        className={GeistMono.variable}
         suppressHydrationWarning
       >
         <head>
