@@ -146,7 +146,8 @@ export default function LandingClient({ untranslatedCount = 0 }: { untranslatedC
   const [activeProblem, setActiveProblem] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
   const visualRef = useRef<HTMLDivElement>(null);
-  const syncAlert = untranslatedCount > 3;
+
+  const syncAlert = untranslatedCount > 1;
 
   const currentProblem = problems[activeProblem] ?? problems[0];
   const currentStep = steps[activeStep] ?? steps[0];
@@ -176,7 +177,7 @@ export default function LandingClient({ untranslatedCount = 0 }: { untranslatedC
           <div>
             <div className="inline-flex items-center gap-2.5 rounded-sm border border-archive-zinc-200 dark:border-archive-zinc-800 bg-white dark:bg-archive-zinc-950 px-3 py-1.5 mb-8 animate-hero-enter">
               <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${syncAlert ? "bg-hero-red-500" : "bg-emerald-500"}`} />
-              <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-archive-zinc-500 leading-none">Sync Status</span>
+              <span className="text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-archive-zinc-500 leading-none">Live Sync</span>
             </div>
 
             <h1 className="text-5xl sm:text-7xl font-black tracking-tighter leading-[0.95] mb-6 animate-hero-enter [animation-delay:100ms]">
