@@ -50,7 +50,7 @@ export default function FloatingActions() {
 
   return (
     <>
-      <div ref={containerRef} className="fixed bottom-[18px] right-[18px] z-[90] sm:bottom-6 sm:right-6">
+      <div ref={containerRef} className="fixed bottom-[18px] right-[20px] z-[90] sm:bottom-6 sm:right-8">
         <div className="relative h-11 w-11">
         {/* 왼쪽: 뒤로가기 (먼저 등장) */}
         <button
