@@ -1,4 +1,4 @@
-import "./fonts/gothic-a1.css";
+import "./fonts/pretendard-optional.css";
 import "./global.css";
 import type { Metadata } from "next";
 import { GeistMono } from "geist/font/mono";
