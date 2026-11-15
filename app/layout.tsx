@@ -7,6 +7,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Script from "next/script";
 import Footer from "./components/footer";
+import FloatingActions from "./components/FloatingActions";
 import { ClerkProvider } from "@clerk/nextjs";
 import { WebSiteStructuredData } from "./components/StructuredData";
 import { ThemeProvider } from "@/lib/theme-provider";
@@ -146,13 +147,9 @@ export default function RootLayout({
               </div>
             </footer>
           </ThemeProvider>
+          <FloatingActions />
           <Analytics />
           <SpeedInsights />
-          <Script
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6198824361218150"
-            strategy="lazyOnload"
-            crossOrigin="anonymous"
-          />
           <Script
             src="https://cloud.umami.is/script.js"
             data-website-id="83fbc50b-56e9-473d-be24-ea6801d81058"

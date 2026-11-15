@@ -51,7 +51,6 @@ export default function Footer() {
       <div className="space-y-4 text-[11px] font-medium leading-relaxed text-archive-zinc-500 dark:text-archive-zinc-500">
         <p>© PATCHLOG. This is an unofficial fan platform and is not affiliated with NetEase Games or Marvel. All game content and copyrights belong to their respective owners.</p>
         <div className="flex flex-wrap gap-x-6 gap-y-2 text-[10px] font-black uppercase tracking-widest opacity-50">
-          <span>hbd9425@gmail.com</span>
           <span>Marvel Rivals: NetEase Games</span>
           <span>Steam: Valve Corporation</span>
         </div>
