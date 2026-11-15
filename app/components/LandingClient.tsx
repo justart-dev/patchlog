@@ -206,20 +206,17 @@ export default function LandingClient({ untranslatedCount = 0 }: { untranslatedC
 
           <div className="relative animate-hero-enter [animation-delay:200ms]">
             <div ref={visualRef} className="will-change-transform transition-transform duration-150 ease-out">
-              <div className="border border-archive-zinc-200 dark:border-archive-zinc-800 rounded-sm overflow-hidden bg-white dark:bg-archive-zinc-950">
+              <div className="border border-archive-zinc-200 dark:border-archive-zinc-800 rounded-sm overflow-hidden bg-white dark:bg-archive-zinc-950 hero-float">
                 <Image
                   src={HERO_VISUAL}
                   alt="Marvel Rivals"
                   width={1280}
                   height={576}
                   priority
-                  className="w-full aspect-[16/9] object-cover hero-float"
+                  className="block w-full aspect-[16/9] object-cover"
                 />
               </div>
             </div>
-            <p className="mt-3 font-mono text-[10px] uppercase tracking-widest text-archive-zinc-400">
-              Source: Steam · App 2767030
-            </p>
           </div>
         </div>
       </section>
