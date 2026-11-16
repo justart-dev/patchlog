@@ -45,34 +45,26 @@
 
 ## 아키텍처
 
-```text
-                      ┌──────────────────────────┐
-                      │   Vercel Cron 09 / 21시  │
-                      └────────────┬─────────────┘
-                                   │
-                                   ▼
-┌─────────────┐          ┌──────────────────┐
-│  Steam API  │────────▶ │ /api/marvel-batch│
-└─────────────┘   수집    └────────┬─────────┘
-                                   │
-                     ┌─────────────┴─────────────┐
-                     ▼                           ▼
-          ┌────────────────────┐      ┌──────────────────┐
-          │  OpenAI 번역        │      │  IndexNow 제출    │
-          │  + 스킬맵 치환      │      │ (네이버 · Bing)   │
-          └─────────┬──────────┘      └──────────────────┘
-                    ▼
-          ┌────────────────────┐
-          │  Supabase Postgres │
-          │  ├ steam_patch_logs │
-          │  ├ marvel_skill_map │
-          │  └ comments         │
-          └─────────┬──────────┘
-                    ▼
-          ┌────────────────────────────────────┐
-          │        Next.js App Router          │
-          │  패치 목록 · 상세 · 티어표 · 통계   │
-          └────────────────────────────────────┘
+```mermaid
+sequenceDiagram
+  autonumber
+  participant C as Vercel Cron
+  participant B as /api/marvel-batch
+  participant S as Steam API
+  participant G as OpenAI
+  participant D as Supabase
+  participant I as IndexNow
+  participant N as Next.js
+
+  C->>B: 09:00 / 21:00 실행
+  B->>S: 공지 조회
+  S-->>B: 원문 수집
+  B->>D: 원문 저장
+  B->>G: 미번역분 번역 요청
+  G-->>B: 번역 + 스킬 용어 치환
+  B->>D: 번역문 저장
+  B->>I: 새 패치 URL 제출
+  D-->>N: 패치 · 티어 · 통계 서빙
 ```
 
 ## 자동화 스케줄
