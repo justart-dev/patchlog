@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { clientKey, rateLimit } from "@/lib/rate-limit";
 
 const TYPES = ["버그", "제안", "기타"] as const;
 const MAX_MESSAGE = 1000;
@@ -95,6 +96,14 @@ function renderText(payload: {
 }
 
 export async function POST(request: Request) {
+  const limit = rateLimit(`feedback:${clientKey(request)}`, 5, 60 * 60_000);
+  if (!limit.ok) {
+    return NextResponse.json(
+      { error: "잠시 후 다시 시도해주세요." },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfter) } }
+    );
+  }
+
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     console.error("[feedback] RESEND_API_KEY is missing");

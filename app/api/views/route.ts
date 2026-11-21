@@ -1,9 +1,16 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { clientKey, rateLimit } from "@/lib/rate-limit";
 
-// Increments the view count for a patch log. Public, but intentionally cheap:
-// POST one id, we only allow it via the service role RPC.
 export async function POST(request: Request) {
+  const limit = rateLimit(`views:${clientKey(request)}`, 60, 60_000);
+  if (!limit.ok) {
+    return NextResponse.json(
+      { error: "too many requests" },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfter) } }
+    );
+  }
+
   let body: { patchId?: string };
   try {
     body = await request.json();
