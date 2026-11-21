@@ -35,8 +35,13 @@ export function postProcessTranslation(options: PostProcessOptions): string {
   const sortedSkillEntries = Object.entries(skillMap).sort(
     ([a], [b]) => b.length - a.length
   );
+  const KEY_LABEL = "(?:좌클릭|우클릭|패시브|궁극기|Shift|E|Q|C|F|X|Z|Ctrl|Space|기타)";
+
   sortedSkillEntries.forEach(([englishName, koreanName]) => {
-    const englishPattern = new RegExp(escapeRegex(englishName), "g");
+    const englishPattern = new RegExp(
+      `${escapeRegex(englishName)}(\\s*\\(${KEY_LABEL}\\))?`,
+      "g"
+    );
     translatedContent = translatedContent.replace(englishPattern, koreanName);
 
     const koreanMatch = koreanName.match(/^(.+?)\((.+)\)$/);
