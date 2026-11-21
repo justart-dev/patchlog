@@ -236,3 +236,27 @@ export function addStylesToHtml(html: string): string {
 
   return html;
 }
+
+const BLOCKED_SRC = /^\s*(javascript|data:text\/html|vbscript):/i;
+
+export function sanitizeHtml(html: string): string {
+  if (!html) return "";
+
+  let out = html
+    .replace(/<\s*(script|style|object|embed|link|meta|base|form)\b[\s\S]*?<\s*\/\s*\1\s*>/gi, "")
+    .replace(/<\s*(script|style|object|embed|link|meta|base|form)\b[^>]*\/?>/gi, "")
+    .replace(/\son[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, "")
+    .replace(/\s(href|src|xlink:href)\s*=\s*("([^"]*)"|'([^']*)'|([^\s>]+))/gi, (match, _attr, _quoted, dq, sq, bare) => {
+      const value = dq ?? sq ?? bare ?? "";
+      return BLOCKED_SRC.test(value) ? "" : match;
+    });
+
+  out = out.replace(/<iframe\b([^>]*)>[\s\S]*?<\/iframe>/gi, (match, attrs: string) =>
+    /src\s*=\s*["']https:\/\/(www\.)?(youtube\.com|youtube-nocookie\.com)\//i.test(attrs) ? match : ""
+  );
+  out = out.replace(/<iframe\b[^>]*\/?>/gi, (tag) =>
+    /src\s*=\s*["']https:\/\/(www\.)?(youtube\.com|youtube-nocookie\.com)\//i.test(tag) ? tag : ""
+  );
+
+  return out;
+}

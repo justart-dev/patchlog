@@ -17,8 +17,9 @@ interface Comment {
     first_name: string | null;
     last_name: string | null;
     profile_image_url: string | null;
-    clerk_user_id: string;
+    clerk_user_id?: string;
   };
+  is_owner?: boolean;
   replies?: Comment[];
 }
 
@@ -295,6 +296,7 @@ export default function CommentSection({ patchLogId }: CommentSectionProps) {
   };
 
   const isOwner = (comment: Comment): boolean => {
+    if (typeof comment.is_owner === "boolean") return comment.is_owner;
     return user?.id === comment.user.clerk_user_id || false;
   };
 

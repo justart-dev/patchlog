@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 const supabaseUrl = process.env.SUPABASE_URL!;
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY!;
@@ -15,7 +15,8 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const patchLogId = searchParams.get("patch_log_id");
-    const limit = parseInt(searchParams.get("limit") || "50", 10);
+    const rawLimit = parseInt(searchParams.get("limit") || "50", 10);
+    const limit = Number.isFinite(rawLimit) ? Math.min(Math.max(rawLimit, 1), 100) : 50;
 
     if (!patchLogId) {
       return NextResponse.json(
@@ -46,7 +47,18 @@ export async function GET(request: Request) {
       throw error;
     }
 
-    return NextResponse.json({ success: true, data });
+    const { userId: viewerId } = await auth();
+    const rows = (data ?? []).map((comment: any) => {
+      const user = comment.user ? { ...comment.user } : null;
+      if (user) delete user.clerk_user_id;
+      return {
+        ...comment,
+        user,
+        is_owner: Boolean(viewerId) && comment.user?.clerk_user_id === viewerId,
+      };
+    });
+
+    return NextResponse.json({ success: true, data: rows });
   } catch (error) {
     console.error("Error fetching comments:", error);
     return NextResponse.json(
@@ -132,7 +144,16 @@ export async function POST(request: Request) {
       throw error;
     }
 
-    return NextResponse.json({ success: true, data });
+    const row = data as any;
+    const created = row
+      ? (() => {
+          const user = row.user ? { ...row.user } : null;
+          if (user) delete user.clerk_user_id;
+          return { ...row, user, is_owner: true };
+        })()
+      : row;
+
+    return NextResponse.json({ success: true, data: created });
   } catch (error) {
     console.error("Error creating comment:", error);
     return NextResponse.json(

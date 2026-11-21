@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { addStylesToHtml } from "../../utils/htmlUtils";
+import { addStylesToHtml, sanitizeHtml } from "../../utils/htmlUtils";
 import {
   wrapSkillsWithUnderline,
   replaceEnglishTitles,
@@ -102,11 +102,13 @@ export default function PatchDetailClient({
             {patchDetail.translated_ko ? (
               <div
                 dangerouslySetInnerHTML={{
-                  __html: wrapSkillsWithUnderline(
-                    convertYouTubePreviewTags(
-                      addStylesToHtml(patchDetail.translated_ko)
-                    ),
-                    skillMap
+                  __html: sanitizeHtml(
+                    wrapSkillsWithUnderline(
+                      convertYouTubePreviewTags(
+                        addStylesToHtml(patchDetail.translated_ko)
+                      ),
+                      skillMap
+                    )
                   ),
                 }}
               />
