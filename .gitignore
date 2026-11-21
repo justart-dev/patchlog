@@ -79,3 +79,6 @@ public/worker-*.js
 public/worker-*.js.map
 public/fallback-*.js
 public/fallback-*.js.map
+
+# brag-lite output
+brag-output/
