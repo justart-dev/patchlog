@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
   const secret = request.headers.get("x-revalidate-secret");
   const expected = process.env.REVALIDATE_SECRET || "";
 
-  if (expected && secret !== expected) {
+  if (!expected || secret !== expected) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

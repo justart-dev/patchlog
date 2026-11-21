@@ -5,7 +5,17 @@ const supabaseUrl = process.env.SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-export async function GET() {
+function isAuthorized(request: Request) {
+  const expected = process.env.CRON_SECRET || "";
+  if (!expected) return false;
+  return (request.headers.get("authorization") || "") === `Bearer ${expected}`;
+}
+
+export async function GET(request: Request) {
+  if (!isAuthorized(request)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     // 최근 24시간 내 배치 실행 기록 조회
     const { data: recentBatches, error } = await supabase
